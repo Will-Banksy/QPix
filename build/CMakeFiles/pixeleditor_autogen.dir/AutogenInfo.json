@@ -15,6 +15,11 @@
 			"UVLADIE3JM/moc_editortools.cpp"
 		],
 		[
+			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/tools/eraser.h",
+			"Mu",
+			"MR466ZQLAD/moc_eraser.cpp"
+		],
+		[
 			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/tools/pencil.h",
 			"Mu",
 			"MR466ZQLAD/moc_pencil.cpp"
@@ -30,19 +35,39 @@
 			"YPKJ5OE7LN/moc_canvas.cpp"
 		],
 		[
-			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/canvaspane.h",
+			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/flowlayout.h",
 			"Mu",
-			"YPKJ5OE7LN/moc_canvaspane.cpp"
+			"YPKJ5OE7LN/moc_flowlayout.cpp"
 		],
 		[
-			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/contentpane.h",
+			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/panes/canvaspane.h",
 			"Mu",
-			"YPKJ5OE7LN/moc_contentpane.cpp"
+			"UZ7LX6UFPB/moc_canvaspane.cpp"
+		],
+		[
+			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/panes/contentpane.h",
+			"Mu",
+			"UZ7LX6UFPB/moc_contentpane.cpp"
+		],
+		[
+			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/panes/flowscrollpane.h",
+			"Mu",
+			"UZ7LX6UFPB/moc_flowscrollpane.cpp"
+		],
+		[
+			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/panes/toolpane.h",
+			"Mu",
+			"UZ7LX6UFPB/moc_toolpane.cpp"
 		],
 		[
 			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/pixeleditor.h",
 			"Mu",
 			"YPKJ5OE7LN/moc_pixeleditor.cpp"
+		],
+		[
+			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/weightedsplitter.h",
+			"Mu",
+			"YPKJ5OE7LN/moc_weightedsplitter.cpp"
 		],
 		[
 			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/utils/algorithms.h",
@@ -116,6 +141,10 @@
 			"Mu"
 		],
 		[
+			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/tools/eraser.cpp",
+			"Mu"
+		],
+		[
 			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/tools/pencil.cpp",
 			"Mu"
 		],
@@ -128,15 +157,31 @@
 			"Mu"
 		],
 		[
-			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/canvaspane.cpp",
+			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/flowlayout.cpp",
 			"Mu"
 		],
 		[
-			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/contentpane.cpp",
+			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/panes/canvaspane.cpp",
+			"Mu"
+		],
+		[
+			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/panes/contentpane.cpp",
+			"Mu"
+		],
+		[
+			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/panes/flowscrollpane.cpp",
+			"Mu"
+		],
+		[
+			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/panes/toolpane.cpp",
 			"Mu"
 		],
 		[
 			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/pixeleditor.cpp",
+			"Mu"
+		],
+		[
+			"/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/src/ui/weightedsplitter.cpp",
 			"Mu"
 		],
 		[

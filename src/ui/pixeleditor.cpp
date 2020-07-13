@@ -1,5 +1,5 @@
 #include "pixeleditor.h"
-#include "contentpane.h"
+#include "src/ui/panes/contentpane.h"
 
 PixelEditor::PixelEditor(QWidget *parent) : QMainWindow(parent) {
 	setCentralWidget(new ContentPane());

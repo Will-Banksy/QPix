@@ -12,6 +12,12 @@ class Canvas : public QGraphicsItem {
 		~Canvas();
 		QImage* surface;
 		QImage* overlay;
+		QImage* buffer;
+
+		// Commits changes to the buffer - basically writes the buffer to the image
+		void commit();
+		// Reverts the buffer back to the image
+		void revert();
 
 	protected:
 		void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;

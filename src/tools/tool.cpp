@@ -54,6 +54,8 @@ void Tool::onDragCancel(QMouseEvent* evt, QPoint& cPos) {
 	curr = QPoint(cPos);
 	currMouseButton = getMouseButton(evt); // Set to mouse button that cancelled the drag
 	firstDragEvent = false;
+
+	canvas->revert();
 }
 
 void Tool::onMouseMoved(QMouseEvent* evt, QPoint& cPos) {

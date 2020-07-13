@@ -1,5 +1,4 @@
 #include "canvaspane.h"
-#include "canvas.h"
 #include <QWheelEvent>
 #include "src/editortools.h"
 
@@ -33,7 +32,7 @@ void CanvasPane::wheelEvent(QWheelEvent* event) {
 	} else {
 		factor = 0.9;
 	}
-	factor = scaleNumber * factor > 120 ? 120.0 / scaleNumber : factor; // Needs to be long-time-useage-proofed
+	factor = scaleNumber * factor > 120 ? 120.0 / scaleNumber : factor; // Needs to be long-time-useage-proofed - need some way to get the current scale
 	scaleNumber *= factor;
 
 	scale(factor, factor);

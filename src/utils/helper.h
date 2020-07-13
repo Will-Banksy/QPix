@@ -1,6 +1,7 @@
-#include <stdlib.h>
 #ifndef HELPER_H
 #define HELPER_H
+
+#include <stdlib.h>
 
 namespace utils {
 	// char* addstrs(char* str1, char* str2, int str1len, int str2len);

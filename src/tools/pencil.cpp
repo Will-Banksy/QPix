@@ -10,7 +10,7 @@ Pencil::Pencil(int id, Canvas* canvas) : Tool(id, canvas) {
 
 	// Assign the lambda (capturing the 'this' pointer so I can use global variables) to the std::function
 	toolAction = [&, this](int i, int j, uint col, ToolSettings& settings) {
-		this->canvas->surface->setPixel(i, j, col);
+		this->canvas->buffer->setPixel(i, j, col);
 	};
 }
 
@@ -60,6 +60,8 @@ void Pencil::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
 	} else {
 		Algorithms::plotLine(prev.x(), curr.y(), prev.x(), prev.y(), col, settings, toolAction);
 	}
+
+	canvas->commit();
 }
 
 // @Override public void onMouseReleased(MouseEvent me)
