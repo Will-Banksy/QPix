@@ -1,3 +1,6 @@
+# Don't want the build directory
 build
+
+# Remove KDevelop project files - have to do .kdev4/* because .kdev4 doesn't seem to work for ignoring the directory
 .kdev4/*
 PixelEditor.kdev4
