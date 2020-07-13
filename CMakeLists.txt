@@ -29,7 +29,6 @@ set(pixeleditor_CPP
 	src/ui/panes/contentpane.cpp
 	src/ui/panes/canvaspane.cpp
 	src/ui/panes/toolpane.cpp
-	src/ui/panes/flowscrollpane.cpp
 
 	src/tools/tool.cpp
 	src/tools/pencil.cpp
@@ -52,7 +51,6 @@ set(SOURCES
 	src/ui/panes/contentpane.h
 	src/ui/panes/canvaspane.h
 	src/ui/panes/toolpane.h
-	src/ui/panes/flowscrollpane.h
 
 	src/tools/tool.h
 	src/tools/pencil.h
