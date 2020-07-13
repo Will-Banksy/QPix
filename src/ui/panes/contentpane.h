@@ -2,6 +2,7 @@
 #define CONTENTPANE_H
 
 #include <QWidget>
+#include <QMdiArea>
 
 /**
  * @todo write docs
