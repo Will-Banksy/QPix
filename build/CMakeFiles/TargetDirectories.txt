@@ -1,8 +1,0 @@
-/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/build/CMakeFiles/install/strip.dir
-/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/build/CMakeFiles/install/local.dir
-/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/build/CMakeFiles/install.dir
-/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/build/CMakeFiles/list_install_components.dir
-/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/build/CMakeFiles/rebuild_cache.dir
-/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/build/CMakeFiles/edit_cache.dir
-/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/build/CMakeFiles/pixeleditor.dir
-/home/william-banks/Documents/Coding/C++/KProjects/PixelEditor/build/CMakeFiles/pixeleditor_autogen.dir
