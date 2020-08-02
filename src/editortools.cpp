@@ -10,7 +10,7 @@ Tool* EditorTools::selectedTool = nullptr;
 void EditorTools::initTools(Canvas* canvas) {
 	tools.append(new Pencil(0, canvas));
 	tools.append(new Eraser(1, canvas));
-	selectedTool = tools[1];
+	selectedTool = tools[0];
 }
 
 

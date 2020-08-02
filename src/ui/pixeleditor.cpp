@@ -5,6 +5,8 @@
 PixelEditor::PixelEditor(QWidget *parent) : QMainWindow(parent) {
 	setCentralWidget(new ContentPane());
 
+	setWindowTitle("QPix");
+
 	setDockOptions(QMainWindow::AnimatedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::VerticalTabs);
 
 	addDockWidget(Qt::LeftDockWidgetArea, new ToolPane(), Qt::Vertical);

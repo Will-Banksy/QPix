@@ -1,5 +1,8 @@
-cmake_minimum_required(VERSION 3.0)
-project(PixelEditor)
+# Minimum required version of cmake to build this project
+cmake_minimum_required(VERSION 3.1)
+
+# Set project name and version, and languages used
+project(QPix VERSION 1.0 LANGUAGES CXX)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -60,11 +63,11 @@ set(SOURCES
 	src/utils/helper.h
 )
 
-# Tell CMake to create the helloworld executable
-add_executable(pixeleditor ${SOURCES} ${QT_RESOURCES})
+# Tell CMake to create the executable
+add_executable(qpix ${SOURCES} ${QT_RESOURCES})
 
-# Use the Widgets module from Qt 5.
-target_link_libraries(pixeleditor Qt5::Widgets)
+# Use the Widgets module from Qt 5
+target_link_libraries(qpix Qt5::Widgets)
 
 # Install the executable
-install(TARGETS pixeleditor DESTINATION bin)
+install(TARGETS qpix DESTINATION bin)
