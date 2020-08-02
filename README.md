@@ -16,4 +16,6 @@ make
 
 ### To Run
 
+```bash
 ./pixeleditor
+```
