@@ -1,8 +1,8 @@
 #ifndef ERASER_H
 #define ERASER_H
 
-#include "tool.h"
-#include "src/utils/algorithms.h"
+#include "Tool.h"
+#include "utils/Algorithms.h"
 
 /**
  * @todo write docs

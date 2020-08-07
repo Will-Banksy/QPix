@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.1)
 project(QPix VERSION 1.0 LANGUAGES CXX)
 
 # Find includes in corresponding build directories
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 # Instruct CMake to create code from Qt designer ui files
@@ -22,49 +22,52 @@ qt5_add_resources(QT_RESOURCES resources.qrc)
 
 set(pixeleditor_CPP
 	src/main.cpp
-	src/editortools.cpp
+	src/EditorTools.cpp
 
-	src/ui/pixeleditor.cpp
-	src/ui/canvas.cpp
-	src/ui/weightedsplitter.cpp
-	src/ui/flowlayout.cpp
+	src/ui/PixelEditor.cpp
+	src/ui/Canvas.cpp
+	src/ui/WeightedSplitter.cpp
+	src/ui/FlowLayout.cpp
 
-	src/ui/panes/contentpane.cpp
-	src/ui/panes/canvaspane.cpp
-	src/ui/panes/toolpane.cpp
+	src/ui/panes/ContentPane.cpp
+	src/ui/panes/CanvasPane.cpp
+	src/ui/panes/ToolPane.cpp
 
-	src/tools/tool.cpp
-	src/tools/pencil.cpp
-	src/tools/eraser.cpp
+	src/tools/Tool.cpp
+	src/tools/Pencil.cpp
+	src/tools/Eraser.cpp
 
-	src/utils/algorithms.cpp
-	src/utils/helper.cpp
+	src/utils/Algorithms.cpp
+	src/utils/Helper.cpp
 )
 
 set(SOURCES
 	${pixeleditor_CPP}
 
-	src/editortools.h
+	src/EditorTools.h
 
-	src/ui/pixeleditor.h
-	src/ui/canvas.h
-	src/ui/weightedsplitter.h
-	src/ui/flowlayout.h
+	src/ui/PixelEditor.h
+	src/ui/Canvas.h
+	src/ui/WeightedSplitter.h
+	src/ui/FlowLayout.h
 
-	src/ui/panes/contentpane.h
-	src/ui/panes/canvaspane.h
-	src/ui/panes/toolpane.h
+	src/ui/panes/ContentPane.h
+	src/ui/panes/CanvasPane.h
+	src/ui/panes/ToolPane.h
 
-	src/tools/tool.h
-	src/tools/pencil.h
-	src/tools/eraser.h
+	src/tools/Tool.h
+	src/tools/Pencil.h
+	src/tools/Eraser.h
 
-	src/utils/algorithms.h
-	src/utils/helper.h
+	src/utils/Algorithms.h
+	src/utils/Helper.h
 )
 
 # Tell CMake to create the executable
 add_executable(qpix ${SOURCES} ${QT_RESOURCES})
+
+# So I don't have to include the src in #include <header>
+target_include_directories(qpix PRIVATE src)
 
 # Use the Widgets module from Qt 5
 target_link_libraries(qpix Qt5::Widgets)

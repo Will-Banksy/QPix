@@ -1,7 +1,7 @@
 #ifndef ALGORITHMS_H
 #define ALGORITHMS_H
 
-#include "src/tools/tool.h"
+#include "tools/Tool.h"
 
 typedef unsigned int uint;
 typedef std::function<void(int, int, uint, Tool::ToolSettings&)> AlgoAction;

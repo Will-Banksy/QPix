@@ -1,6 +1,6 @@
-#include "editortools.h"
-#include "src/tools/pencil.h"
-#include "src/tools/eraser.h"
+#include "EditorTools.h"
+#include "tools/Pencil.h"
+#include "tools/Eraser.h"
 
 uint EditorTools::primaryColour = 0xff000000;
 uint EditorTools::secondaryColour = 0x00000000;

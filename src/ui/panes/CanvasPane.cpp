@@ -1,6 +1,6 @@
-#include "canvaspane.h"
+#include "CanvasPane.h"
 #include <QWheelEvent>
-#include "src/editortools.h"
+#include "EditorTools.h"
 
 CanvasPane::CanvasPane(QWidget* parent) : QGraphicsView(parent) {
 	QGraphicsScene* scene = new QGraphicsScene();

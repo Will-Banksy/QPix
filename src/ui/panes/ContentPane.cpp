@@ -1,10 +1,10 @@
-#include "contentpane.h"
+#include "ContentPane.h"
 #include <QVBoxLayout>
 #include <QPushButton>
-#include "canvaspane.h"
+#include "CanvasPane.h"
 #include <QSplitter>
-#include "src/ui/weightedsplitter.h"
-#include "toolpane.h"
+#include "ui/WeightedSplitter.h"
+#include "ToolPane.h"
 #include <iostream>
 
 ContentPane::ContentPane(QWidget* parent) : QWidget(parent) {

@@ -2,7 +2,7 @@
 #define EDITORTOOLS_H
 
 #include <QColor>
-#include <src/tools/tool.h>
+#include "tools/Tool.h"
 
 // class Canvas;
 // class Tool; // Forward declaration - can only be used when defining references or pointers to the class

@@ -1,7 +1,7 @@
-#include "weightedsplitter.h"
+#include "WeightedSplitter.h"
 #include <QResizeEvent>
 #include <iostream>
-#include "src/utils/helper.h"
+#include "utils/Helper.h"
 
 WeightedSplitter::WeightedSplitter(Qt::Orientation orientation, QWidget* parent) : QSplitter(orientation, parent) {
 	weights = QList<float>();

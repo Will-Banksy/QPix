@@ -5,7 +5,7 @@
 #include <QPoint>
 #include <QMouseEvent>
 #include <QColor>
-#include "src/ui/canvas.h"
+#include "ui/Canvas.h"
 
 /**
  * @todo write docs

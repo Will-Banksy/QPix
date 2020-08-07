@@ -1,4 +1,4 @@
-#include "pencil.h"
+#include "Pencil.h"
 #include <iostream>
 
 // the ': Tool(id, canvas)' in the initialisation list is like calling super(id, tool)

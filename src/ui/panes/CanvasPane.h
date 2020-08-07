@@ -2,7 +2,7 @@
 #define CANVASPANE_H
 
 #include <QGraphicsView>
-#include "src/ui/canvas.h"
+#include "ui/Canvas.h"
 
 /**
  * @todo write docs

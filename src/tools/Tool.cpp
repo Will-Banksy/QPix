@@ -1,5 +1,5 @@
-#include "tool.h"
-#include "src/editortools.h"
+#include "Tool.h"
+#include "EditorTools.h"
 
 Tool::Tool(int id, Canvas* canvas) {
 	this->id = id;

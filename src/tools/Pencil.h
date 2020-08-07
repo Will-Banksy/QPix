@@ -1,8 +1,8 @@
 #ifndef PENCIL_H
 #define PENCIL_H
 
-#include "tool.h"
-#include "src/utils/algorithms.h"
+#include "Tool.h"
+#include "utils/Algorithms.h"
 
 /**
  * @todo write docs

@@ -1,4 +1,4 @@
-#include "algorithms.h"
+#include "Algorithms.h"
 
 inline int abs(int val) {
 	if(val < 0) {

@@ -1,8 +1,8 @@
-#include "toolpane.h"
+#include "ToolPane.h"
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>
-#include "src/ui/flowlayout.h"
+#include "ui/FlowLayout.h"
 
 ToolPane::ToolPane(QWidget* parent) : QDockWidget(parent) {
 	setWindowTitle("Tools");

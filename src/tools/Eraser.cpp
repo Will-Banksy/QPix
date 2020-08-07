@@ -1,4 +1,4 @@
-#include "eraser.h"
+#include "Eraser.h"
 
 // the ': Tool(id, canvas)' in the initialisation list is like calling super(id, tool)
 Eraser::Eraser(int id, Canvas* canvas) : Tool(id, canvas) {

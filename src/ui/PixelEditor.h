@@ -2,7 +2,8 @@
 #define PIXELEDITOR_H
 
 #include <QMainWindow>
-#include <QScopedPointer>
+
+class ToolPane;
 
 class PixelEditor : public QMainWindow
 {
@@ -11,6 +12,11 @@ class PixelEditor : public QMainWindow
 	public:
 		explicit PixelEditor(QWidget *parent = nullptr);
 		~PixelEditor() override;
+
+	private:
+		ToolPane* toolPane;
+
+		void setupMenus();
 };
 
 #endif // PIXELEDITOR_H
