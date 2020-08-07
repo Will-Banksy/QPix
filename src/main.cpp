@@ -1,4 +1,4 @@
-#include "ui/pixeleditor.h"
+#include "ui/PixelEditor.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -10,4 +10,3 @@ int main(int argc, char *argv[])
 
     return app.exec();
 }
-
