@@ -1,21 +1,20 @@
 # QPix
 
-A simple little Pixel Editor
+A simple little Pixel Art Editor, using the Qt libraries
 
-### Build instructions
+### Compile And Run
 
 You need Qt5 and CMake 3.1 or higher
 
-Navigate to project directory
+Navigate to project directory:
 
 ```bash
 mkdir build && cd build
 cmake ..
 make
 ```
-
-### To Run
+To run:
 
 ```bash
-./pixeleditor
+./qpix
 ```
