@@ -1,0 +1,21 @@
+<RCC>
+	<qresource>
+		<file alias="Transparency-Dark.png">data/Transparency-Dark.png</file>
+		<file alias="Icon_Bucket">data/Bucket.png</file>
+		<file alias="Icon_ColourWand">data/Colour_Wand.png</file>
+		<file alias="Icon_Dither">data/Dither.png</file>
+		<file alias="Icon_Ellipse">data/Ellipse.png</file>
+		<file alias="Icon_Folder">data/Folder.png</file>
+		<file alias="Icon_Hand">data/Hand.png</file>
+		<file alias="Icon_Line">data/Line.png</file>
+		<file alias="Icon_Pencil">data/Pencil.png</file>
+		<file alias="Icon_Pipette">data/Pipette.png</file>
+		<file alias="Icon_Rectangle">data/Rectangle.png</file>
+		<file alias="Icon_Replace">data/Replace.png</file>
+		<file alias="Icon_Save">data/Save.png</file>
+		<file alias="Icon_SaveAs">data/Save_As.png</file>
+		<file alias="Icon_SelectFree">data/Select_Free.png</file>
+		<file alias="Icon_SelectRect">data/Select_Rect.png</file>
+		<file alias="Icon_Wand">data/Wand.png</file>
+	</qresource>
+</RCC>

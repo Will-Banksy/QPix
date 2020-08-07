@@ -18,7 +18,7 @@ find_package(Qt5Widgets CONFIG REQUIRED)
 find_package(Qt5Core)
 
 # Add the resources
-qt5_add_resources(QT_RESOURCES qtres.qrc)
+qt5_add_resources(QT_RESOURCES resources.qrc)
 
 set(pixeleditor_CPP
 	src/main.cpp
