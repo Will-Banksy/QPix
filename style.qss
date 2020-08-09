@@ -1,0 +1,49 @@
+/*
+ * This is a Qt style sheet. This style sheet will be the default style for my application
+ */
+
+/* Use this to declare variables - except Qt doesn't support variables */
+/* Instead, specify them in the colours.json file */
+/*:root {
+	--back-dark: #1C1C1C;
+	--back-light: #282828;
+
+	--button-normal: #333333;
+	--button-hover: #444444;
+
+	--accent: #4495D4;
+
+	--text: #E8E8E8;
+}*/
+
+QPushButton {
+	border: none;
+	background: none;
+	background-color: @button-normal;
+	color: black;
+}
+
+QPushButton:focus {
+	border: none;
+	background-color: @button-normal;
+}
+
+QPushButton:pressed {
+	border: none;
+	background-color: @button-hover;
+}
+
+QPushButton:hover {
+	border: none;
+	background-color: @button-hover;
+}
+
+QPushButton:checked {
+	border: 2px solid @accent;
+	background-color: @button-normal;
+}
+
+QPushButton:checked:hover {
+	border: 2px solid @accent;
+	background-color: @button-hover;
+}

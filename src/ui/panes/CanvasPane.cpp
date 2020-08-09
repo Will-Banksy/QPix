@@ -18,7 +18,7 @@ CanvasPane::CanvasPane(QWidget* parent) : QGraphicsView(parent) {
 	// Track mouse to receive mouse moved events
 	setMouseTracking(true);
 
-	scaleNumber = 1.0;
+	scaleAmt = 1.0;
 }
 
 CanvasPane::~CanvasPane() {
@@ -32,8 +32,14 @@ void CanvasPane::wheelEvent(QWheelEvent* event) {
 	} else {
 		factor = 0.9;
 	}
-	factor = scaleNumber * factor > 120 ? 120.0 / scaleNumber : factor; // Needs to be long-time-useage-proofed - need some way to get the current scale
-	scaleNumber *= factor;
+	factor = scaleAmt * factor > 120 ? 120.0 / scaleAmt : factor; // Needs to be long-time-useage-proofed - need some way to get the current scale - current tracking method may be subject to gradual divergence from the real scale
+	scaleAmt *= factor;
+
+	if(scaleAmt < 1) {
+		setRenderHint(QPainter::SmoothPixmapTransform, true); // If we are zoomed OUT, then smooth the drawn image
+	} else {
+		setRenderHint(QPainter::SmoothPixmapTransform, false); // If we are zoomed IN, then definitely don't smooth the drawn image
+	}
 
 	scale(factor, factor);
 	canvas->update();

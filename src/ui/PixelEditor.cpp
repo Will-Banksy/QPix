@@ -1,11 +1,13 @@
 #include "PixelEditor.h"
 #include "ui/panes/ContentPane.h"
 #include "ui/panes/ToolPane.h"
+#include <QStyle>
 
 PixelEditor::PixelEditor(QWidget *parent) : QMainWindow(parent) {
+	setWindowTitle("QPix");
+
 	setCentralWidget(new ContentPane());
 
-	setWindowTitle("QPix");
 
 	setDockOptions(QMainWindow::AnimatedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::VerticalTabs);
 

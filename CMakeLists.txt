@@ -33,6 +33,8 @@ set(pixeleditor_CPP
 	src/ui/panes/CanvasPane.cpp
 	src/ui/panes/ToolPane.cpp
 
+	src/ui/widgets/ToolButton.cpp
+
 	src/tools/Tool.cpp
 	src/tools/Pencil.cpp
 	src/tools/Eraser.cpp
@@ -54,6 +56,8 @@ set(SOURCES
 	src/ui/panes/ContentPane.h
 	src/ui/panes/CanvasPane.h
 	src/ui/panes/ToolPane.h
+
+	src/ui/widgets/ToolButton.h
 
 	src/tools/Tool.h
 	src/tools/Pencil.h

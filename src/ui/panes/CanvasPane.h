@@ -17,14 +17,14 @@ class CanvasPane : public QGraphicsView {
 		void wheelEvent(QWheelEvent* event) override;
 		void mousePressEvent(QMouseEvent* event) override;
 		void mouseReleaseEvent(QMouseEvent* event) override;
-		void mouseMoveEvent(QMouseEvent* event) override; // Goddamnit it seems that overriding mouseMoveEvent makes zooming just zoom into the corner (regardless of if mouse tracking is enabled)
+		void mouseMoveEvent(QMouseEvent* event) override;
 
 	private:
 		bool mouseDown;
 		bool hasMovedMouse;
 		bool ignoreRelease;
 
-		double scaleNumber; // --
+		double scaleAmt; // --
 };
 
 #endif // CANVASPANE_H

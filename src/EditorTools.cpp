@@ -18,4 +18,5 @@ EditorTools::EditorTools() {
 }
 
 EditorTools::~EditorTools() {
+	// Don't need to delete selectedTool - when the QList deletes itself it should take care of deleting all the tools. Right?
 }

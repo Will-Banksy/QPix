@@ -17,5 +17,8 @@
 		<file alias="Icon_SelectFree">data/Select_Free.png</file>
 		<file alias="Icon_SelectRect">data/Select_Rect.png</file>
 		<file alias="Icon_Wand">data/Wand.png</file>
+
+		<file>style.qss</file>
+		<file>colours.json</file>
 	</qresource>
 </RCC>
