@@ -16,16 +16,18 @@
 	--text: #E8E8E8;
 }*/
 
+* {
+	background-color: @back-dark;
+	color: @text;
+/* 	border: 1px solid @back-light; */
+}
+
 QPushButton {
 	border: none;
 	background: none;
 	background-color: @button-normal;
 	color: black;
-}
-
-QPushButton:focus {
-	border: none;
-	background-color: @button-normal;
+	border-radius: 2px;
 }
 
 QPushButton:pressed {

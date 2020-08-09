@@ -35,8 +35,6 @@ QString utils::getStyleSheet() {
 	qss.open(QFile::ReadOnly);
 	QString styleSheet = QString::fromUtf8(qss.readAll());
 
-	std::cout << "After: " << styleSheet.toStdString() << std::endl;
-
 	// Get the keys and iterate over them
 	QJsonObject obj = doc.object();
 	for(QString key : obj.keys()) {
@@ -44,8 +42,6 @@ QString utils::getStyleSheet() {
 
 		styleSheet.replace(key, val);
 	}
-
-	std::cout << "After: " << styleSheet.toStdString() << std::endl;
 
 	return styleSheet;
 }
