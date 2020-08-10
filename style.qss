@@ -62,8 +62,8 @@ QGraphicsView {
 }
 
 QDockWidget {
-	titlebar-close-icon: url(:close.png);
-	titlebar-normal-icon: url(:/float.png), url(:/float-hover.png) active;
+	titlebar-close-icon: url(:/placeholder.png); /* You CAN put a list of icons and their states here, but there isn't a unique 'hover' and 'pressed' state */
+	titlebar-normal-icon: url(:/placeholder.png);
 }
 
 QDockWidget::close-button,
@@ -72,13 +72,25 @@ QDockWidget::float-button {
 	border: none;
 }
 
+/* And because there isn't those unique states, I'm just doing this as a workaround */
 QDockWidget::close-button {
-/* 	image: url(:/close-hover.png); */
+	image: url(:/close.png);
+}
+QDockWidget::close-button:hover {
+	image: url(:/close-hover.png);
+}
+QDockWidget::close-button:pressed {
+	image: url(:/close-pressed.png);
 }
 
-QDockWidget::close-button:hover {
-/* 	subcontrol-margin-right: 6px; */
-/* 	image: url(:/close-hover.png); */
+QDockWidget::float-button {
+	image: url(:/float.png);
+}
+QDockWidget::float-button:hover {
+	image: url(:/float-hover.png);
+}
+QDockWidget::float-button:pressed {
+	image: url(:/float-pressed.png);
 }
 
 QDockWidget::title {

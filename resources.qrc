@@ -18,6 +18,7 @@
 		<file alias="Icon_SelectRect">data/Select_Rect.png</file>
 		<file alias="Icon_Wand">data/Wand.png</file>
 
+		<file alias="placeholder.png">data/controls/placeholder.png</file>
 		<file alias="close.png">data/controls/close.png</file>
 		<file alias="close-hover.png">data/controls/close-hover.png</file>
 		<file alias="close-pressed.png">data/controls/close-pressed.png</file>
