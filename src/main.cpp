@@ -6,8 +6,7 @@
 #include <QCommonStyle>
 #include "utils/Helper.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
 
 // 	QStyle* style = app.style();

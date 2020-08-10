@@ -5,13 +5,15 @@
 
 class ToolPane;
 
-class PixelEditor : public QMainWindow
-{
+class PixelEditor : public QMainWindow {
     Q_OBJECT
 
 	public:
 		explicit PixelEditor(QWidget *parent = nullptr);
 		~PixelEditor() override;
+
+// 	protected:
+// 		void paintEvent(QPaintEvent* event) override;
 
 	private:
 		ToolPane* toolPane;

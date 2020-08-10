@@ -29,7 +29,6 @@ set(pixeleditor_CPP
 	src/ui/WeightedSplitter.cpp
 	src/ui/FlowLayout.cpp
 
-	src/ui/panes/ContentPane.cpp
 	src/ui/panes/CanvasPane.cpp
 	src/ui/panes/ToolPane.cpp
 
@@ -53,7 +52,6 @@ set(SOURCES
 	src/ui/WeightedSplitter.h
 	src/ui/FlowLayout.h
 
-	src/ui/panes/ContentPane.h
 	src/ui/panes/CanvasPane.h
 	src/ui/panes/ToolPane.h
 
