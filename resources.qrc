@@ -18,6 +18,13 @@
 		<file alias="Icon_SelectRect">data/Select_Rect.png</file>
 		<file alias="Icon_Wand">data/Wand.png</file>
 
+		<file alias="close.png">data/controls/close.png</file>
+		<file alias="close-hover.png">data/controls/close-hover.png</file>
+		<file alias="close-pressed.png">data/controls/close-pressed.png</file>
+		<file alias="float.png">data/controls/float.png</file>
+		<file alias="float-hover.png">data/controls/float-hover.png</file>
+		<file alias="float-pressed.png">data/controls/float-pressed.png</file>
+
 		<file>style.qss</file>
 		<file>colours.json</file>
 	</qresource>

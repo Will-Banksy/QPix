@@ -15,7 +15,7 @@ class ToolButton : public QPushButton {
 		~ToolButton() override;
 
 	public slots:
-		void onToggled(bool checked);
+		void onToggled();
 };
 
 #endif // TOOLBUTTON_H

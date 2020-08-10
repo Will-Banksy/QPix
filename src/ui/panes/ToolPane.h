@@ -13,6 +13,9 @@ class ToolPane : public QDockWidget {
 		~ToolPane() = default;
 		ToolPane(QWidget* parent = nullptr);
 
+// 	protected:
+// 		void paintEvent(QPaintEvent* event) override;
+
 	private:
 		void addToolButtons(FlowLayout* layout);
 };

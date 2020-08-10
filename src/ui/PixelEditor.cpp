@@ -2,6 +2,8 @@
 #include "ui/panes/ContentPane.h"
 #include "ui/panes/ToolPane.h"
 #include <QStyle>
+#include <QPushButton>
+#include <QVBoxLayout>
 
 PixelEditor::PixelEditor(QWidget *parent) : QMainWindow(parent) {
 	setWindowTitle("QPix");

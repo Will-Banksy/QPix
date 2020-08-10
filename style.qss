@@ -1,5 +1,7 @@
 /*
  * This is a Qt style sheet. This style sheet will be the default style for my application
+ *
+ * Animations workaround?: https://stackoverflow.com/questions/40287398/pyqt5-stylesheet-animation
  */
 
 /* Use this to declare variables - except Qt doesn't support variables */
@@ -19,7 +21,11 @@
 * {
 	background-color: @back-dark;
 	color: @text;
-/* 	border: 1px solid @back-light; */
+	border: none;
+	outline: none;
+	margin: 0;
+	padding: 0;
+/* 	border-radius: 2px; */
 }
 
 QPushButton {
@@ -49,3 +55,48 @@ QPushButton:checked:hover {
 	border: 2px solid @accent;
 	background-color: @button-hover;
 }
+
+QGraphicsView {
+	border: 1px solid @button-hover;
+	border-radius: 2px;
+}
+
+QDockWidget {
+	titlebar-close-icon: url(:close.png);
+	titlebar-normal-icon: url(:/float.png), url(:/float-hover.png) active;
+}
+
+QDockWidget::close-button,
+QDockWidget::float-button {
+	background: none;
+	border: none;
+}
+
+QDockWidget::close-button {
+/* 	image: url(:/close-hover.png); */
+}
+
+QDockWidget::close-button:hover {
+/* 	subcontrol-margin-right: 6px; */
+/* 	image: url(:/close-hover.png); */
+}
+
+QDockWidget::title {
+	color: @text;
+	border: 1px solid @button-hover;
+	border-bottom: none;
+	padding: 3px 6px 3px 6px;
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+}
+
+.DockContent { /* The dot followed by a name targets all widgets that have that name as their class property */
+	border: 1px solid @button-hover;
+	border-top: none;
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+}
+
+/*QMainWindow::separator {
+	background: @accent;
+}*/

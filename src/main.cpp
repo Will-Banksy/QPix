@@ -10,8 +10,10 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-	QStyle* style = app.style();
+// 	QStyle* style = app.style();
 // 	std::cout << style->objectName().toStdString() << std::endl;
+
+	app.setStyle(new QCommonStyle());
 
 	// Get the stylesheet
 	QString styleSheet = utils::getStyleSheet();
