@@ -18,6 +18,9 @@ CanvasPane::CanvasPane(QWidget* parent) : QGraphicsView(parent) {
 	// Track mouse to receive mouse moved events
 	setMouseTracking(true);
 
+	mouseDown = false;
+	hasMovedMouse = false;
+	ignoreRelease = false;
 	scaleAmt = 1.0;
 }
 

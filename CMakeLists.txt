@@ -6,7 +6,7 @@ project(QPix VERSION 1.0 LANGUAGES CXX)
 
 # Find includes in corresponding build directories
 # set(CMAKE_INCLUDE_CURRENT_DIR ON)
-# Instruct CMake to run moc automatically when needed.
+# Instruct CMake to run moc (Meta Object Compiler) automatically when needed.
 set(CMAKE_AUTOMOC ON)
 # Instruct CMake to create code from Qt designer ui files
 # set(CMAKE_AUTOUIC ON)
@@ -26,7 +26,6 @@ set(pixeleditor_CPP
 
 	src/ui/PixelEditor.cpp
 	src/ui/Canvas.cpp
-	src/ui/WeightedSplitter.cpp
 	src/ui/FlowLayout.cpp
 
 	src/ui/panes/CanvasPane.cpp
@@ -49,7 +48,6 @@ set(SOURCES
 
 	src/ui/PixelEditor.h
 	src/ui/Canvas.h
-	src/ui/WeightedSplitter.h
 	src/ui/FlowLayout.h
 
 	src/ui/panes/CanvasPane.h

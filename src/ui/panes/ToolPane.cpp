@@ -28,6 +28,6 @@ ToolPane::ToolPane(QWidget* parent) : QDockWidget(parent) {
 
 void ToolPane::addToolButtons(FlowLayout* layout) {
 	for(Tool* tool : EditorTools::tools) {
-		layout->addWidget(new ToolButton());
+		layout->addWidget(new ToolButton(tool));
 	}
 }

@@ -2,17 +2,18 @@
 #define TOOLBUTTON_H
 
 #include <QPushButton>
+#include "tools/Tool.h"
 
 /**
  * @todo write docs
  */
 class ToolButton : public QPushButton {
-// 	protected:
-		Q_OBJECT
+	Q_OBJECT
 
 	public:
-		explicit ToolButton(QWidget* parent = nullptr);
+		explicit ToolButton(Tool* tool, QWidget* parent = nullptr);
 		~ToolButton() override;
+		Tool* tool;
 
 	public slots:
 		void onToggled();

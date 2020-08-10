@@ -24,7 +24,7 @@ class CanvasPane : public QGraphicsView {
 		bool hasMovedMouse;
 		bool ignoreRelease;
 
-		double scaleAmt; // --
+		double scaleAmt; // Keeps track of the current scale
 };
 
 #endif // CANVASPANE_H

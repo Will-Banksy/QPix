@@ -24,8 +24,5 @@ PixelEditor::~PixelEditor() {
 };
 
 void PixelEditor::setupMenus() {
+	// Add the menu here
 }
-
-// void PixelEditor::paintEvent(QPaintEvent* event) {
-// 	event->accept();
-// }
