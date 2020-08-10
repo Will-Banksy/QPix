@@ -27,7 +27,9 @@ ToolPane::ToolPane(QWidget* parent) : QDockWidget(parent) {
 }
 
 void ToolPane::addToolButtons(FlowLayout* layout) {
-	for(Tool* tool : EditorTools::tools) {
-		layout->addWidget(new ToolButton(tool));
+	for(Tool tool : EditorTools::tools) {
+		ToolButton* btn = new ToolButton(tool);
+		tool.button = btn;
+		layout->addWidget(btn);
 	}
 }

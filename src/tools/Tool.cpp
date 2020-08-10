@@ -5,6 +5,7 @@ Tool::Tool(int id, Canvas* canvas) {
 	this->id = id;
 	settings = ToolSettings();
 	this->canvas = canvas;
+	button = nullptr;
 }
 
 Tool::~Tool() {

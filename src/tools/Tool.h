@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include <QColor>
 #include "ui/Canvas.h"
+#include "ui/widgets/ToolButton.h"
 
 /**
  * @todo write docs
@@ -41,6 +42,7 @@ class Tool {
 		ToolSettings settings;
 		int triggerType;
 		Canvas* canvas;
+		ToolButton* button;
 
 	protected:
 		QPoint curr;

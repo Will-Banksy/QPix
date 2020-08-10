@@ -28,7 +28,7 @@
 /* 	border-radius: 2px; */
 }
 
-QPushButton {
+QToolButton {
 	border: none;
 	background: none;
 	background-color: @button-normal;
@@ -36,22 +36,22 @@ QPushButton {
 	border-radius: 2px;
 }
 
-QPushButton:pressed {
+QToolButton:pressed {
 	border: none;
 	background-color: @button-hover;
 }
 
-QPushButton:hover {
+QToolButton:hover {
 	border: none;
 	background-color: @button-hover;
 }
 
-QPushButton:checked {
+QToolButton:checked {
 	border: 2px solid @accent;
 	background-color: @button-normal;
 }
 
-QPushButton:checked:hover {
+QToolButton:checked:hover {
 	border: 2px solid @accent;
 	background-color: @button-hover;
 }
@@ -102,7 +102,7 @@ QDockWidget::title {
 	border-top-right-radius: 2px;
 }
 
-.DockContent { /* The dot followed by a name targets all widgets that have that name as their class property (by default, it seems the class property of a QWidget is it's class name, for example QDockWidget or QPushButton) */
+.DockContent { /* The dot followed by a name targets all widgets that have that name as their class property (by default, it seems the class property of a QWidget is it's class name, for example QDockWidget or QToolButton) */
 	border: 1px solid @button-hover;
 	border-top: none;
 	border-bottom-left-radius: 2px;
