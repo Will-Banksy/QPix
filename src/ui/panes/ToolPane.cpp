@@ -27,9 +27,12 @@ ToolPane::ToolPane(QWidget* parent) : QDockWidget(parent) {
 }
 
 void ToolPane::addToolButtons(FlowLayout* layout) {
-	for(Tool tool : EditorTools::tools) {
+	for(Tool* tool : EditorTools::tools) {
 		ToolButton* btn = new ToolButton(tool);
-		tool.button = btn;
+		tool->button = btn;
+		if(tool == EditorTools::selectedTool) {
+			btn->setCheckedSafe(true, true);
+		}
 		layout->addWidget(btn);
 	}
 }

@@ -13,9 +13,14 @@ class ToolButton : public QToolButton {
 	Q_OBJECT
 
 	public:
-		explicit ToolButton(Tool& tool, QWidget* parent = nullptr);
+		explicit ToolButton(Tool* tool, QWidget* parent = nullptr);
 		~ToolButton() override;
-		Tool& tool;
+		Tool* tool;
+		void setCheckedSafe(bool checked, bool blockSignal = false);
+
+	private:
+		bool checkedSafely;
+		bool blockNextSignal;
 
 	public slots:
 		void onToggled(bool checked);

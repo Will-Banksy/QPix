@@ -19,7 +19,7 @@ class EditorTools {
 		static uint primaryColour;
 		static uint secondaryColour;
 		static Tool* selectedTool;
-		static QList<Tool> tools;
+		static QList<Tool*> tools;
 		static void initTools(Canvas* canvas);
 };
 
