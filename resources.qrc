@@ -9,6 +9,10 @@
 		<file alias="float.png">data/controls/float.png</file>
 		<file alias="float-hover.png">data/controls/float-hover.png</file>
 		<file alias="float-pressed.png">data/controls/float-pressed.png</file>
+		<file alias="scrollbar-hor-normal.png">data/controls/scrollbar-hor-normal.png</file>
+		<file alias="scrollbar-ver-normal.png">data/controls/scrollbar-ver-normal.png</file>
+		<file alias="scrollbar-hor-hover.png">data/controls/scrollbar-hor-hover.png</file>
+		<file alias="scrollbar-ver-hover.png">data/controls/scrollbar-ver-hover.png</file>
 
 		<file>style.qss</file>
 		<file>colours.json</file>

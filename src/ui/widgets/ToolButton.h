@@ -9,7 +9,7 @@ class Tool;
 /**
  * @todo write docs
  */
-class ToolButton : public QToolButton {
+class ToolButton : public QToolButton { // Hang on... ToolButtons are basically glorified radio buttons. I've got the code working now though, so no need to change them
 	Q_OBJECT
 
 	public:

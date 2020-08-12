@@ -12,7 +12,7 @@ ToolButton::ToolButton(Tool* tool, QWidget* parent) : QToolButton(parent)/*, too
 	setMaximumSize(40, 40);
 	this->tool = tool;
 	checkedSafely = false;
-	blockNextSignal = false;
+	blockNextSignal = false; // Make sure I do set EVERY variable to have an initial value - otherwise it'll just have randomness left over from other processes/parts of this program as it's initial value. And unpredictable values are never good
 }
 
 ToolButton::~ToolButton() {
