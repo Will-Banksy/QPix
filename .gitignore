@@ -1,6 +1,6 @@
 # Don't want the build directory
-build
+build/*
 
-# Remove KDevelop project files - have to do .kdev4/* because .kdev4 doesn't seem to work for ignoring the directory
+# Ignore KDevelop project files
 .kdev4/*
-PixelEditor.kdev4
+*.kdev4

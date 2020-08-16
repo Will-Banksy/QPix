@@ -8,10 +8,13 @@
 #include "ui/Canvas.h"
 #include "ui/widgets/ToolButton.h"
 
-
 // Define a macro to replace all CHECK_MOUSE_BUTTONS with the code after it at compile time
 #define CHECK_MOUSE_BUTTONS if(currMouseButton != RIGHT && currMouseButton != LEFT) return;
 
+namespace utils {} // I guess this is like a forward declaration of a namespace?
+using namespace utils;
+
+// TODO: Maybe add tool namespace?
 /**
  * @todo write docs
  */

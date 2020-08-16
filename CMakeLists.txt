@@ -4,12 +4,8 @@ cmake_minimum_required(VERSION 3.1)
 # Set project name and version, and languages used
 project(QPix VERSION 1.0 LANGUAGES CXX)
 
-# Find includes in corresponding build directories
-# set(CMAKE_INCLUDE_CURRENT_DIR ON)
-# Instruct CMake to run moc (Meta Object Compiler) automatically when needed.
+# Instruct CMake to run moc (Meta Object Compiler) automatically when needed
 set(CMAKE_AUTOMOC ON)
-# Instruct CMake to create code from Qt designer ui files
-# set(CMAKE_AUTOUIC ON)
 
 # Find the QtWidgets library
 find_package(Qt5Widgets CONFIG REQUIRED)
@@ -67,13 +63,13 @@ set(SOURCES
 	src/utils/Colour.h
 )
 
-# Tell CMake to create the executable
+# Tell CMake to create the executable qpix
 add_executable(qpix ${SOURCES} ${QT_RESOURCES})
 
-# So I don't have to include the src in #include <header>
+# So I don't have to include the src in #include <header> - includes that directory for target qpix
 target_include_directories(qpix PRIVATE src)
 
-# Use the Widgets module from Qt 5
+# Use the Widgets module from Qt 5 - do it for target qpix
 target_link_libraries(qpix Qt5::Widgets)
 
 # Install the executable

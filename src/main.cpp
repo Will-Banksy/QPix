@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
 	app.setStyle(new QCommonStyle()); // Basing my QSS-made style off the cross-platform common style so less 'visual artifacts' (aka things not bloody working like they should) appear
 
 	// Get the stylesheet
-	QString styleSheet = utils::getStyleSheet();
+	QString styleSheet = utils::getStyleSheet(); // Maybe make so it can load other style sheets, if the user wants
 
 	app.setStyleSheet(styleSheet);
 

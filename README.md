@@ -1,5 +1,7 @@
 # QPix
 
+--- WIP ---
+
 A simple little Pixel Art Editor, using the Qt libraries
 
 ### Compile And Run

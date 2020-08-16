@@ -1,11 +1,12 @@
 #ifndef COLOUR_H
 #define COLOUR_H
 
-#include <stdlib.h>
+typedef unsigned int uint;
+typedef unsigned short ushort;
 
 namespace utils {
 	/// This class deals with colours as in ARGB
-    class Colour {
+    class Colour { // TODO: Provide a definition for each method
 	    public:
 		    static uint TRANSPARENT;
 			static uint BLACK;
