@@ -36,9 +36,11 @@ set(pixeleditor_CPP
 	src/tools/Tool.cpp
 	src/tools/Pencil.cpp
 	src/tools/Eraser.cpp
+	src/tools/Fill.cpp
 
 	src/utils/Algorithms.cpp
 	src/utils/Helper.cpp
+	src/utils/Colour.cpp
 )
 
 set(SOURCES
@@ -58,9 +60,11 @@ set(SOURCES
 	src/tools/Tool.h
 	src/tools/Pencil.h
 	src/tools/Eraser.h
+	src/tools/Fill.h
 
 	src/utils/Algorithms.h
 	src/utils/Helper.h
+	src/utils/Colour.h
 )
 
 # Tell CMake to create the executable

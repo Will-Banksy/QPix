@@ -20,8 +20,7 @@ void Eraser::onMousePressed(QMouseEvent* evt, QPoint& cPos) {
 	// Call superclasses implementation
 	Tool::onMousePressed(evt, cPos);
 
-	if(currMouseButton != RIGHT && currMouseButton != LEFT)
-		return;
+	CHECK_MOUSE_BUTTONS
 
 	Algorithms::plotLine(curr.x(), curr.y(), curr.x(), curr.y(), transparent, settings, toolAction);
 }
@@ -29,8 +28,7 @@ void Eraser::onMousePressed(QMouseEvent* evt, QPoint& cPos) {
 void Eraser::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
 	Tool::onMouseDragged(evt, cPos);
 
-	if(currMouseButton != RIGHT && currMouseButton != LEFT)
-		return;
+	CHECK_MOUSE_BUTTONS
 
 	Algorithms::plotLine(curr.x(), curr.y(), prev.x(), prev.y(), transparent, settings, toolAction);
 }
@@ -38,8 +36,7 @@ void Eraser::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
 void Eraser::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
 	Tool::onMouseReleased(evt, cPos);
 
-	if(currMouseButton != RIGHT && currMouseButton != LEFT)
-		return;
+	CHECK_MOUSE_BUTTONS
 
 	Algorithms::plotLine(prev.x(), curr.y(), prev.x(), prev.y(), transparent, settings, toolAction);
 

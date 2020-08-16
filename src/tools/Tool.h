@@ -8,6 +8,10 @@
 #include "ui/Canvas.h"
 #include "ui/widgets/ToolButton.h"
 
+
+// Define a macro to replace all CHECK_MOUSE_BUTTONS with the code after it at compile time
+#define CHECK_MOUSE_BUTTONS if(currMouseButton != RIGHT && currMouseButton != LEFT) return;
+
 /**
  * @todo write docs
  */
@@ -25,7 +29,7 @@ class Tool {
 				bool circleBrush;
 				int tolerance;
 				bool oneToOneRatio;
-				bool fill;
+				bool fill8Way;
 				bool pixelPerfect;
 				bool selectionAppend;
 				bool interdisperse;

@@ -115,14 +115,13 @@ QDockWidget::title {
 
 QScrollBar:horizontal {
 /* 	height: 10px; If you change the height, the widget doesn't register it as such, so that you can scroll 'off' what you're scrolling on, where you see background where the scroll bar would cover if it didn't have it's size set here */
-/* 	padding: 4px; */
 	border-top: 1px solid @button-normal;
 }
 
-QScrollBar:horizontal:hover {
-/* 	background-image: url(:/scrollbar-hor-normal.png); I would like to get something like breeze's scrollbars - you hover on the track/gutter and it shows. But there might not be a way to do that with QSS */
-/* 	border: 7px transparent; */
-}
+/*QScrollBar:horizontal:hover {
+	background-image: url(:/scrollbar-hor-normal.png); I would like to get something like breeze's scrollbars - you hover on the track/gutter and it shows. But there might not be a way to do that with QSS
+	border: 7px transparent;
+}*/
 
 QScrollBar::handle:horizontal {
 	min-width: 20px;
@@ -155,7 +154,5 @@ QScrollBar::sub-line {
 }
 
 QScrollBar:vertical {
-/* 	width: 10px; */
-/* 	padding: 4px; */
 	border-left: 1px solid @button-normal;
 }

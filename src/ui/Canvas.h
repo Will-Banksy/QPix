@@ -10,8 +10,8 @@ class Canvas : public QGraphicsItem {
 	public:
 		explicit Canvas();
 		~Canvas();
-		QImage* surface;
 		QImage* overlay;
+		/// If you want to draw to the surface, draw to this buffer and commit()
 		QImage* buffer;
 
 		// Commits changes to the buffer - basically writes the buffer to the image
@@ -25,6 +25,7 @@ class Canvas : public QGraphicsItem {
 
 	private:
 		QPixmap* background;
+		QImage* surface;
 };
 
 #endif // CANVAS_H
