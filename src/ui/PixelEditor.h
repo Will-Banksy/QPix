@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+// TODO: Use tr() function for QStrings
+
 class ToolPane;
 
 class PixelEditor : public QMainWindow {
@@ -13,9 +15,22 @@ class PixelEditor : public QMainWindow {
 		~PixelEditor() override;
 
 	private:
+		// Dock Widgets
 		ToolPane* toolPane;
 
+		// The menu bar
+		QMenuBar* menuBar;
+
+		// Actions
+		QAction* quitAct;
+		QAction* showToolsAct;
+
+		void createActions();
 		void setupMenus();
+
+	public slots:
+		void quit();
+		void showTools();
 };
 
 #endif // PIXELEDITOR_H

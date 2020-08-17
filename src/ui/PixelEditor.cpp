@@ -5,6 +5,8 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QPaintEvent>
+#include <QMenuBar>
+#include <QApplication>
 
 PixelEditor::PixelEditor(QWidget *parent) : QMainWindow(parent) {
 	setWindowTitle("QPix");
@@ -16,6 +18,7 @@ PixelEditor::PixelEditor(QWidget *parent) : QMainWindow(parent) {
 	toolPane = new ToolPane();
 	addDockWidget(Qt::LeftDockWidgetArea, toolPane, Qt::Vertical);
 
+	statusBar();
 	setupMenus();
 }
 
@@ -24,5 +27,35 @@ PixelEditor::~PixelEditor() {
 };
 
 void PixelEditor::setupMenus() {
-	// Add the menu here
+	createActions();
+
+	QMenuBar* menuBar = new QMenuBar(this);
+
+	QMenu* file = menuBar->addMenu(tr("&File"));
+	file->addSeparator();
+	file->addAction(quitAct);
+
+	QMenu* view = menuBar->addMenu(tr("&View"));
+	QMenu* showToolViews = view->addMenu(tr("Show Tool Views"));
+	showToolViews->addAction(showToolsAct);
+}
+
+void PixelEditor::createActions() { // FIXME: Status bar tips don't seem to be working as expected
+	quitAct = new QAction(tr("&Quit"), this);
+	quitAct->setShortcut(QKeySequence::Quit);
+	quitAct->setStatusTip(tr("Quit the application"));
+	connect(quitAct, &QAction::triggered, this, &PixelEditor::quit, Qt::QueuedConnection); // Using a QueuedConnection because QCoreApplication::quit() recommends it
+
+	showToolsAct = new QAction(tr("Show Tools"), this);
+	showToolsAct->setStatusTip(tr("Show the Tools tool view"));
+	connect(showToolsAct, &QAction::triggered, this, &PixelEditor::showTools);
+}
+
+void PixelEditor::quit() {
+	// Here I can do stuff before quitting
+	QApplication::quit();
+}
+
+void PixelEditor::showTools() {
+	toolPane->setVisible(true);
 }
