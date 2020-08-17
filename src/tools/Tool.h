@@ -27,6 +27,12 @@ class Tool {
 			NONE
 		};
 
+		enum ToolID {
+			PENCIL,
+			ERASER,
+			FILL
+		};
+
 		class ToolSettings {
 			public:
 				bool circleBrush;
@@ -40,10 +46,10 @@ class Tool {
 
 		Tool(int id, Canvas* canvas);
 		virtual ~Tool();
-		std::string name;
-		std::string description;
-		std::string keyShortcut;
-		std::string iconPath;
+		QString name;
+		QString description;
+		QString keyShortcut;
+		QString iconPath;
 		int id;
 		bool sizeMatters = false;
 		ToolSettings settings;

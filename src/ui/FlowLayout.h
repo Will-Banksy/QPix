@@ -48,6 +48,8 @@
  **
  ****************************************************************************/
 
+// TODO: Rewrite flow layout/Recreate it in some fashion
+
 #ifndef FLOWLAYOUT_H
 #define FLOWLAYOUT_H
 

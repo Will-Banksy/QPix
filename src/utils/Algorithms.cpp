@@ -40,7 +40,7 @@ namespace utils {
 
 		uint targetColour = canvas.buffer->pixel(startX, startY);
 
-		uint* bytes = (uint*)canvas.buffer->bits(); // Get the bits for fast writing/reading
+// 		uint* bytes = (uint*)canvas.buffer->bits(); // Get the bits for fast writing/reading
 
 		QQueue<QPoint> q;
 
@@ -50,7 +50,8 @@ namespace utils {
 		while(!q.isEmpty()) {
 			QPoint p = q.dequeue();
 
-			*colAt(bytes, canvas.buffer->width(), p.x(), p.y()) = col; // This should be roughly equivalent to canvas.buffer->setPixel(i, j, col)
+// 			*colAt(bytes, canvas.buffer->width(), p.x(), p.y()) = col; // This should be roughly equivalent to canvas.buffer->setPixel(i, j, col)
+			action(p.x(), p.y(), col, settings);
 
 			if(checkFillValidity(canvas, p.x() + 1, p.y(), targetColour, tolerance, filled)) {
 				q.enqueue(QPoint(p.x() + 1, p.y()));

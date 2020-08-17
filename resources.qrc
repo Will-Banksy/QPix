@@ -14,6 +14,10 @@
 		<file alias="scrollbar-hor-hover.png">data/controls/scrollbar-hor-hover.png</file>
 		<file alias="scrollbar-ver-hover.png">data/controls/scrollbar-ver-hover.png</file>
 
+		<file alias="pencil.png">data/tools/pencil.png</file>
+		<file alias="eraser.png">data/tools/eraser.png</file>
+		<file alias="fill.png">data/tools/fill.png</file>
+
 		<file>style.qss</file>
 		<file>colours.json</file>
 	</qresource>

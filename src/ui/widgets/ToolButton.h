@@ -18,9 +18,13 @@ class ToolButton : public QToolButton { // Hang on... ToolButtons are basically 
 		Tool* tool;
 		void setCheckedSafe(bool checked, bool blockSignal = false);
 
+	protected:
+		void paintEvent(QPaintEvent* event) override;
+
 	private:
 		bool checkedSafely;
 		bool blockNextSignal;
+		QPixmap icon;
 
 	public slots:
 		void onToggled(bool checked);

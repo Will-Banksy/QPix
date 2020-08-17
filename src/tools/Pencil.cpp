@@ -6,7 +6,7 @@ Pencil::Pencil(int id, Canvas* canvas) : Tool(id, canvas) {
 	name = "Pencil";
 	description = "Draws pixels";
 	keyShortcut = "P";
-	iconPath = ":/Pencil.png";
+	iconPath = ":/pencil.png";
 
 	// Assign the lambda (capturing the 'this' pointer so I can use global variables) to the std::function
 	toolAction = [&, this](int i, int j, uint col, ToolSettings& settings) {

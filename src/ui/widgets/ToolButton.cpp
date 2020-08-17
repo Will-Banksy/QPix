@@ -2,9 +2,8 @@
 #include <QVariant>
 #include <iostream>
 #include "EditorTools.h"
+#include <QPainter>
 
-
-//
 ToolButton::ToolButton(Tool* tool, QWidget* parent) : QToolButton(parent)/*, tool(tool)*/ {
 	setCheckable(true); // This button gets toggled. Don't even need to do any click handling!
 	connect(this, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
@@ -13,6 +12,7 @@ ToolButton::ToolButton(Tool* tool, QWidget* parent) : QToolButton(parent)/*, too
 	this->tool = tool;
 	checkedSafely = false;
 	blockNextSignal = false; // Make sure I do set EVERY variable to have an initial value - otherwise it'll just have randomness left over from other processes/parts of this program as it's initial value. And unpredictable values are never good
+	icon = QPixmap(tool->iconPath); // Get the icon
 }
 
 ToolButton::~ToolButton() {
@@ -46,4 +46,11 @@ void ToolButton::setCheckedSafe(bool checked, bool blockSignal) {
 		checkedSafely = true; // We want two modes: hard block and soft block. Hard block just returns immediately, soft block returns if an 'uncheck' symbol was sent (so that when the last selected tool's button is unchecked, it doesn't start try to re-check itself)
 	}
 	setChecked(checked);
+}
+
+void ToolButton::paintEvent(QPaintEvent* event) {
+	QToolButton::paintEvent(event);
+
+	QPainter painter(this);
+	painter.drawPixmap((width() / 2) - (icon.width() / 2), (height() / 2) - (icon.height() / 2), icon);
 }

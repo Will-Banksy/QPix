@@ -1,10 +1,10 @@
 #include "Fill.h"
 
 Fill::Fill(int id, Canvas* canvas) : Tool(id, canvas) {
-	name = "Pencil";
-	description = "Draws pixels";
-	keyShortcut = "P";
-	iconPath = ":/Pencil.png";
+	name = "Fill";
+	description = "Fills an area";
+	keyShortcut = "B";
+	iconPath = ":/fill.png";
 
 	// Assign the lambda (capturing the 'this' pointer so I can use global variables) to the std::function
 	toolAction = [&, this](int i, int j, uint col, ToolSettings& settings) {
