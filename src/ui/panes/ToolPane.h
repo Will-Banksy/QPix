@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QDockWidget>
 #include "ui/FlowLayout.h"
+#include "ui/FlowLayout2.h"
 
 /**
  * @todo write docs
@@ -17,7 +18,7 @@ class ToolPane : public QDockWidget {
 // 		void paintEvent(QPaintEvent* event) override;
 
 	private:
-		void addToolButtons(FlowLayout* layout);
+		void addToolButtons(FlowLayout2* layout);
 };
 
 #endif // TOOLPANE_H

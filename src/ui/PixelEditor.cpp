@@ -7,6 +7,7 @@
 #include <QPaintEvent>
 #include <QMenuBar>
 #include <QApplication>
+#include <QStatusBar>
 
 PixelEditor::PixelEditor(QWidget *parent) : QMainWindow(parent) {
 	setWindowTitle("QPix");
@@ -18,7 +19,7 @@ PixelEditor::PixelEditor(QWidget *parent) : QMainWindow(parent) {
 	toolPane = new ToolPane();
 	addDockWidget(Qt::LeftDockWidgetArea, toolPane, Qt::Vertical);
 
-	statusBar();
+// 	statusBar()->setSizeGripEnabled(false); // Will probably add this back at some point
 	setupMenus();
 }
 
@@ -40,14 +41,14 @@ void PixelEditor::setupMenus() {
 	showToolViews->addAction(showToolsAct);
 }
 
-void PixelEditor::createActions() { // FIXME: Status bar tips don't seem to be working as expected
+void PixelEditor::createActions() { // Status bar tips don't seem to be working
 	quitAct = new QAction(tr("&Quit"), this);
 	quitAct->setShortcut(QKeySequence::Quit);
-	quitAct->setStatusTip(tr("Quit the application"));
+// 	quitAct->setStatusTip(tr("Quit the application"));
 	connect(quitAct, &QAction::triggered, this, &PixelEditor::quit, Qt::QueuedConnection); // Using a QueuedConnection because QCoreApplication::quit() recommends it
 
 	showToolsAct = new QAction(tr("Show Tools"), this);
-	showToolsAct->setStatusTip(tr("Show the Tools tool view"));
+// 	showToolsAct->setStatusTip(tr("Show the Tools tool view"));
 	connect(showToolsAct, &QAction::triggered, this, &PixelEditor::showTools);
 }
 

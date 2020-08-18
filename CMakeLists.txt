@@ -22,7 +22,7 @@ set(pixeleditor_CPP
 
 	src/ui/PixelEditor.cpp
 	src/ui/Canvas.cpp
-	src/ui/FlowLayout.cpp
+	src/ui/FlowLayout2.cpp
 
 	src/ui/panes/CanvasPane.cpp
 	src/ui/panes/ToolPane.cpp
@@ -46,7 +46,7 @@ set(SOURCES
 
 	src/ui/PixelEditor.h
 	src/ui/Canvas.h
-	src/ui/FlowLayout.h
+	src/ui/FlowLayout2.h
 
 	src/ui/panes/CanvasPane.h
 	src/ui/panes/ToolPane.h

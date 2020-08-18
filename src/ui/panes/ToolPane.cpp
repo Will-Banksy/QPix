@@ -3,6 +3,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 #include "ui/FlowLayout.h"
+#include "ui/FlowLayout2.h"
 #include "tools/Tool.h"
 #include "EditorTools.h"
 #include "ui/widgets/ToolButton.h"
@@ -13,7 +14,7 @@ ToolPane::ToolPane(QWidget* parent) : QDockWidget(parent) {
 	QVBoxLayout* outerLayout = new QVBoxLayout();
 	outerLayout->setAlignment(Qt::AlignTop);
 
-	FlowLayout* flowLayout = new FlowLayout();
+	FlowLayout2* flowLayout = new FlowLayout2();
 
 	addToolButtons(flowLayout);
 
@@ -26,7 +27,7 @@ ToolPane::ToolPane(QWidget* parent) : QDockWidget(parent) {
 	setWidget(widget);
 }
 
-void ToolPane::addToolButtons(FlowLayout* layout) {
+void ToolPane::addToolButtons(FlowLayout2* layout) {
 	for(Tool* tool : EditorTools::tools) {
 		ToolButton* btn = new ToolButton(tool);
 		tool->button = btn;
