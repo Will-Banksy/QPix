@@ -2,11 +2,10 @@
 #include <QVBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>
-#include "ui/FlowLayout.h"
-#include "ui/FlowLayout2.h"
 #include "tools/Tool.h"
 #include "EditorTools.h"
 #include "ui/widgets/ToolButton.h"
+#include <QSizeGrip>
 
 ToolPane::ToolPane(QWidget* parent) : QDockWidget(parent) {
 	setWindowTitle("Tools");
@@ -19,6 +18,11 @@ ToolPane::ToolPane(QWidget* parent) : QDockWidget(parent) {
 	addToolButtons(flowLayout);
 
 	outerLayout->addLayout(flowLayout);
+
+	// TODO: Somehow make it so that QDockWidgets are easily resizeable. Currently, you can use the Dock Widget titlebar
+	// QSizeGrips might be the way to go
+// 	QSizeGrip resizeHandle(this);
+// 	resizeHandle.setVisible(true);
 
 	// Setting the layout directly on the QDockWidget doesn't work, it says in the Qt docs that QDockWidget acts as a wrapper for it's child widget, set with setWidget
 	QWidget* widget = new QWidget();

@@ -1,8 +1,10 @@
 #include "CanvasPane.h"
 #include <QWheelEvent>
 #include "EditorTools.h"
+#include <QOpenGLWidget>
 
 CanvasPane::CanvasPane(QWidget* parent) : QGraphicsView(parent) {
+// 	setViewport(new QOpenGLWidget()); // Rendering using a QOpenGLWidget does reduce cpu usage - but also of course increases gpu usage. Anyway what I need to do is make it more efficient, not this.
 	QGraphicsScene* scene = new QGraphicsScene();
 
 	canvas = new Canvas();
@@ -109,3 +111,8 @@ void CanvasPane::mouseMoveEvent(QMouseEvent* event) {
 
 	canvas->update();
 }
+
+// void CanvasPane::updateVisible() {
+// 	QPointF upperLeft = mapToScene(QPoint(0, 0));
+// 	QPointF lowerRight = mapToScene(QPoint(width(), height()));
+// }

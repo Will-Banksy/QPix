@@ -142,3 +142,5 @@ QScrollBar::sub-line {
 QScrollBar:vertical {
 	border-left: 1px solid @button-normal;
 }
+
+/* TODO: Need to actually style menus - remember to disable global menu bar for testing */

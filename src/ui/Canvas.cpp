@@ -1,5 +1,10 @@
 #include "Canvas.h"
 #include <QPainter>
+#include <QGraphicsScene>
+#include <QGraphicsView>
+#include <QStyleOptionGraphicsItem>
+#include "utils/Helper.h"
+#include <iostream>
 
 Canvas::Canvas() : QGraphicsItem() {
 	surface = new QImage(32, 32, QImage::Format_ARGB32);
@@ -11,6 +16,9 @@ Canvas::Canvas() : QGraphicsItem() {
 	buffer = new QImage(*surface);
 
 	background = new QPixmap(":/Transparency-Dark.png");
+
+	// So we get the exposedRect (visible rectangle) as a QStyleOptionGraphicsItem parameter in paint
+	setFlags(ItemUsesExtendedStyleOption);
 }
 
 Canvas::~Canvas() {
@@ -20,13 +28,18 @@ Canvas::~Canvas() {
 	delete background;
 }
 
+// Hmm... Painting seems to actually be fairly intensive - or, at least, more than it should be. Change this, probably by only repainting the areas that need it?
+// Actually, it doesn't seem TOO much worse than Aseprite, except when we're zoomed in, which is when things get a bit more so
+// But now I've optimised the canvas painting... The problem must be the graphics scene painting :/
+// Maybe if I do all the scaling transformations on this Canvas instead of on the graphics view, maybe this optimisation won't go unnoticed
 void Canvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
-	QRect bounds = QRect(0, 0, surface->width(), surface->height());
-	painter->drawTiledPixmap(bounds, *background);
+	QRect visible = utils::expandRound(option->exposedRect);
+	QPoint offset(visible.x(), visible.y());
 
-	painter->drawImage(0, 0, *buffer);
+	painter->drawTiledPixmap(visible, *background, offset);
+	painter->drawImage(visible.x(), visible.y(), *buffer, visible.x(), visible.y(), visible.width(), visible.height());
 
-// 	painter->drawImage(0, 0, *overlay);
+// 	TODO: Draw overlay
 }
 
 QRectF Canvas::boundingRect() const {

@@ -4,6 +4,7 @@
 #include <QJsonArray>
 #include <iostream>
 #include <QJsonObject>
+#include <cmath>
 
 // using namespace utils;
 
@@ -50,5 +51,17 @@ namespace utils {
 	uint* colAt(uint* argbArr, int width, int i, int j) {
 		int index = i + j * width;
 		return &argbArr[index];
+	}
+
+	QRect expandRound(const QRectF& rect) {
+		QPointF p1 = rect.topLeft();
+		QPointF p2 = rect.bottomRight();
+		int x1 = floor(p1.x());
+		int y1 = floor(p1.y());
+		int x2 = ceil(p2.x());
+		int y2 = ceil(p2.y());
+		int w = x2 - x1;
+		int h = y2 - y1;
+		return QRect(x1, y1, w, h);
 	}
 }

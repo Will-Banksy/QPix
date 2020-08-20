@@ -38,9 +38,6 @@ class FlowLayout2 : public QLayout {
 		QVector<QLayoutItem*> items;
 		int spacingX;
 		int spacingY;
-
-		QSize cachedSize;
-		bool cacheDirty; // Whether the cached size needs to be updated
 };
 
 #endif // FLOWLAYOUT2_H
