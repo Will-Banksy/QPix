@@ -4,14 +4,15 @@
 #include <QGraphicsView>
 #include <QStyleOptionGraphicsItem>
 #include "utils/Helper.h"
+#include "utils/Colour.h"
 #include <iostream>
 
 Canvas::Canvas() : QGraphicsItem() {
 	surface = new QImage(32, 32, QImage::Format_ARGB32);
-	surface->fill(0x00000000);
+	surface->fill(utils::Colour::TRANSPARENT);
 
 	overlay = new QImage(surface->width(), surface->height(), QImage::Format_ARGB32);
-	overlay->fill(0x00000000);
+	overlay->fill(utils::Colour::TRANSPARENT);
 
 	buffer = new QImage(*surface);
 
@@ -38,8 +39,9 @@ void Canvas::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QW
 
 	painter->drawTiledPixmap(visible, *background, offset);
 	painter->drawImage(visible.x(), visible.y(), *buffer, visible.x(), visible.y(), visible.width(), visible.height());
+	painter->drawImage(visible.x(), visible.y(), *overlay, visible.x(), visible.y(), visible.width(), visible.height());
 
-// 	TODO: Draw overlay
+// 	std::cout << "Repainting" << std::endl;
 }
 
 QRectF Canvas::boundingRect() const {
@@ -53,4 +55,8 @@ void Canvas::commit() {
 
 void Canvas::revert() {
 	memcpy(buffer->bits(), surface->bits(), surface->width() * surface->height() * 4);
+}
+
+void Canvas::clearOverlay() {
+	overlay->fill(utils::Colour::TRANSPARENT);
 }

@@ -2,6 +2,7 @@
 #include "tools/Pencil.h"
 #include "tools/Eraser.h"
 #include "tools/Fill.h"
+#include "tools/Line.h"
 
 uint EditorTools::primaryColour = 0xff000000;
 uint EditorTools::secondaryColour = 0x00000000;
@@ -12,6 +13,7 @@ void EditorTools::initTools(Canvas* canvas) {
 	tools.append(new Pencil(0, canvas));
 	tools.append(new Eraser(1, canvas));
 	tools.append(new Fill(2, canvas));
+	tools.append(new Line(3, canvas));
 	selectedTool = tools.at(0);
 }
 

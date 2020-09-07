@@ -17,6 +17,7 @@
 		<file alias="pencil.png">data/tools/pencil.png</file>
 		<file alias="eraser.png">data/tools/eraser.png</file>
 		<file alias="fill.png">data/tools/fill.png</file>
+		<file alias="line.png">data/tools/line.png</file>
 
 		<file>style.qss</file>
 		<file>colours.json</file>

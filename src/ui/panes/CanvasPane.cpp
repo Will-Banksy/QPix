@@ -24,6 +24,8 @@ CanvasPane::CanvasPane(QWidget* parent) : QGraphicsView(parent) {
 	hasMovedMouse = false;
 	ignoreRelease = false;
 	scaleAmt = 1.0;
+
+	prevCanvasCoord = QPoint(-1, -1);
 }
 
 CanvasPane::~CanvasPane() {
@@ -109,7 +111,10 @@ void CanvasPane::mouseMoveEvent(QMouseEvent* event) {
 
 	hasMovedMouse = true;
 
-	canvas->update();
+	if(prevCanvasCoord != canvasPos) { // So the canvas will only be repainted when the mouse moves to a new pixel. This makes things much less demanding
+		canvas->update();
+		prevCanvasCoord = canvasPos;
+	}
 }
 
 // void CanvasPane::updateVisible() {

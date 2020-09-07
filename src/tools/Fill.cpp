@@ -12,7 +12,7 @@ Fill::Fill(int id, Canvas* canvas) : Tool(id, canvas) {
 	};
 }
 
-void Fill::onMouseClicked(QMouseEvent* evt, QPoint& cPos) {
+void Fill::onMouseClicked(QMouseEvent* evt, QPoint& cPos) { // TODO: Maybe change this so you can preview and cancel the fill?
 	Tool::onMouseClicked(evt, cPos);
 
 	CHECK_MOUSE_BUTTONS

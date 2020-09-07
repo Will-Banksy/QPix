@@ -33,6 +33,7 @@ set(pixeleditor_CPP
 	src/tools/Pencil.cpp
 	src/tools/Eraser.cpp
 	src/tools/Fill.cpp
+	src/tools/Line.cpp
 
 	src/utils/Algorithms.cpp
 	src/utils/Helper.cpp
@@ -57,6 +58,7 @@ set(SOURCES
 	src/tools/Pencil.h
 	src/tools/Eraser.h
 	src/tools/Fill.h
+	src/tools/Line.h
 
 	src/utils/Algorithms.h
 	src/utils/Helper.h

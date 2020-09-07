@@ -9,10 +9,13 @@ ToolButton::ToolButton(Tool* tool, QWidget* parent) : QToolButton(parent)/*, too
 	connect(this, SIGNAL(toggled(bool)), this, SLOT(onToggled(bool)));
 	setMinimumSize(40, 40); // Make sure the button won't be resized. If I use SVG's for the icons, I could instead use hasHeightForWidth (something like that)
 	setMaximumSize(40, 40);
+
 	this->tool = tool;
 	checkedSafely = false;
 	blockNextSignal = false; // Make sure I do set EVERY variable to have an initial value - otherwise it'll just have randomness left over from other processes/parts of this program as it's initial value. And unpredictable values are never good
-	icon = QPixmap(tool->iconPath); // Get the icon
+	setIcon(QIcon(tool->iconPath));
+	setIconSize(QSize(24, 24));
+	setShortcut(QKeySequence(this->tool->keyShortcut)); // TODO: Disable shortcuts if we have the mouse pressed on the canvas
 }
 
 ToolButton::~ToolButton() {
@@ -46,11 +49,4 @@ void ToolButton::setCheckedSafe(bool checked, bool blockSignal) {
 		checkedSafely = true; // We want two modes: hard block and soft block. Hard block just returns immediately, soft block returns if an 'uncheck' symbol was sent (so that when the last selected tool's button is unchecked, it doesn't start try to re-check itself)
 	}
 	setChecked(checked);
-}
-
-void ToolButton::paintEvent(QPaintEvent* event) {
-	QToolButton::paintEvent(event);
-
-	QPainter painter(this);
-	painter.drawPixmap((width() / 2) - (icon.width() / 2), (height() / 2) - (icon.height() / 2), icon);
 }

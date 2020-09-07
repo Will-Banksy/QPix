@@ -10,7 +10,7 @@ namespace utils {
 	/**
 	* @todo write docs
 	*/
-	class Algorithms {
+	class Algorithms { // TODO: Need to change how Algorithms handles drawing I think
 		public:
 			static void plotLine(int startX, int startY, int endX, int endY, uint col, Tool::ToolSettings& settings, AlgoAction& action);
 			static void fillArea(Canvas& canvas, int startX, int startY, uint col, Tool::ToolSettings& settings, AlgoAction& action);

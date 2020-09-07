@@ -25,6 +25,8 @@ class CanvasPane : public QGraphicsView {
 		bool ignoreRelease;
 
 		double scaleAmt; // Keeps track of the current scale
+
+		QPoint prevCanvasCoord;
 };
 
 #endif // CANVASPANE_H

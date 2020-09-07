@@ -10,6 +10,7 @@ class Canvas : public QGraphicsItem {
 	public:
 		explicit Canvas();
 		~Canvas();
+		/// This is NOT for drawing anything that needs to end up on the surface - This is used for previews of actions only
 		QImage* overlay;
 		/// If you want to draw to the surface, draw to this buffer and commit()
 		QImage* buffer;
@@ -18,6 +19,8 @@ class Canvas : public QGraphicsItem {
 		void commit();
 		/// Reverts the buffer back to the image
 		void revert();
+		/// Clears the overlay
+		void clearOverlay();
 
 	protected:
 		void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
