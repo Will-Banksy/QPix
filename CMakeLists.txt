@@ -38,6 +38,8 @@ set(pixeleditor_CPP
 	src/utils/Algorithms.cpp
 	src/utils/Helper.cpp
 	src/utils/Colour.cpp
+	src/utils/Brush.cpp
+	src/utils/BrushMatrix.cpp
 )
 
 set(SOURCES
@@ -63,6 +65,8 @@ set(SOURCES
 	src/utils/Algorithms.h
 	src/utils/Helper.h
 	src/utils/Colour.h
+	src/utils/Brush.h
+	src/utils/BrushMatrix.h
 )
 
 # Tell CMake to create the executable qpix

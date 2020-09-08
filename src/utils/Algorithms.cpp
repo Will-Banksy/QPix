@@ -1,8 +1,10 @@
 #include "Algorithms.h"
 #include <QQueue>
 #include <QPoint>
+#include <QPointF>
 #include "Helper.h"
 #include "Colour.h"
+#include <cmath>
 
 namespace utils {
 	inline int abs(int val) {
@@ -12,23 +14,69 @@ namespace utils {
 		return val;
 	}
 
-	void Algorithms::plotLine(int startX, int startY, int endX, int endY, uint col, Tool::ToolSettings& settings, AlgoAction& action) {
+	inline float sq(float val) {
+		return val * val;
+	}
+
+	inline float distance(float x0, float y0, float x1, float y1) {
+		return sqrtf(sq(x0 - x1) + sq(y0 - y1));
+	}
+
+	void Algorithms::plotLine(int startX, int startY, int endX, int endY, uint col, Tool::ToolSettings& settings, AlgoAction& action, bool uniformLine) {
 		int& x0 = startX;
 		int& y0 = startY;
 		int& x1 = endX;
 		int& y1 = endY;
 
-		int dx =  abs(x1-x0), sx = x0<x1 ? 1 : -1;
-		int dy = -abs(y1-y0), sy = y0<y1 ? 1 : -1;
-		int err = dx+dy, e2; /* error value e_xy */
+		if(!uniformLine) {
+			int dx =  abs(x1-x0), sx = x0<x1 ? 1 : -1;
+			int dy = -abs(y1-y0), sy = y0<y1 ? 1 : -1;
+			int err = dx+dy, e2; /* error value e_xy */
 
-		for(;;){  /* loop */
-			// Call the function with the () operator
-			action(x0, y0, col, settings);
-			if (x0==x1 && y0==y1) break;
-			e2 = 2*err;
-			if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
-				if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
+			for(;;){  /* loop */
+				// Call the function with the () operator
+				action(x0, y0, col, settings);
+				if (x0==x1 && y0==y1) break;
+				e2 = 2*err;
+				if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
+					if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
+			}
+		} else {
+			float dx = abs(x1 - x0) + 1;
+			float dy = abs(y1 - y0) + 1;
+
+			float sx = (x0 < x1) ? 1 : -1;
+			float sy = (y0 < y1) ? 1 : -1;
+
+			float ratio = fmax(dx, dy) / fmin(dx, dy);
+
+			int pixelStep = round(ratio);
+
+			if (pixelStep > fmin(dx, dy)) {
+				pixelStep = std::numeric_limits<double>::infinity();//(int)Double.POSITIVE_INFINITY;
+			}
+
+			float maxDistance = (float)distance(x0, y0, x1, y1);
+
+			int x = x0;
+			int y = y0;
+			int i = 0;
+			while (true) {
+				i++;
+
+				action(x, y, col, settings);
+				if (distance(x0, y0, x, y) >= maxDistance) {
+					break;
+				}
+
+				bool isAtStep = i % pixelStep == 0;
+				if (dx >= dy || isAtStep) {
+					x += sx;
+				}
+				if (dy >= dx || isAtStep) {
+					y += sy;
+				}
+			}
 		}
 	}
 

@@ -33,10 +33,10 @@ void Line::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
 
 	uint col = getColour();
 
-	if(settings.pixelPerfect) {
+	if(settings.oneToOneRatio) {
 		// Need function to call here
 	} else {
-		Algorithms::plotLine(curr.x(), curr.y(), prev.x(), prev.y(), col, settings, toolAction);
+		Algorithms::plotLine(start.x(), start.y(), curr.x(), curr.y(), col, settings, toolAction);
 	}
 }
 
@@ -48,10 +48,10 @@ void Line::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
 
 	uint col = getColour();
 
-	if(settings.pixelPerfect) {
+	if(settings.oneToOneRatio) {
 		// Need function to call here
 	} else {
-		Algorithms::plotLine(prev.x(), curr.y(), prev.x(), prev.y(), col, settings, toolAction);
+		Algorithms::plotLine(start.x(), start.y(), curr.x(), curr.y(), col, settings, toolAction);
 	}
 
 	canvas->commit();

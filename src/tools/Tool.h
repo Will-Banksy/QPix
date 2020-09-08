@@ -37,7 +37,7 @@ class Tool {
 			public:
 				bool circleBrush;
 				int tolerance;
-				bool oneToOneRatio;
+				bool oneToOneRatio; // A uniform line, if using the Line tool
 				bool fill8Way;
 				bool pixelPerfect;
 				bool selectionAppend;
