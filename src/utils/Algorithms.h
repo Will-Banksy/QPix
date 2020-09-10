@@ -8,7 +8,7 @@ namespace utils {
 	typedef std::function<void(int, int, uint, Tool::ToolSettings&)> AlgoAction;
 
 	/**
-	* @todo write docs
+	* More like drawing algorithms, this class contains various functions to draw to the buffer and overlay
 	*/
 	class Algorithms { // TODO: Need to change how Algorithms handles drawing I think
 		public:

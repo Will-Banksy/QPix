@@ -1,26 +1,42 @@
 #ifndef BRUSH_H
 #define BRUSH_H
 
+#include "BrushMatrix.h"
+
 /**
  * @todo write docs
  */
 namespace utils {
 	enum BrushType {
+		/// The default brush is a square of various sizes
 		DEFAULT,
-		CUSTOM
+		/// A custom BrushMatrix is specified for this type
+		CUSTOM,
+		/// Like the default but only 1px size
+		POINT,
+		/// No brush
+		NONE
 	};
 
-	class Brush {
+	class DefaultBrush {
 		public:
-			Brush() = default;
+			DefaultBrush() = default;
 			const BrushType type = DEFAULT;
 	};
 
-	class CustomBrush : public Brush {
-		CustomBrush() : Brush() {};
+	class CustomBrush : public DefaultBrush {
+		public:
+			CustomBrush(ushort width, ushort height, QList<QPoint> points);
 
-		const BrushType type = CUSTOM;
-		const bool** brushMatrix;
+			const BrushType type = CUSTOM;
+			const BrushMatrix brushMatrix;
+	};
+
+	class Brush1Px : public DefaultBrush {
+		public:
+			Brush1Px() : DefaultBrush() {}
+
+			const BrushType type = POINT;
 	};
 }
 

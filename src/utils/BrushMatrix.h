@@ -1,23 +1,27 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#include <QPoint>
+#include <QList>
+
 /**
  * @todo write docs
  */
 namespace utils {
 	class BrushMatrix {
 		public:
-			BrushMatrix(ushort width, ushort height, QList<QPoint> points);
+			BrushMatrix();
+			BrushMatrix(ushort width, ushort height, const QList<QPoint>& points);
 			~BrushMatrix();
 			bool at(int i, int j);
 
 		private:
-			char* matrix;
-			int width;
-			int height;
+			uchar* matrix;
+			ushort width;
+			ushort height;
 
-			char* makePackedMatrix(ushort width, ushort height);
-			void setAt(char* matrix, int i, int j, bool val);
+			uchar* makePackedMatrix(ushort width, ushort height);
+			void setAt(uchar* matrix, int i, int j, bool val);
 	};
 }
 

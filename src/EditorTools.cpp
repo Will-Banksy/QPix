@@ -8,6 +8,7 @@ uint EditorTools::primaryColour = 0xff000000;
 uint EditorTools::secondaryColour = 0x00000000;
 QList<Tool*> EditorTools::tools = QList<Tool*>();
 Tool* EditorTools::selectedTool = nullptr;
+DefaultBrush EditorTools::brush = DefaultBrush();
 
 void EditorTools::initTools(Canvas* canvas) {
 	tools.append(new Pencil(0, canvas));
@@ -18,9 +19,9 @@ void EditorTools::initTools(Canvas* canvas) {
 }
 
 
-EditorTools::EditorTools() {
+/*EditorTools::EditorTools() {
 }
 
 EditorTools::~EditorTools() {
 	// Don't need to delete selectedTool - when the QList deletes itself it should take care of deleting all the tools. Right?
-}
+}*/

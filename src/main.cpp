@@ -7,6 +7,13 @@
 #include "utils/Helper.h"
 
 int main(int argc, char *argv[]) {
+// 	uchar byte = 0b00000100;
+// 	utils::setBit(byte, 2, 0);
+// 	utils::setBit(byte, 7, 1);
+// 	byte = ~byte;
+// 	std::cout << utils::getBit(byte, 7) << std::endl;
+// 	std::cout << (ulong)byte << std::endl;
+
 	QApplication app(argc, argv);
 
 	// 	QStyle* style = app.style();
