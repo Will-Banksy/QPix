@@ -8,13 +8,12 @@ namespace utils {
 	typedef std::function<void(int, int, uint, Tool::ToolSettings&)> AlgoAction;
 
 	/**
-	* More like drawing algorithms, this class contains various functions to draw to the buffer and overlay
+	* More like drawing algorithms, this class contains various functions to draw to the buffer and overlay. Or will do anyway
 	*/
 	class Algorithms { // TODO: Need to change how Algorithms handles drawing I think
 		public:
 			static void plotLine(int startX, int startY, int endX, int endY, uint col, Tool::ToolSettings& settings, AlgoAction& action, bool uniformLine = false);
 			static void fillArea(Canvas& canvas, int startX, int startY, uint col, Tool::ToolSettings& settings, AlgoAction& action);
-
 
 		private:
 			static bool checkFillValidity(Canvas& canvas, int i, int j, uint targetColour, int tolerance, bool** filled);
