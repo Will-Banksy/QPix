@@ -2,41 +2,51 @@
 #define BRUSH_H
 
 #include "BrushMatrix.h"
+#include <QSize>
+#include <iostream>
 
 /**
  * @todo write docs
  */
 namespace utils {
 	enum BrushType {
-		/// The default brush is a square of various sizes
-		DEFAULT,
-		/// A custom BrushMatrix is specified for this type
-		CUSTOM,
-		/// Like the default but only 1px size
-		POINT,
+		/// Variable brushes are defined by brush shapes, and can be used at any size
+		VARIABLE,
+		/// Fixed brushes are defined by a matrix, and can only be used at the size of the matrix
+		FIXED,
 		/// No brush
 		NONE
 	};
 
-	class DefaultBrush {
-		public:
-			DefaultBrush() = default;
-			const BrushType type = DEFAULT;
+	enum BrushShape {
+		RECT,
+		ELLIPSE
 	};
 
-	class CustomBrush : public DefaultBrush {
+	class Brush {
 		public:
-			CustomBrush(ushort width, ushort height, QList<QPoint> points);
+			Brush(BrushType type = NONE) : m_type(type) {}
+			virtual void applyBrush(int i_, int j_, uint* colArray, QSize imageSize, uint col) const; // const - won't change members
 
-			const BrushType type = CUSTOM;
-			const BrushMatrix brushMatrix;
+			const BrushType m_type; // m_ is a convention that means m_{var} var is a member, there's others like s_ for static I think
 	};
 
-	class Brush1Px : public DefaultBrush {
+	class VariableBrush : public Brush {
 		public:
-			Brush1Px() : DefaultBrush() {}
+			VariableBrush(BrushShape shape = RECT) : Brush(VARIABLE), m_shape(shape) {};
+			virtual void applyBrush(int i_, int j_, uint* colArray, QSize imageSize, uint col) const override;
 
-			const BrushType type = POINT;
+// 			const BrushType m_type = VARIABLE;
+			const BrushShape m_shape;
+	};
+
+	class FixedBrush : public Brush {
+		public:
+			FixedBrush(ushort width, ushort height, QList<QPoint> points) : Brush(FIXED), m_brushMatrix(BrushMatrix(width, height, points)) {}
+			virtual void applyBrush(int i_, int j_, uint* colArray, QSize imageSize, uint col) const override;
+
+// 			const BrushType m_type = FIXED;
+			const BrushMatrix m_brushMatrix;
 	};
 }
 

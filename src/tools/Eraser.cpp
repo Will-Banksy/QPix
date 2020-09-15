@@ -1,4 +1,5 @@
 #include "Eraser.h"
+#include "EditorTools.h"
 
 // the ': Tool(id, canvas)' in the initialisation list is like calling super(id, tool)
 Eraser::Eraser(int id, Canvas* canvas) : Tool(id, canvas) {
@@ -6,11 +7,6 @@ Eraser::Eraser(int id, Canvas* canvas) : Tool(id, canvas) {
 	description = "Erases pixels";
 	keyShortcut = "E";
 	iconPath = ":/eraser.png";
-
-	// Assign the lambda (capturing the 'this' pointer so I can use global variables) to the std::function
-	toolAction = [&, this](int i, int j, uint col, ToolSettings& settings) {
-		this->canvas->buffer->setPixel(i, j, col);
-	};
 }
 
 Eraser::~Eraser() {
@@ -22,7 +18,7 @@ void Eraser::onMousePressed(QMouseEvent* evt, QPoint& cPos) {
 
 	CHECK_MOUSE_BUTTONS
 
-	Algorithms::plotLine(curr.x(), curr.y(), curr.x(), curr.y(), transparent, settings, toolAction);
+	Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), curr.x(), curr.y(), transparent, EditorTools::brush);
 }
 
 void Eraser::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
@@ -30,7 +26,7 @@ void Eraser::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
 
 	CHECK_MOUSE_BUTTONS
 
-	Algorithms::plotLine(curr.x(), curr.y(), prev.x(), prev.y(), transparent, settings, toolAction);
+	Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), prev.x(), prev.y(), transparent, EditorTools::brush);
 }
 
 void Eraser::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
@@ -38,7 +34,7 @@ void Eraser::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
 
 	CHECK_MOUSE_BUTTONS
 
-	Algorithms::plotLine(prev.x(), curr.y(), prev.x(), prev.y(), transparent, settings, toolAction);
+	Painter::drawLine(*canvas->buffer, prev.x(), curr.y(), prev.x(), prev.y(), transparent, EditorTools::brush);
 
 	canvas->commit();
 }

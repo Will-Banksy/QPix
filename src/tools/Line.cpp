@@ -1,15 +1,11 @@
 #include "Line.h"
+#include "EditorTools.h"
 
 Line::Line(int id, Canvas* canvas) : Tool(id, canvas) {
 	name = "Line";
 	description = "Draws lines";
 	keyShortcut = "L";
 	iconPath = ":/line.png";
-
-	// Assign the lambda (capturing the 'this' pointer so I can use global variables) to the std::function
-	toolAction = [&, this](int i, int j, uint col, ToolSettings& settings) {
-		this->canvas->overlay->setPixel(i, j, col); // TODO: Respect tool settings, brush size, etc.
-	};
 }
 
 // TODO: Change methods contents
@@ -22,7 +18,7 @@ void Line::onMousePressed(QMouseEvent* evt, QPoint& cPos) {
 
 	uint col = getColour();
 
-	Algorithms::plotLine(curr.x(), curr.y(), curr.x(), curr.y(), col, settings, toolAction);
+	Painter::drawLine(*canvas->overlay, curr.x(), curr.y(), curr.x(), curr.y(), col, EditorTools::brush);
 }
 
 void Line::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
@@ -36,7 +32,7 @@ void Line::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
 	if(settings.oneToOneRatio) {
 		// Need function to call here
 	} else {
-		Algorithms::plotLine(start.x(), start.y(), curr.x(), curr.y(), col, settings, toolAction);
+		Painter::drawLine(*canvas->overlay, start.x(), start.y(), curr.x(), curr.y(), col, EditorTools::brush);
 	}
 }
 
@@ -51,7 +47,7 @@ void Line::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
 	if(settings.oneToOneRatio) {
 		// Need function to call here
 	} else {
-		Algorithms::plotLine(start.x(), start.y(), curr.x(), curr.y(), col, settings, toolAction);
+		Painter::drawLine(*canvas->buffer, start.x(), start.y(), curr.x(), curr.y(), col, EditorTools::brush);
 	}
 
 	canvas->commit();

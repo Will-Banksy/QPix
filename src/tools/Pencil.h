@@ -2,7 +2,7 @@
 #define PENCIL_H
 
 #include "Tool.h"
-#include "utils/Algorithms.h"
+#include "utils/Painter.h"
 
 /**
  * @todo write docs
@@ -10,7 +10,6 @@
 class Pencil : public Tool {
 	private:
 		QList<QPair<QPoint, uint>> currentStroke;
-		AlgoAction toolAction;
 
 	public:
 		Pencil(int id, Canvas* canvas);

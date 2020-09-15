@@ -65,14 +65,14 @@ namespace utils {
 		return QRect(x1, y1, w, h);
 	}
 
-	void setBit(uchar& byte, uchar bitPos, bool val) {
-		uchar mask = 1u << bitPos; // Make a bit mask - the bit at the position we want to change is 1, the rest are 0
+	void setBit(quint8& byte, quint8 bitPos, bool val) {
+		quint8 mask = 1u << bitPos; // Make a bit mask - the bit at the position we want to change is 1, the rest are 0
 		byte &= ~mask; // Sets the bit at bitPos to 0 (if bitPos is 2, does somenumber & 11111011)
 		byte |= val << bitPos; // Sets the bit at bitPos to val
 	}
 
-	bool getBit(const uchar& byte, uchar bitPos) {
-		uchar tmp = byte >> bitPos;
+	bool getBit(const quint8& byte, quint8 bitPos) {
+		quint8 tmp = byte >> bitPos;
 		bool val = tmp & 1u;
 		return val;
 	}

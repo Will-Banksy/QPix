@@ -2,7 +2,7 @@
 #define LINE_H
 
 #include "Tool.h"
-#include "utils/Algorithms.h"
+#include "utils/Painter.h"
 #include "ui/Canvas.h"
 
 /**
@@ -15,9 +15,6 @@ class Line : public Tool {
 		void onMousePressed(QMouseEvent* evt, QPoint& cPos) override;
 		void onMouseReleased(QMouseEvent* evt, QPoint& cPos) override;
 		void onMouseDragged(QMouseEvent* evt, QPoint& cPos) override;
-
-	private:
-		AlgoAction toolAction;
 };
 
 #endif // LINE_H

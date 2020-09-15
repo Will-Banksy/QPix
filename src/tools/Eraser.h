@@ -2,14 +2,13 @@
 #define ERASER_H
 
 #include "Tool.h"
-#include "utils/Algorithms.h"
+#include "utils/Painter.h"
 
 /**
  * @todo write docs
  */
 class Eraser : public Tool {
 	private:
-		AlgoAction toolAction;
 		uint transparent = 0x00000000;
 
 	public:

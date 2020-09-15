@@ -21,9 +21,13 @@ class EditorTools {
 		static uint secondaryColour;
 		static Tool* selectedTool;
 		static QList<Tool*> tools;
-		static DefaultBrush brush;
+		static Brush brush;
+		static ushort brushWidth;
+		static ushort brushHeight;
 
 		static void initTools(Canvas* canvas);
+		static void setBrushSize(ushort size);
+		static void setBrushSize(ushort width, ushort height);
 };
 
 #endif // EDITORTOOLS_H

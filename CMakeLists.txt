@@ -35,7 +35,7 @@ set(pixeleditor_CPP
 	src/tools/Fill.cpp
 	src/tools/Line.cpp
 
-	src/utils/Algorithms.cpp
+	src/utils/Painter.cpp
 	src/utils/Helper.cpp
 	src/utils/Colour.cpp
 	src/utils/Brush.cpp
@@ -62,7 +62,7 @@ set(SOURCES
 	src/tools/Fill.h
 	src/tools/Line.h
 
-	src/utils/Algorithms.h
+	src/utils/Painter.h
 	src/utils/Helper.h
 	src/utils/Colour.h
 	src/utils/Brush.h

@@ -12,9 +12,9 @@ namespace utils {
 	uint* colAt(uint* argbArr, int width, int i, int j);
 	QRect expandRound(const QRectF& rect);
 	/// Where bitPos is the index of the byte counting from the right hand side of the byte
-	void setBit(uchar& byte, uchar bitPos, bool val);
+	void setBit(quint8& byte, quint8 bitPos, bool val);
 	/// Where bitPos is the index of the byte counting from the right hand side of the byte
-	bool getBit(const uchar& byte, uchar bitPos);
+	bool getBit(const quint8& byte, quint8 bitPos);
 
 	// Can't split templates across header and source files: https://stackoverflow.com/questions/5612791/c-template-and-header-files#5612847
 	// Reason is that the WHOLE function/class/thing that is templated needs to be known at compile time, so it can actually generate the function/class/thing according to it's usage

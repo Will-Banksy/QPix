@@ -1,5 +1,6 @@
 #include "Pencil.h"
 #include <iostream>
+#include "EditorTools.h"
 
 // the ': Tool(id, canvas)' in the initialisation list is like calling super(id, tool)
 Pencil::Pencil(int id, Canvas* canvas) : Tool(id, canvas) {
@@ -7,11 +8,6 @@ Pencil::Pencil(int id, Canvas* canvas) : Tool(id, canvas) {
 	description = "Draws pixels";
 	keyShortcut = "P";
 	iconPath = ":/pencil.png";
-
-	// Assign the lambda (capturing the 'this' pointer so I can use global variables) to the std::function
-	toolAction = [&, this](int i, int j, uint col, ToolSettings& settings) {
-		this->canvas->buffer->setPixel(i, j, col); // TODO: Respect tool settings, brush size, etc.
-	};
 }
 
 Pencil::~Pencil() {
@@ -28,7 +24,7 @@ void Pencil::onMousePressed(QMouseEvent* evt, QPoint& cPos) {
 
 	uint col = getColour();
 
-	Algorithms::plotLine(curr.x(), curr.y(), curr.x(), curr.y(), col, settings, toolAction);
+	Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), curr.x(), curr.y(), col, EditorTools::brush);
 }
 
 void Pencil::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
@@ -42,7 +38,7 @@ void Pencil::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
 	if(settings.pixelPerfect) {
 		// Need function to call here
 	} else {
-		Algorithms::plotLine(curr.x(), curr.y(), prev.x(), prev.y(), col, settings, toolAction);
+		Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), prev.x(), prev.y(), col, EditorTools::brush);
 	}
 }
 
@@ -57,7 +53,7 @@ void Pencil::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
 	if(settings.pixelPerfect) {
 		// Need function to call here
 	} else {
-		Algorithms::plotLine(prev.x(), curr.y(), prev.x(), prev.y(), col, settings, toolAction);
+		Painter::drawLine(*canvas->buffer, prev.x(), curr.y(), prev.x(), prev.y(), col, EditorTools::brush);
 	}
 
 	canvas->commit();
