@@ -30,7 +30,9 @@ PixelEditor::~PixelEditor() {
 void PixelEditor::setupMenus() {
 	createActions();
 
-	QMenuBar* menuBar = new QMenuBar(this);
+	QMenuBar* menuBar = new QMenuBar();
+	setMenuBar(menuBar);
+	menuBar->setNativeMenuBar(true); // If possible will use this as the native menubar
 
 	QMenu* file = menuBar->addMenu(tr("&File"));
 	file->addSeparator();

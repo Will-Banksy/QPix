@@ -144,3 +144,42 @@ QScrollBar:vertical {
 }
 
 /* TODO: Need to actually style menus - remember to disable global menu bar for testing */
+
+QMenu {
+	background-color: @back-dark;
+	/*border-top: 1px solid @button-normal;
+	border-bottom: 1px solid @button-normal;*/
+	border-radius: 2px;
+}
+
+QMenu::item {
+	margin: 0px;
+	padding: 2px 5px 2px 5px;
+	border-left: 1px solid @button-normal;
+	border-right: 1px solid @button-normal;
+}
+
+*[isFirstChild="true"] {
+	border-top: 1px solid @button-normal;
+	border-radius: 2px 2px 0px 0px;
+}
+
+/*QMenu::item:last-child {
+	border-bottom: 1px solid @button-normal;
+	border-radius: 0px 0px 2px 2px;
+}
+
+QMenu::item:first-child {
+	border-top: 1px solid @button-normal;
+	border-radius: 2px 2px 0px 0px;
+}*/
+
+QMenu::item:selected {
+	background-color: @accent;
+	border-color: @accent;
+}
+
+QMenuBar::item {
+	margin: 0px;
+	padding: 2px 5px 2px 5px;
+}
