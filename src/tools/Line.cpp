@@ -18,7 +18,7 @@ void Line::onMousePressed(QMouseEvent* evt, QPoint& cPos) {
 
 	uint col = getColour();
 
-	Painter::drawLine(*canvas->overlay, curr.x(), curr.y(), curr.x(), curr.y(), col, EditorTools::brush);
+	Painter::drawLine(*canvas->overlay, curr.x(), curr.y(), curr.x(), curr.y(), col, *EditorTools::brush);
 }
 
 void Line::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
@@ -32,7 +32,7 @@ void Line::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
 	if(settings.oneToOneRatio) {
 		// Need function to call here
 	} else {
-		Painter::drawLine(*canvas->overlay, start.x(), start.y(), curr.x(), curr.y(), col, EditorTools::brush);
+		Painter::drawLine(*canvas->overlay, start.x(), start.y(), curr.x(), curr.y(), col, *EditorTools::brush);
 	}
 }
 
@@ -47,7 +47,7 @@ void Line::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
 	if(settings.oneToOneRatio) {
 		// Need function to call here
 	} else {
-		Painter::drawLine(*canvas->buffer, start.x(), start.y(), curr.x(), curr.y(), col, EditorTools::brush);
+		Painter::drawLine(*canvas->buffer, start.x(), start.y(), curr.x(), curr.y(), col, *EditorTools::brush);
 	}
 
 	canvas->commit();

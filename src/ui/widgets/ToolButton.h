@@ -4,6 +4,8 @@
 #include <QToolButton>
 // #include "tools/Tool.h"
 
+#include <QWidget>
+
 class Tool;
 
 /**
@@ -24,6 +26,13 @@ class ToolButton : public QToolButton { // Hang on... ToolButtons are basically 
 
 	public slots:
 		void onToggled(bool checked);
+};
+
+class Thing : public QWidget {
+public:
+	Thing() {
+
+	}
 };
 
 #endif // TOOLBUTTON_H

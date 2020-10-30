@@ -18,7 +18,7 @@ void Eraser::onMousePressed(QMouseEvent* evt, QPoint& cPos) {
 
 	CHECK_MOUSE_BUTTONS
 
-	Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), curr.x(), curr.y(), transparent, EditorTools::brush);
+	Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), curr.x(), curr.y(), transparent, *EditorTools::brush);
 }
 
 void Eraser::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
@@ -26,7 +26,7 @@ void Eraser::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
 
 	CHECK_MOUSE_BUTTONS
 
-	Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), prev.x(), prev.y(), transparent, EditorTools::brush);
+	Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), prev.x(), prev.y(), transparent, *EditorTools::brush);
 }
 
 void Eraser::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
@@ -34,7 +34,7 @@ void Eraser::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
 
 	CHECK_MOUSE_BUTTONS
 
-	Painter::drawLine(*canvas->buffer, prev.x(), curr.y(), prev.x(), prev.y(), transparent, EditorTools::brush);
+	Painter::drawLine(*canvas->buffer, prev.x(), curr.y(), prev.x(), prev.y(), transparent, *EditorTools::brush);
 
 	canvas->commit();
 }

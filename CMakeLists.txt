@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.1)
 # Set project name and version, and languages used
 project(QPix VERSION 1.0 LANGUAGES CXX)
 
-# Instruct CMake to run moc (Meta Object Compiler) automatically when needed
+# Instruct CMake to run moc (Qt's Meta Object Compiler) automatically when needed
 set(CMAKE_AUTOMOC ON)
 
 # Find the QtWidgets library

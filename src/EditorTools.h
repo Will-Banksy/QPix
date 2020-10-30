@@ -21,7 +21,7 @@ class EditorTools {
 		static uint secondaryColour;
 		static Tool* selectedTool;
 		static QList<Tool*> tools;
-		static Brush brush;
+		static Brush* brush;
 		static ushort brushWidth;
 		static ushort brushHeight;
 

@@ -8,7 +8,7 @@ uint EditorTools::primaryColour = 0xff000000;
 uint EditorTools::secondaryColour = 0x00000000;
 QList<Tool*> EditorTools::tools = QList<Tool*>();
 Tool* EditorTools::selectedTool = nullptr;
-Brush EditorTools::brush = VariableBrush();
+Brush* EditorTools::brush = new VariableBrush();
 ushort EditorTools::brushWidth = 1;
 ushort EditorTools::brushHeight = 1;
 

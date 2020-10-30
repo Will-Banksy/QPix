@@ -34,7 +34,7 @@ namespace utils {
 	class VariableBrush : public Brush {
 		public:
 			VariableBrush(BrushShape shape = RECT) : Brush(VARIABLE), m_shape(shape) {};
-			virtual void applyBrush(int i_, int j_, uint* colArray, QSize imageSize, uint col) const override;
+			void applyBrush(int i_, int j_, uint* colArray, QSize imageSize, uint col) const override;
 
 // 			const BrushType m_type = VARIABLE;
 			const BrushShape m_shape;
@@ -43,7 +43,7 @@ namespace utils {
 	class FixedBrush : public Brush {
 		public:
 			FixedBrush(ushort width, ushort height, QList<QPoint> points) : Brush(FIXED), m_brushMatrix(BrushMatrix(width, height, points)) {}
-			virtual void applyBrush(int i_, int j_, uint* colArray, QSize imageSize, uint col) const override;
+			void applyBrush(int i_, int j_, uint* colArray, QSize imageSize, uint col) const override;
 
 // 			const BrushType m_type = FIXED;
 			const BrushMatrix m_brushMatrix;

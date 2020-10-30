@@ -15,6 +15,6 @@ void Fill::onMouseClicked(QMouseEvent* evt, QPoint& cPos) { // TODO: Maybe chang
 
 	uint col = getColour();
 
-	Painter::fillArea(*canvas->buffer, curr.x(), curr.y(), col, EditorTools::brush);
+	Painter::fillArea(*canvas->buffer, curr.x(), curr.y(), col, *EditorTools::brush);
 }
 

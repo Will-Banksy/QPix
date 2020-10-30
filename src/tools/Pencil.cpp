@@ -24,7 +24,7 @@ void Pencil::onMousePressed(QMouseEvent* evt, QPoint& cPos) {
 
 	uint col = getColour();
 
-	Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), curr.x(), curr.y(), col, EditorTools::brush);
+	Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), curr.x(), curr.y(), col, *EditorTools::brush);
 }
 
 void Pencil::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
@@ -38,7 +38,7 @@ void Pencil::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
 	if(settings.pixelPerfect) {
 		// Need function to call here
 	} else {
-		Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), prev.x(), prev.y(), col, EditorTools::brush);
+		Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), prev.x(), prev.y(), col, *EditorTools::brush);
 	}
 }
 
@@ -53,7 +53,7 @@ void Pencil::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
 	if(settings.pixelPerfect) {
 		// Need function to call here
 	} else {
-		Painter::drawLine(*canvas->buffer, prev.x(), curr.y(), prev.x(), prev.y(), col, EditorTools::brush);
+		Painter::drawLine(*canvas->buffer, prev.x(), curr.y(), prev.x(), prev.y(), col, *EditorTools::brush);
 	}
 
 	canvas->commit();

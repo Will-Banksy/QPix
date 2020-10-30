@@ -7,10 +7,20 @@ namespace utils {
 	}
 
 	void VariableBrush::applyBrush(int i, int j, uint* colArray, QSize imageSize, uint col) const {
-		std::cout << "applyBrush" << std::endl;
+// 		std::cout << "applyBrush" << std::endl;
 		if(EditorTools::brushWidth == 1 && EditorTools::brushHeight == 1) {
-			int index = i + j * imageSize.width();
-			colArray[index] = col;
+			// TODO Implement the ability to 'tile' your strokes
+			bool tileBrush = true;
+			if(i >= 0 && i < imageSize.width() && j >= 0 && j < imageSize.height()) {
+				int index = i + j * imageSize.width();
+				colArray[index] = col;
+			} else if(tileBrush) {
+				// Not quite working. Of course it couldn't be this simple
+				i = i % imageSize.width();
+				j = j % imageSize.height();
+				int index = i + j * imageSize.width();
+				colArray[index] = col;
+			}
 		}
 	}
 
