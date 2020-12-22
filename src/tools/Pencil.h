@@ -12,7 +12,7 @@ class Pencil : public Tool {
 		QList<QPair<QPoint, uint>> currentStroke;
 
 	public:
-		Pencil(int id, Canvas* canvas);
+		Pencil(int id);
 		~Pencil() override; // Need to override destructor: https://stackoverflow.com/questions/461203/when-to-use-virtual-destructors#461224
 		void onMousePressed(QMouseEvent* evt, QPoint& cPos) override;
 		void onMouseReleased(QMouseEvent* evt, QPoint& cPos) override;

@@ -10,7 +10,7 @@
  */
 class Line : public Tool {
 	public:
-		Line(int id, Canvas* canvas);
+		Line(int id);
 		~Line() override = default;
 		void onMousePressed(QMouseEvent* evt, QPoint& cPos) override;
 		void onMouseReleased(QMouseEvent* evt, QPoint& cPos) override;

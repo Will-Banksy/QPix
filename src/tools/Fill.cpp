@@ -1,7 +1,7 @@
 #include "Fill.h"
 #include "EditorTools.h"
 
-Fill::Fill(int id, Canvas* canvas) : Tool(id, canvas) {
+Fill::Fill(int id) : Tool(id) {
 	name = "Fill";
 	description = "Fills an area";
 	keyShortcut = "B";

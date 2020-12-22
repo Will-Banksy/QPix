@@ -7,6 +7,7 @@
 #include <QColor>
 #include "ui/Canvas.h"
 #include "ui/widgets/ToolButton.h"
+#include "ToolOptionWidget.h"
 
 // Define a macro to replace all CHECK_MOUSE_BUTTONS with the code after it at compile time
 #define CHECK_MOUSE_BUTTONS if(currMouseButton != RIGHT && currMouseButton != LEFT) return;
@@ -44,7 +45,7 @@ class Tool {
 				bool interdisperse;
 		};
 
-		Tool(int id, Canvas* canvas);
+		Tool(int id);
 		virtual ~Tool();
 		QString name;
 		QString description;
@@ -55,7 +56,9 @@ class Tool {
 		ToolSettings settings;
 		int triggerType;
 		Canvas* canvas;
-		ToolButton* button;
+// 		ToolButton* button;
+
+		QList<ToolOptionWidget*> options;
 
 	protected:
 		QPoint curr;

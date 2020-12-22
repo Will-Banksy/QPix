@@ -3,11 +3,18 @@
 #include "EditorTools.h"
 
 // the ': Tool(id, canvas)' in the initialisation list is like calling super(id, tool)
-Pencil::Pencil(int id, Canvas* canvas) : Tool(id, canvas) {
+Pencil::Pencil(int id) : Tool(id) {
 	name = "Pencil";
 	description = "Draws pixels";
 	keyShortcut = "P";
 	iconPath = ":/pencil.png";
+
+	options.append(new ToolOptionBool([](QVariant newValue) {
+		std::cout << "NewValue: " << newValue.toBool() << std::endl;
+	}, "Hello"));
+	options.append(new ToolOptionMulti([](QVariant newValue) {
+		std::cout << "NewValue: " << newValue.toInt() << std::endl;
+	}, { "Item 1", "Item 2", "Item 3" }));
 }
 
 Pencil::~Pencil() {

@@ -2,7 +2,7 @@
 #include "EditorTools.h"
 
 // the ': Tool(id, canvas)' in the initialisation list is like calling super(id, tool)
-Eraser::Eraser(int id, Canvas* canvas) : Tool(id, canvas) {
+Eraser::Eraser(int id) : Tool(id) {
 	name = "Eraser";
 	description = "Erases pixels";
 	keyShortcut = "E";

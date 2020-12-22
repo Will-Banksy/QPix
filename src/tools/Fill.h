@@ -9,7 +9,7 @@
  */
 class Fill : public Tool {
 	public:
-		Fill(int id, Canvas* canvas);
+		Fill(int id);
 		~Fill() = default;
 		void onMouseClicked(QMouseEvent* evt, QPoint& cPos) override;
 };

@@ -9,12 +9,9 @@
  * @todo write docs
  */
 class ToolPane : public QDockWidget {
-	public:
-		~ToolPane() = default;
-		ToolPane(QWidget* parent = nullptr);
-
-	private:
-		void addToolButtons(FlowLayout2* layout);
+public:
+	ToolPane(QWidget* parent = nullptr);
+	virtual ~ToolPane();
 };
 
 #endif // TOOLPANE_H

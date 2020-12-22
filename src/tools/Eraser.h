@@ -12,7 +12,7 @@ class Eraser : public Tool {
 		uint transparent = 0x00000000;
 
 	public:
-		Eraser(int id, Canvas* canvas);
+		Eraser(int id);
 		~Eraser() override; // Need to override destructor: https://stackoverflow.com/questions/461203/when-to-use-virtual-destructors#461224
 		void onMousePressed(QMouseEvent* evt, QPoint& cPos) override;
 		void onMouseReleased(QMouseEvent* evt, QPoint& cPos) override;

@@ -7,6 +7,9 @@ project(QPix VERSION 1.0 LANGUAGES CXX)
 # Instruct CMake to run moc (Qt's Meta Object Compiler) automatically when needed
 set(CMAKE_AUTOMOC ON)
 
+# Use c++20
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
+
 # Find the QtWidgets library
 find_package(Qt5Widgets CONFIG REQUIRED)
 
@@ -19,16 +22,23 @@ qt5_add_resources(QT_RESOURCES resources.qrc)
 set(pixeleditor_CPP
 	src/main.cpp
 	src/EditorTools.cpp
+	src/UI.cpp
+	src/Project.cpp
+	src/Window.cpp
+	src/Application.cpp
+	src/ProjectManager.cpp
 
 	src/ui/PixelEditor.cpp
 	src/ui/Canvas.cpp
 	src/ui/FlowLayout2.cpp
+	src/ui/ProjectScene.cpp
+	src/ui/CanvasView.cpp
 
-	src/ui/panes/CanvasPane.cpp
 	src/ui/panes/ToolPane.cpp
 
 	src/ui/widgets/ToolButton.cpp
 
+	src/tools/ToolOptionWidget.cpp
 	src/tools/Tool.cpp
 	src/tools/Pencil.cpp
 	src/tools/Eraser.cpp
@@ -46,16 +56,23 @@ set(SOURCES
 	${pixeleditor_CPP}
 
 	src/EditorTools.h
+	src/UI.h
+	src/Project.h
+	src/Window.h
+	src/Application.h
+	src/ProjectManager.h
 
 	src/ui/PixelEditor.h
 	src/ui/Canvas.h
 	src/ui/FlowLayout2.h
+	src/ui/ProjectScene.h
+	src/ui/CanvasView.h
 
-	src/ui/panes/CanvasPane.h
 	src/ui/panes/ToolPane.h
 
 	src/ui/widgets/ToolButton.h
 
+	src/tools/ToolOptionWidget.h
 	src/tools/Tool.h
 	src/tools/Pencil.h
 	src/tools/Eraser.h

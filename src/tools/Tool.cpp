@@ -1,11 +1,11 @@
 #include "Tool.h"
 #include "EditorTools.h"
 
-Tool::Tool(int id, Canvas* canvas) {
+Tool::Tool(int id) {
 	this->id = id;
 	settings = ToolSettings();
-	this->canvas = canvas;
-	button = nullptr;
+// 	this->canvas = canvas;
+// 	button = nullptr;
 }
 
 Tool::~Tool() {

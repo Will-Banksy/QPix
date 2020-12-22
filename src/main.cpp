@@ -5,6 +5,8 @@
 #include <QFile>
 #include <QCommonStyle>
 #include "utils/Helper.h"
+#include <cmath>
+#include "Application.h"
 
 int main(int argc, char *argv[]) {
 // 	uchar byte = 0b00000100;
@@ -14,20 +16,22 @@ int main(int argc, char *argv[]) {
 // 	std::cout << utils::getBit(byte, 7) << std::endl;
 // 	std::cout << (ulong)byte << std::endl;
 
-	QApplication app(argc, argv);
+// 	QApplication app(argc, argv);
 
 	// 	QStyle* style = app.style();
 	// 	std::cout << style->objectName().toStdString() << std::endl;
 
-	app.setStyle(new QCommonStyle()); // Basing my QSS-made style off the cross-platform common style so less 'visual artifacts' (aka things not bloody working like they should) appear
+// 	app.setStyle(new QCommonStyle()); // Basing my QSS-made style off the cross-platform common style so less 'visual artifacts' (aka things not bloody working like they should) appear
 
 	// Get the stylesheet
-	QString styleSheet = utils::getStyleSheet(); // Maybe make so it can load other style sheets, if the user wants
+// 	QString styleSheet = utils::getStyleSheet(); // Maybe make so it can load other style sheets, if the user wants
 
-	app.setStyleSheet(styleSheet);
+// 	app.setStyleSheet(styleSheet);
 
-	PixelEditor mainWindow;
-	mainWindow.show();
+// 	PixelEditor mainWindow;
+// 	mainWindow.show();
 
-	return app.exec();
+// 	return app.exec();
+
+	return Application::init(argc, argv);
 }

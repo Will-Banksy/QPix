@@ -1,5 +1,6 @@
 #include "Brush.h"
 #include "EditorTools.h"
+#include "Helper.h"
 
 namespace utils {
 	void Brush::applyBrush(int i, int j, uint* colArray, QSize imageSize, uint col) const {
@@ -15,11 +16,13 @@ namespace utils {
 				int index = i + j * imageSize.width();
 				colArray[index] = col;
 			} else if(tileBrush) {
-				// Not quite working. Of course it couldn't be this simple
-				i = i % imageSize.width();
-				j = j % imageSize.height();
-				int index = i + j * imageSize.width();
-				colArray[index] = col;
+				// Working amazingly thanks to a different definition of modulo
+				i = utils::mod(i, imageSize.width());
+				j = utils::mod(j, imageSize.height());
+				if(i >= 0 && i < imageSize.width() && j >= 0 && j < imageSize.height()) { // Just in case
+					int index = i + j * imageSize.width();
+					colArray[index] = col;
+				}
 			}
 		}
 	}

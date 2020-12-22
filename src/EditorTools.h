@@ -24,10 +24,12 @@ class EditorTools {
 		static Brush* brush;
 		static ushort brushWidth;
 		static ushort brushHeight;
+		static bool lock; // When lock is true, cannot switch tools
 
-		static void initTools(Canvas* canvas);
+		static void initTools();
 		static void setBrushSize(ushort size);
 		static void setBrushSize(ushort width, ushort height);
+		static void switchTool(int selectedToolIndex);
 };
 
 #endif // EDITORTOOLS_H

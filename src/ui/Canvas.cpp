@@ -7,6 +7,8 @@
 #include "utils/Colour.h"
 #include <iostream>
 
+QPixmap* Canvas::background;
+
 Canvas::Canvas() : QGraphicsItem() {
 	surface = new QImage(32, 32, QImage::Format_ARGB32);
 	surface->fill(utils::Colour::TRANSPARENT);

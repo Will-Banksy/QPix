@@ -27,6 +27,7 @@ class PixelEditor : public QMainWindow {
 
 		void createActions();
 		void setupMenus();
+		void addToolBars();
 
 	public slots:
 		void quit();

@@ -1,5 +1,4 @@
 #include "PixelEditor.h"
-#include "ui/panes/CanvasPane.h"
 #include "ui/panes/ToolPane.h"
 #include <QStyle>
 #include <QPushButton>
@@ -8,11 +7,19 @@
 #include <QMenuBar>
 #include <QApplication>
 #include <QStatusBar>
+#include <QToolBar>
+#include <QStackedWidget>
+#include "tools/Tool.h"
+#include "EditorTools.h"
+#include <typeindex>
+#include <typeinfo>
 
 PixelEditor::PixelEditor(QWidget *parent) : QMainWindow(parent) {
 	setWindowTitle("QPix");
 
-	setCentralWidget(new CanvasPane());
+// 	setCentralWidget(new CanvasPane()); // This calls EditorTools::initTools
+
+	addToolBars();
 
 	setDockOptions(QMainWindow::AnimatedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::VerticalTabs);
 
@@ -61,4 +68,59 @@ void PixelEditor::quit() {
 
 void PixelEditor::showTools() {
 	toolPane->setVisible(true);
+}
+
+void PixelEditor::addToolBars() {
+	QToolBar* toolbar = new QToolBar("Toolbar");
+	QStackedWidget* stack = new QStackedWidget();
+
+	for(Tool* tool : EditorTools::tools) {
+		QWidget* container = new QWidget();
+		QHBoxLayout* layout = new QHBoxLayout();
+		layout->setAlignment(Qt::AlignLeft); // Don't stretch the widgets all the way across. Align them to the left
+		for(ToolOptionWidget* opWidget : tool->options) {
+			switch(opWidget->optionType()) {
+				case TOT_BOOL:
+					layout->addWidget((ToolOptionBool*)opWidget);
+					break;
+
+				case TOT_MULTI:
+					layout->addWidget((ToolOptionMulti*)opWidget);
+					break;
+
+				default:
+					std::cout << "Argh. Why???" << std::endl;
+					break;
+			}
+// 			std::type_index type = typeid(opWidget);
+// 			std::cout << "About to add a bool or multi widget?" << std::endl;
+// 			if(type == typeid(ToolOptionBool)) {
+// 				layout->addWidget(&dynamic_cast<ToolOptionBool&>(opWidget));
+// 				std::cout << "Added bool widget" << std::endl;
+// 			} else if(type == typeid(ToolOptionMulti)) {
+// 				layout->addWidget(&dynamic_cast<ToolOptionMulti&>(opWidget));
+// 				std::cout << "Added multi widget" << std::endl;
+// 			} else {
+// 				std::cout << "Nope!" << std::endl;
+// 			}
+		}
+		container->setLayout(layout);
+		stack->addWidget(container);
+	}
+
+	toolbar->addWidget(stack);
+	addToolBar(Qt::TopToolBarArea, toolbar);
+
+// 	QToolBar* toolbar = new QToolBar();
+// 	toolbar->setMovable(false);
+// 	QStackedWidget* stack = new QStackedWidget();
+//
+// 	QComboBox* box = new QComboBox();
+// 	box->addItem("Item 1");
+// 	box->addItem("Item 2");
+// 	box->addItem("Item 3");
+// 	stack->addWidget(box);
+//
+// 	toolbar->addWidget(stack);
+// 	addToolBar(Qt::TopToolBarArea, toolbar);
 }

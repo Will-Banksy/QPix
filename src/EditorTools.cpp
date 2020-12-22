@@ -3,6 +3,8 @@
 #include "tools/Eraser.h"
 #include "tools/Fill.h"
 #include "tools/Line.h"
+#include "Window.h"
+#include "Application.h"
 
 uint EditorTools::primaryColour = 0xff000000;
 uint EditorTools::secondaryColour = 0x00000000;
@@ -11,12 +13,13 @@ Tool* EditorTools::selectedTool = nullptr;
 Brush* EditorTools::brush = new VariableBrush();
 ushort EditorTools::brushWidth = 1;
 ushort EditorTools::brushHeight = 1;
+bool EditorTools::lock = false;
 
-void EditorTools::initTools(Canvas* canvas) {
-	tools.append(new Pencil(0, canvas));
-	tools.append(new Eraser(1, canvas));
-	tools.append(new Fill(2, canvas));
-	tools.append(new Line(3, canvas));
+void EditorTools::initTools() {
+	tools.append(new Pencil(0));
+	tools.append(new Eraser(1));
+	tools.append(new Fill(2));
+	tools.append(new Line(3));
 	selectedTool = tools.at(0);
 }
 
@@ -28,6 +31,13 @@ void EditorTools::setBrushSize(ushort size) {
 void EditorTools::setBrushSize(ushort width, ushort height) {
 	brushWidth = width;
 	brushHeight = height;
+}
+
+void EditorTools::switchTool(int selectedToolIndex) {
+	selectedTool = tools.at(selectedToolIndex);
+	for(Window* window : Application::windows) {
+		window->ui->switchToolUI(selectedToolIndex);
+	}
 }
 
 

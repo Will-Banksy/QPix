@@ -76,4 +76,9 @@ namespace utils {
 		bool val = tmp & 1u;
 		return val;
 	}
+
+	// a = divisor, n = dividend, See Knuth's definition: https://en.wikipedia.org/wiki/Modulo_operation#In_programming_languages
+	int mod(int a, int n) {
+		return a - n * floor((float)a / n);
+	}
 }

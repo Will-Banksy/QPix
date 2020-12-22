@@ -3,13 +3,13 @@
 
 #include <QGraphicsItem>
 
-/**
- * @todo write docs
- */
+class Project;
+
 class Canvas : public QGraphicsItem {
 	public:
-		explicit Canvas();
+		Canvas();
 		~Canvas();
+
 		/// This is NOT for drawing anything that needs to end up on the surface - This is used for previews of actions only
 		QImage* overlay;
 		/// If you want to draw to the surface, draw to this buffer and commit()
@@ -27,7 +27,7 @@ class Canvas : public QGraphicsItem {
 		QRectF boundingRect() const override;
 
 	private:
-		QPixmap* background;
+		static QPixmap* background;
 		QImage* surface;
 };
 

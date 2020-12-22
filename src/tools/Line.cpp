@@ -1,7 +1,7 @@
 #include "Line.h"
 #include "EditorTools.h"
 
-Line::Line(int id, Canvas* canvas) : Tool(id, canvas) {
+Line::Line(int id) : Tool(id) {
 	name = "Line";
 	description = "Draws lines";
 	keyShortcut = "L";
