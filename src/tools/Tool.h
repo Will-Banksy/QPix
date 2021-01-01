@@ -56,9 +56,6 @@ class Tool {
 		ToolSettings settings;
 		int triggerType;
 		Canvas* canvas;
-// 		ToolButton* button;
-
-		QList<ToolOptionWidget*> options;
 
 	protected:
 		QPoint curr;
@@ -77,7 +74,8 @@ class Tool {
 		virtual void onMouseClicked(QMouseEvent* evt, QPoint& cPos);
 		virtual void onDragCancel(QMouseEvent* evt, QPoint& cPos); // This method is called when you're dragging with one mouse button and press another
 		virtual void onMouseMoved(QMouseEvent* evt, QPoint& cPos); // This method is called when you're moving the mouse when the mouse is not down
-		bool isSelector();
+		bool isSelector(); // Idk if this should be virtual
+		virtual QList<ToolOptionWidget*> createOptions();
 
 	protected:
 		MouseButton getMouseButton(QMouseEvent* evt);

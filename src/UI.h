@@ -1,13 +1,17 @@
 #ifndef UI_H
 #define UI_H
 
-#include <QAction>
+#include <QObject>
+#include <QList>
+#include <QHash>
 
+class QAction;
 class Window;
 class CanvasView;
 class ToolPane;
 class QStackedWidget;
 class ToolButton;
+class TabbedProjectView;
 
 class UI : public QObject {
 	Q_OBJECT
@@ -18,10 +22,11 @@ public:
 
 public:
 	Window* window; // Does not own this pointer
-	CanvasView* canvasPane;
+	CanvasView* canvasView;
 	ToolPane* toolDock; // TODO Rename class ToolPane to ToolDock
 	QStackedWidget* toolConfigStack;
 	QList<ToolButton*> toolButtons;
+	TabbedProjectView* tabbedView;
 
 	QHash<QString, QAction*> actions;
 
@@ -38,6 +43,7 @@ public:
 public slots:
 	void showToolsDock();
 	void newWindow();
+	void newTab();
 };
 
 #endif // UI_H

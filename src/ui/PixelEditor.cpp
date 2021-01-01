@@ -78,7 +78,7 @@ void PixelEditor::addToolBars() {
 		QWidget* container = new QWidget();
 		QHBoxLayout* layout = new QHBoxLayout();
 		layout->setAlignment(Qt::AlignLeft); // Don't stretch the widgets all the way across. Align them to the left
-		for(ToolOptionWidget* opWidget : tool->options) {
+		for(ToolOptionWidget* opWidget : tool->createOptions()) {
 			switch(opWidget->optionType()) {
 				case TOT_BOOL:
 					layout->addWidget((ToolOptionBool*)opWidget);

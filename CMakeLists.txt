@@ -7,8 +7,8 @@ project(QPix VERSION 1.0 LANGUAGES CXX)
 # Instruct CMake to run moc (Qt's Meta Object Compiler) automatically when needed
 set(CMAKE_AUTOMOC ON)
 
-# Use c++20
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
+# Use c++20, -g for including debugging symbols, -O0 for 0 optimization
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -std=c++20")
 
 # Find the QtWidgets library
 find_package(Qt5Widgets CONFIG REQUIRED)
@@ -33,6 +33,7 @@ set(pixeleditor_CPP
 	src/ui/FlowLayout2.cpp
 	src/ui/ProjectScene.cpp
 	src/ui/CanvasView.cpp
+	src/ui/TabbedProjectView.cpp
 
 	src/ui/panes/ToolPane.cpp
 
@@ -67,6 +68,7 @@ set(SOURCES
 	src/ui/FlowLayout2.h
 	src/ui/ProjectScene.h
 	src/ui/CanvasView.h
+	src/ui/TabbedProjectView.h
 
 	src/ui/panes/ToolPane.h
 

@@ -8,11 +8,16 @@ class Window;
 
 class Project {
 public:
-	Project(Window* window_);
+	Project(Window* window_, int id);
 	~Project();
 
 	ProjectScene* scene; // Owns this object
 	Window* window; // Does not own this
+	QString name;
+	QTransform viewTransform;
+	bool saved;
+	int tabId;
+	int id;
 };
 
 #endif // PROJECT_H

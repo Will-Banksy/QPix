@@ -20,7 +20,6 @@ void Application::quit() {
 	QApplication::quit();
 }
 
-
 Window* Application::createWindow() {
 	Window* window = new Window();
 	window->show();

@@ -85,3 +85,7 @@ uint Tool::getColour() {
 			return EditorTools::secondaryColour;
 	}
 }
+
+QList<ToolOptionWidget*> Tool::createOptions() {
+	return QList<ToolOptionWidget*>();
+}

@@ -10,6 +10,7 @@
 #include "EditorTools.h"
 #include <QToolBar>
 #include <QStackedWidget>
+#include "ui/TabbedProjectView.h"
 
 UI::UI(Window* window) : window(window) {
 	if(window) {
@@ -23,21 +24,24 @@ UI::~UI() {
 void UI::setupUI() {
 	window->setWindowTitle("QPix");
 	window->setDockOptions(QMainWindow::AnimatedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::VerticalTabs);
+// 	window->statusBar();
 	createActions();
 	createMenus();
 	createDocks();
 	createToolbars();
 	// Create other stuff too
 
-	canvasPane = new CanvasView();
-	window->setCentralWidget(canvasPane);
 	{
-		Project* project = ProjectManager::createProject(window);
+		canvasView = new CanvasView();
 
-		canvasPane->setScene(project->scene);
+		tabbedView = new TabbedProjectView(canvasView, { });
+		ProjectManager::createProject(window);
 
-		canvasPane->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-		canvasPane->setResizeAnchor(QGraphicsView::AnchorViewCenter);
+		window->setCentralWidget(tabbedView);
+
+		canvasView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+		canvasView->setResizeAnchor(QGraphicsView::AnchorViewCenter);
+// 		canvasView->setStatusTip("Canvas");
 	}
 }
 
@@ -48,8 +52,9 @@ void UI::createMenus() {
 
 	QMenu* file = menuBar->addMenu(QObject::tr("&File"));
 	file->addSeparator();
-	file->addAction(actions["Quit"]);
 	file->addAction(actions["New Window"]);
+	file->addAction(actions["New Tab"]);
+	file->addAction(actions["Quit"]);
 
 	QMenu* view = menuBar->addMenu(QObject::tr("&View"));
 	QMenu* showToolViews = view->addMenu(QObject::tr("Show Tool Views"));
@@ -73,6 +78,12 @@ void UI::createActions() {
 	// Status tip
 	connect(newWindowAct, &QAction::triggered, this, &UI::newWindow);
 	actions.insert("New Window", newWindowAct);
+
+	QAction* newTabAct = new QAction(tr("New &Tab"));
+	newTabAct->setShortcut(QKeySequence::AddTab);
+	// Status tip
+	connect(newTabAct, &QAction::triggered, this, &UI::newTab);
+	actions.insert("New Tab", newTabAct);
 }
 
 void UI::createDocks() {
@@ -97,7 +108,7 @@ void UI::createDocks() {
 	}
 }
 
-void UI::createToolbars() {
+void UI::createToolbars() { // TODO Make it so that when the option widgets state changes (like a ToolOptionBool being ticked) then the option widget is updated in all windows
 	QToolBar* toolbar = new QToolBar("Tool Config Toolbar");
 	toolConfigStack = new QStackedWidget();
 
@@ -105,7 +116,7 @@ void UI::createToolbars() {
 		QWidget* container = new QWidget();
 		QHBoxLayout* layout = new QHBoxLayout();
 		layout->setAlignment(Qt::AlignLeft); // Don't stretch the widgets all the way across. Align them to the left
-		for(ToolOptionWidget* opWidget : tool->options) {
+		for(ToolOptionWidget* opWidget : tool->createOptions()) {
 			switch(opWidget->optionType()) {
 				case TOT_BOOL:
 					layout->addWidget((ToolOptionBool*)opWidget);
@@ -116,7 +127,7 @@ void UI::createToolbars() {
 					break;
 
 				default:
-					std::cout << "Argh. Why???" << std::endl;
+					// Kill myself
 					break;
 			}
 		}
@@ -135,6 +146,11 @@ void UI::showToolsDock() {
 
 void UI::newWindow() {
 	Application::createWindow();
+}
+
+void UI::newTab() {
+	Project* project = ProjectManager::createProject(window);
+// 	tabbedView->addProject(project);
 }
 
 void UI::switchToolUI(int selectedTool) {

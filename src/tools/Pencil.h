@@ -18,6 +18,7 @@ class Pencil : public Tool {
 		void onMouseReleased(QMouseEvent* evt, QPoint& cPos) override;
 // 		void onMouseClicked(QMouseEvent* evt, QPoint& cPos) override;
 		void onMouseDragged(QMouseEvent* evt, QPoint& cPos) override;
+		QList<ToolOptionWidget*> createOptions() override;
 };
 
 #endif // PENCIL_H

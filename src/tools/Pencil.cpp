@@ -8,13 +8,6 @@ Pencil::Pencil(int id) : Tool(id) {
 	description = "Draws pixels";
 	keyShortcut = "P";
 	iconPath = ":/pencil.png";
-
-	options.append(new ToolOptionBool([](QVariant newValue) {
-		std::cout << "NewValue: " << newValue.toBool() << std::endl;
-	}, "Hello"));
-	options.append(new ToolOptionMulti([](QVariant newValue) {
-		std::cout << "NewValue: " << newValue.toInt() << std::endl;
-	}, { "Item 1", "Item 2", "Item 3" }));
 }
 
 Pencil::~Pencil() {
@@ -84,3 +77,21 @@ void Pencil::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
 // 		PaintHandler.drawLine(prev, curr, col, DrawTo.CANVAS, EditorTools.brushSize, settings);
 // 	}
 // }
+
+// 	options.append(new ToolOptionBool([](QVariant newValue) {
+// 		std::cout << "NewValue: " << newValue.toBool() << std::endl;
+// 	}, "Hello"));
+// 	options.append(new ToolOptionMulti([](QVariant newValue) {
+// 		std::cout << "NewValue: " << newValue.toInt() << std::endl;
+// 	}, { "Item 1", "Item 2", "Item 3" }));
+
+QList<ToolOptionWidget*> Pencil::createOptions() {
+	return {
+		new ToolOptionBool([](QVariant newValue) {
+			std::cout << "[BOOL] NewValue: " << newValue.toBool() << std::endl;
+		}, "Hello"),
+		new ToolOptionMulti([](QVariant newValue) {
+			std::cout << "[MULTI] NewValue: " << newValue.toInt() << std::endl;
+		}, { "Item 1", "Item 2", "Item 3" })
+	};
+}

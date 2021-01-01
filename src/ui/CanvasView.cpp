@@ -22,6 +22,8 @@ CanvasView::~CanvasView() {
 }
 
 void CanvasView::wheelEvent(QWheelEvent* event) { // Also should make it so you can only zoom out so far
+	if(!scene()) return;
+
 	float factor = 1;
 	if(event->angleDelta().y() > 0) {
 		factor = 1.1;
@@ -51,6 +53,8 @@ inline int mapFloor(float num) {
 }
 
 void CanvasView::mousePressEvent(QMouseEvent* event) {
+	if(!scene()) return;
+
 	QPointF canvasPosF = mapToScene(event->pos());
 	QPoint canvasPos = QPoint(mapFloor(canvasPosF.x()), mapFloor(canvasPosF.y()));
 
@@ -72,6 +76,8 @@ void CanvasView::mousePressEvent(QMouseEvent* event) {
 }
 
 void CanvasView::mouseReleaseEvent(QMouseEvent* event) {
+	if(!scene()) return;
+
 	QPointF canvasPosF = mapToScene(event->pos());
 	QPoint canvasPos = QPoint(mapFloor(canvasPosF.x()), mapFloor(canvasPosF.y()));
 
@@ -90,6 +96,8 @@ void CanvasView::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void CanvasView::mouseMoveEvent(QMouseEvent* event) {
+	if(!scene()) return;
+
 	QGraphicsView::mouseMoveEvent(event); // Need to call superclass here (otherwise the transformation anchor will be ignored)
 
 	QPointF canvasPosF = mapToScene(event->pos());
