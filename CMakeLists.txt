@@ -22,20 +22,17 @@ qt5_add_resources(QT_RESOURCES resources.qrc)
 set(pixeleditor_CPP
 	src/main.cpp
 	src/EditorTools.cpp
-	src/UI.cpp
 	src/Project.cpp
-	src/Window.cpp
 	src/Application.cpp
 	src/ProjectManager.cpp
 
-	src/ui/PixelEditor.cpp
+	src/ui/Window.cpp
+	src/ui/UI.cpp
 	src/ui/Canvas.cpp
 	src/ui/FlowLayout2.cpp
 	src/ui/ProjectScene.cpp
 	src/ui/CanvasView.cpp
 	src/ui/TabbedProjectView.cpp
-
-	src/ui/panes/ToolPane.cpp
 
 	src/ui/widgets/ToolButton.cpp
 
@@ -57,20 +54,17 @@ set(SOURCES
 	${pixeleditor_CPP}
 
 	src/EditorTools.h
-	src/UI.h
 	src/Project.h
-	src/Window.h
 	src/Application.h
 	src/ProjectManager.h
 
-	src/ui/PixelEditor.h
+	src/ui/Window.h
+	src/ui/UI.h
 	src/ui/Canvas.h
 	src/ui/FlowLayout2.h
 	src/ui/ProjectScene.h
 	src/ui/CanvasView.h
 	src/ui/TabbedProjectView.h
-
-	src/ui/panes/ToolPane.h
 
 	src/ui/widgets/ToolButton.h
 

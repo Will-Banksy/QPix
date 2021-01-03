@@ -16,6 +16,7 @@ ToolButton::ToolButton(Tool* tool, QWidget* parent) : QToolButton(parent) {
 	setIcon(QIcon(tool->iconPath));
 	setIconSize(QSize(24, 24)); // Set size of the icons so they're not automatically sized
 	setShortcut(QKeySequence(this->tool->keyShortcut)); // TODO: Disable shortcuts if we have the mouse pressed on the canvas
+	setStatusTip(QString(tool->name).append(" - ").append(tool->description));
 }
 
 ToolButton::~ToolButton() {

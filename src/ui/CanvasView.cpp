@@ -3,6 +3,7 @@
 #include "EditorTools.h"
 #include "ProjectScene.h"
 #include <QOpenGLWidget>
+#include <Project.h>
 
 CanvasView::CanvasView(QWidget* parent) : QGraphicsView(parent) {
 // 	setViewport(new QOpenGLWidget()); // Rendering using a QOpenGLWidget does reduce cpu usage - but also of course increases gpu usage. Anyway what I need to do is make it more efficient, not this.
@@ -40,7 +41,11 @@ void CanvasView::wheelEvent(QWheelEvent* event) { // Also should make it so you 
 	}
 
 	scale(factor, factor);
-	((ProjectScene*)scene())->canvas->update();
+	((ProjectScene*)scene())->update();
+
+	// Update the transform stored by the project
+	((ProjectScene*)scene())->project->viewTransform.scale(factor, factor);
+	((ProjectScene*)scene())->project->viewScaleAmt = scaleAmt;
 }
 
 // This function simply floors floating point values in a way so that flooring -0.5 gives -1 instead of 0

@@ -1,5 +1,5 @@
 #include "Project.h"
-#include "Window.h"
+#include "ui/Window.h"
 #include "ProjectManager.h"
 #include "ui/TabbedProjectView.h"
 
@@ -10,6 +10,9 @@ Project::Project(Window* window_) : window(window_) {
 	filepath = "Unsaved";
 	viewTransform = QTransform();
 	saved = false;
+	viewTransform.reset(); // Reset to identity matrix
+	viewScaleAmt = 1.0;
+
 	ProjectManager::registerNewProject(this);
 	window->ui->tabbedView->registerNewProject(this);
 }

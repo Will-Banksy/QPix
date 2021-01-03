@@ -1,5 +1,5 @@
 #include "Application.h"
-#include "UI.h"
+#include "ui/UI.h"
 #include <QApplication>
 #include "EditorTools.h"
 

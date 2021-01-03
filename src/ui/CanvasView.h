@@ -21,9 +21,10 @@ private:
 	bool hasMovedMouse;
 	bool ignoreRelease;
 
-	double scaleAmt; // Keeps track of the current scale
-
 	QPoint prevCanvasCoord;
+
+public:
+	double scaleAmt; // Keeps track of the current scale
 };
 
 #endif // CANVASVIEW_H

@@ -2,7 +2,7 @@
 #define APPLICATION_H
 
 #include <QList>
-#include "Window.h"
+#include "ui/Window.h"
 #include "ProjectManager.h"
 
 class Application {

@@ -5,23 +5,28 @@
 #include <QMenuBar>
 #include <QMenu>
 #include "Application.h"
-#include "ui/CanvasView.h"
-#include "ui/panes/ToolPane.h"
+#include "CanvasView.h"
 #include "EditorTools.h"
 #include <QToolBar>
 #include <QStackedWidget>
-#include "ui/TabbedProjectView.h"
+#include "TabbedProjectView.h"
 #include <QTableWidget>
 #include <QDialog>
 #include <QTreeView>
 #include <QStandardItemModel>
 #include <QPushButton>
+#include <QDockWidget>
+#include "FlowLayout2.h"
 
 UI::UI(Window* window) : window(window) {
 }
 
 UI::~UI() {
-	// TODO Need to do some deleting
+	// Qt should delete all widgets, so shouldn't need to do much deleting here
+	// But I think I probably need to delete the actions in the hashmap
+	Q_FOREACH(QAction* value, actions) {
+		delete value;
+	}
 }
 
 void UI::setupUI() {
@@ -29,26 +34,24 @@ void UI::setupUI() {
 		return;
 	}
 	window->setWindowTitle("QPix");
-	window->setDockOptions(QMainWindow::AnimatedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::VerticalTabs);
-// 	window->statusBar();
+	window->setDockOptions(QMainWindow::AnimatedDocks | QMainWindow::AllowTabbedDocks | QMainWindow::VerticalTabs);
+	window->statusBar(); // Create status bar
 	createActions();
 	createMenus();
 	createDocks();
 	createToolbars();
 	// Create other stuff too
 
-	{
-		canvasView = new CanvasView();
+	canvasView = new CanvasView();
 
-		tabbedView = new TabbedProjectView(canvasView, { });
-		newTab();
+	tabbedView = new TabbedProjectView(canvasView, { });
+	newTab();
 
-		window->setCentralWidget(tabbedView);
+	window->setCentralWidget(tabbedView);
 
-		canvasView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
-		canvasView->setResizeAnchor(QGraphicsView::AnchorViewCenter);
-// 		canvasView->setStatusTip("Canvas");
-	}
+	canvasView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+	canvasView->setResizeAnchor(QGraphicsView::AnchorViewCenter);
+	canvasView->setStatusTip("Canvas");
 }
 
 void UI::createMenus() {
@@ -109,25 +112,23 @@ void UI::createActions() {
 }
 
 void UI::createDocks() {
-	{
-		toolDock = new ToolPane();
-		QWidget* widget = new QWidget();
-		FlowLayout2* layout = new FlowLayout2();
-		for(Tool* tool : EditorTools::tools) {
-			ToolButton* btn = new ToolButton(tool);
-			if(tool == EditorTools::selectedTool) {
-				btn->setChecked(true);
-			}
-			layout->addWidget(btn);
-			toolButtons.append(btn);
+	toolDock = new QDockWidget();
+	QWidget* widget = new QWidget();
+	FlowLayout2* layout = new FlowLayout2();
+	for(Tool* tool : EditorTools::tools) {
+		ToolButton* btn = new ToolButton(tool);
+		if(tool == EditorTools::selectedTool) {
+			btn->setChecked(true);
 		}
-		QVBoxLayout* outerLayout = new QVBoxLayout();
-		outerLayout->setAlignment(Qt::AlignTop);
-		outerLayout->addLayout(layout);
-		widget->setLayout(outerLayout);
-		toolDock->setWidget(widget);
-		window->addDockWidget(Qt::LeftDockWidgetArea, toolDock, Qt::Vertical);
+		layout->addWidget(btn);
+		toolButtons.append(btn);
 	}
+	QVBoxLayout* outerLayout = new QVBoxLayout();
+	outerLayout->setAlignment(Qt::AlignTop);
+	outerLayout->addLayout(layout);
+	widget->setLayout(outerLayout);
+	toolDock->setWidget(widget);
+	window->addDockWidget(Qt::LeftDockWidgetArea, toolDock, Qt::Vertical);
 }
 
 void UI::createToolbars() { // TODO Make it so that when the option widgets state changes (like a ToolOptionBool being ticked) then the option widget is updated in all windows

@@ -1,7 +1,7 @@
 #include "Window.h"
 #include "Application.h"
 #include <QCloseEvent>
-#include "ui/TabbedProjectView.h"
+#include "TabbedProjectView.h"
 
 Window::Window() {
 	ui = new UI(this);

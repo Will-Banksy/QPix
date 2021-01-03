@@ -15,9 +15,11 @@ public:
 	Window* window; // Does not own this
 	QString name;
 	QString filepath;
-	QTransform viewTransform;
 	bool saved;
 	int id;
+
+	QTransform viewTransform;
+	double viewScaleAmt;
 
 	void save();
 	void close(int tabIndex = -1);

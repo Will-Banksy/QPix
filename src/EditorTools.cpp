@@ -3,7 +3,7 @@
 #include "tools/Eraser.h"
 #include "tools/Fill.h"
 #include "tools/Line.h"
-#include "Window.h"
+#include "ui/Window.h"
 #include "Application.h"
 
 uint EditorTools::primaryColour = 0xff000000;
@@ -39,11 +39,3 @@ void EditorTools::switchTool(int selectedToolIndex) {
 		window->ui->switchToolUI(selectedToolIndex);
 	}
 }
-
-
-/*EditorTools::EditorTools() {
-}
-
-EditorTools::~EditorTools() {
-	// Don't need to delete selectedTool - when the QList deletes itself it should take care of deleting all the tools. Right?
-}*/

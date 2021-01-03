@@ -1,4 +1,4 @@
-#ifndef PIXELEDITOR_H
+/*#ifndef PIXELEDITOR_H
 #define PIXELEDITOR_H
 
 #include <QMainWindow>
@@ -35,3 +35,4 @@ class PixelEditor : public QMainWindow {
 };
 
 #endif // PIXELEDITOR_H
+*/

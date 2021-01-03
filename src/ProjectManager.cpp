@@ -1,5 +1,5 @@
 #include "ProjectManager.h"
-#include "Window.h"
+#include "ui/Window.h"
 #include "ui/TabbedProjectView.h"
 #include <iostream>
 

@@ -1,4 +1,4 @@
-#include "PixelEditor.h"
+/*#include "PixelEditor.h"
 #include "ui/panes/ToolPane.h"
 #include <QStyle>
 #include <QPushButton>
@@ -123,4 +123,4 @@ void PixelEditor::addToolBars() {
 //
 // 	toolbar->addWidget(stack);
 // 	addToolBar(Qt::TopToolBarArea, toolbar);
-}
+}*/

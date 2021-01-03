@@ -12,6 +12,7 @@ class ToolPane;
 class QStackedWidget;
 class ToolButton;
 class TabbedProjectView;
+class QDockWidget;
 
 class UI : public QObject {
 	Q_OBJECT
@@ -23,7 +24,7 @@ public:
 public:
 	Window* window; // Does not own this pointer
 	CanvasView* canvasView; // Owns this
-	ToolPane* toolDock; // TODO Rename class ToolPane to ToolDock
+	QDockWidget* toolDock; // TODO Rename class ToolPane to ToolDock
 	QStackedWidget* toolConfigStack;
 	QList<ToolButton*> toolButtons;
 	TabbedProjectView* tabbedView;

@@ -25,22 +25,6 @@ public:
 public slots:
 	void setCurrentProject(int tabIndex);
 	void handleTabClose(int tabIndex);
-
-// 	QList<Project*> projects;
-// 	QTabBar* tabbar;
-// 	CanvasView* view;
-// 	QHash<int, Project*> projectTabIds;
-//
-// 	void addProject(Project* project);
-// 	void closeProject(Project* project);
-// 	Project* fromId(int id);
-// 	int id(Project* project);
-// 	void addId(int id, Project* project);
-// 	void removeId(int id);
-
-// public slots:
-// 	void setCurrentProject(int index);
-// 	void handleTabClose(int index);
 };
 
 #endif // TABBEDPROJECTVIEW_H
