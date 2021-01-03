@@ -11,6 +11,7 @@ class ProjectScene : public QGraphicsScene {
 
 public:
 	ProjectScene();
+	~ProjectScene();
 
 	Project* project;
 	Canvas* canvas;

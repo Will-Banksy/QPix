@@ -10,29 +10,37 @@ int Application::init(int argc, char *argv[]) {
 
 	EditorTools::initTools();
 
-	createWindow();
+	new Window();
 
 	return app.exec();
 }
 
 void Application::quit() {
 	// Do some stuff beforehand perhaps, like asking all projects if they are okay to be closed
-	QApplication::quit();
+	for(int i = 0; i < windows.count();) {
+		Window* window = windows.at(i);
+		if(window->ui->windowCanClose()) {
+			window->forceClose();
+		} else {
+			break;
+		}
+	}
+	if(windows.isEmpty()) {
+		QApplication::quit();
+	}
 }
 
-Window* Application::createWindow() {
-	Window* window = new Window();
+void Application::registerNewWindow(Window* window) {
 	window->show();
 	windows.append(window);
-	return window;
 }
 
-void Application::closeWindow(Window* window) {
+void Application::registerCloseWindow(Window* window) {
 	windows.removeAll(window);
 }
 
 Project* Application::currentProject() {
-	return nullptr; // TODO
+	return nullptr;
 }
 
 Window* Application::focusedWindow() {

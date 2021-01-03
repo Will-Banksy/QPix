@@ -18,7 +18,9 @@ Canvas::Canvas() : QGraphicsItem() {
 
 	buffer = new QImage(*surface);
 
-	background = new QPixmap(":/Transparency-Dark.png");
+	if(!background) {
+		background = new QPixmap(":/Transparency-Dark.png");
+	}
 
 	// So we get the exposedRect (visible rectangle) as a QStyleOptionGraphicsItem parameter in paint
 	setFlags(ItemUsesExtendedStyleOption);
@@ -28,7 +30,6 @@ Canvas::~Canvas() {
 	delete surface;
 	delete overlay;
 	delete buffer;
-	delete background;
 }
 
 // Hmm... Painting seems to actually be fairly intensive - or, at least, more than it should be. Change this, probably by only repainting the areas that need it?

@@ -16,10 +16,14 @@ public:
 	UI* ui; // Owns this object
 
 	Project* activeProject();
-	void removeThis();
+	void forceClose();
+	void closeProjects();
 
 protected:
 	void closeEvent(QCloseEvent* event) override;
+
+private:
+	bool dontCheckClose;
 };
 
 #endif // WINDOW_H

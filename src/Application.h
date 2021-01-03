@@ -15,8 +15,10 @@ public:
 
 	static int init(int argc, char *argv[]);
 	static void quit();
-	static Window* createWindow();
-	static void closeWindow(Window* window);
+	/// Don't call this apart from in the Window constructor
+	static void registerNewWindow(Window* window);
+	/// Don't call this apart from in the Window constructor
+	static void registerCloseWindow(Window* window);
 	static Project* currentProject();
 	static Window* focusedWindow();
 };

@@ -22,7 +22,7 @@ public:
 
 public:
 	Window* window; // Does not own this pointer
-	CanvasView* canvasView;
+	CanvasView* canvasView; // Owns this
 	ToolPane* toolDock; // TODO Rename class ToolPane to ToolDock
 	QStackedWidget* toolConfigStack;
 	QList<ToolButton*> toolButtons;
@@ -39,11 +39,14 @@ public:
 
 	// Other functions
 	void switchToolUI(int selectedTool);
+	bool windowCanClose();
 
 public slots:
 	void showToolsDock();
 	void newWindow();
 	void newTab();
+	void closeWindow();
+	void closeTab();
 };
 
 #endif // UI_H

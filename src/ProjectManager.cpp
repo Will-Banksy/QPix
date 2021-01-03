@@ -1,22 +1,21 @@
 #include "ProjectManager.h"
 #include "Window.h"
 #include "ui/TabbedProjectView.h"
+#include <iostream>
 
 QList<Project*> ProjectManager::projects;
 QHash<int, Project*> ProjectManager::projectIds;
 
-Project* ProjectManager::createProject(Window* window) {
-	Project* project = new Project(window, getNewId());
+void ProjectManager::registerNewProject(Project* project) {
+	project->id = getNewId();
+	std::cout << "ProjectId: " << project->id << std::endl;
 	projects.append(project);
-	window->ui->tabbedView->addProject(project);
 	projectIds.insert(project->id, project);
-	return project;
 }
 
-void ProjectManager::closeProject(Project* project) {
+void ProjectManager::registerCloseProject(Project* project) {
 	projects.removeAll(project);
 	projectIds.remove(project->id);
-// 	delete project;
 }
 
 int ProjectManager::getNewId() {

@@ -11,17 +11,23 @@
 #include <QToolBar>
 #include <QStackedWidget>
 #include "ui/TabbedProjectView.h"
+#include <QTableWidget>
+#include <QDialog>
+#include <QTreeView>
+#include <QStandardItemModel>
+#include <QPushButton>
 
 UI::UI(Window* window) : window(window) {
-	if(window) {
-		setupUI();
-	}
 }
 
 UI::~UI() {
+	// TODO Need to do some deleting
 }
 
 void UI::setupUI() {
+	if(!window) {
+		return;
+	}
 	window->setWindowTitle("QPix");
 	window->setDockOptions(QMainWindow::AnimatedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::VerticalTabs);
 // 	window->statusBar();
@@ -35,7 +41,7 @@ void UI::setupUI() {
 		canvasView = new CanvasView();
 
 		tabbedView = new TabbedProjectView(canvasView, { });
-		ProjectManager::createProject(window);
+		newTab();
 
 		window->setCentralWidget(tabbedView);
 
@@ -54,6 +60,10 @@ void UI::createMenus() {
 	file->addSeparator();
 	file->addAction(actions["New Window"]);
 	file->addAction(actions["New Tab"]);
+	file->addSeparator();
+	file->addAction(actions["Close Window"]);
+	file->addAction(actions["Close Tab"]);
+	file->addSeparator();
 	file->addAction(actions["Quit"]);
 
 	QMenu* view = menuBar->addMenu(QObject::tr("&View"));
@@ -84,6 +94,18 @@ void UI::createActions() {
 	// Status tip
 	connect(newTabAct, &QAction::triggered, this, &UI::newTab);
 	actions.insert("New Tab", newTabAct);
+
+	QAction* closeWindowAct = new QAction(tr("Clos&e Window"));
+	closeWindowAct->setShortcut(QKeySequence(""));
+	// Status tip
+	connect(closeWindowAct, &QAction::triggered, this, &UI::closeWindow);
+	actions.insert("Close Window", closeWindowAct);
+
+	QAction* closeTabAct = new QAction(tr("&Close Tab"));
+	closeTabAct->setShortcut(QKeySequence::Close);
+	// Status tip
+	connect(closeTabAct, &QAction::triggered, this, &UI::closeTab);
+	actions.insert("Close Tab", closeTabAct);
 }
 
 void UI::createDocks() {
@@ -127,7 +149,6 @@ void UI::createToolbars() { // TODO Make it so that when the option widgets stat
 					break;
 
 				default:
-					// Kill myself
 					break;
 			}
 		}
@@ -145,15 +166,103 @@ void UI::showToolsDock() {
 }
 
 void UI::newWindow() {
-	Application::createWindow();
+	new Window();
 }
 
 void UI::newTab() {
-	Project* project = ProjectManager::createProject(window);
-// 	tabbedView->addProject(project);
+	new Project(window);
+}
+
+void UI::closeWindow() {
+	window->close(); // This will check if windowCanClose
+}
+
+void UI::closeTab() {
+	tabbedView->handleTabClose(tabbedView->tabbar->currentIndex());
 }
 
 void UI::switchToolUI(int selectedTool) {
 	toolButtons.at(selectedTool)->setChecked(true);
 	toolConfigStack->setCurrentIndex(selectedTool);
+}
+
+bool UI::windowCanClose() {
+	QList<Project*> projects = tabbedView->getProjects();
+	QList<Project*> unsavedProjects;
+	for(int i = 0; i < projects.count(); i++) {
+		if(!projects.at(i)->saved) {
+			unsavedProjects.append(projects.at(i));
+		}
+	}
+	if(unsavedProjects.count() == 0) {
+		return true;
+	} else {
+		QDialog diag(window);
+		diag.setWindowTitle("Save Projects - QPix");
+
+		bool returnValue = false;
+		QList<QStandardItem*> entries;
+		QTreeView* treeView = new QTreeView();
+
+		QStandardItemModel* model = new QStandardItemModel();
+		model->setHorizontalHeaderLabels({ "Project Name", "Filepath" });
+
+		for(int i = 0; i < unsavedProjects.count(); i++) {
+			QStandardItem* checkItem = new QStandardItem(unsavedProjects.at(i)->name);
+			checkItem->setCheckable(true);
+			checkItem->setCheckState(Qt::Checked);
+
+			entries.append(checkItem);
+
+			std::cout << "[DIAG] ProjectId: " << unsavedProjects.at(i)->id << std::endl;
+
+			model->appendRow({ checkItem, new QStandardItem(unsavedProjects.at(i)->filepath) });
+		}
+
+		treeView->setModel(model);
+		treeView->resizeColumnToContents(0);
+		treeView->resizeColumnToContents(1);
+
+		QPushButton* saveSelected = new QPushButton(QApplication::style()->standardIcon(QStyle::SP_DialogSaveButton), "Save");
+		saveSelected->setAutoDefault(true);
+		connect(saveSelected, &QPushButton::clicked, [&entries, &unsavedProjects, &returnValue, &diag]() {
+			for(int i = 0; i < entries.count(); i++) {
+				if(entries.at(i)->checkState() == Qt::Checked) {
+					unsavedProjects.at(i)->save();
+				}
+			}
+			returnValue = true;
+			diag.close();
+		});
+
+		QPushButton* discardAll = new QPushButton(QApplication::style()->standardIcon(QStyle::SP_DialogDiscardButton), "Discard All");
+		discardAll->setAutoDefault(false);
+		connect(discardAll, &QPushButton::clicked, [&returnValue, &diag]() {
+			returnValue = true;
+			diag.close();
+		});
+
+		QPushButton* cancel = new QPushButton(QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton), "Cancel");
+		cancel->setAutoDefault(false);
+		connect(cancel, &QPushButton::clicked, [&returnValue, &diag]() {
+			returnValue = false;
+			diag.close();
+		});
+
+		QVBoxLayout* layout = new QVBoxLayout();
+		layout->addWidget(treeView);
+
+		QHBoxLayout* layout2 = new QHBoxLayout();
+		layout2->setAlignment(Qt::AlignRight);
+		layout2->addWidget(saveSelected);
+		layout2->addWidget(discardAll);
+		layout2->addWidget(cancel);
+
+		layout->addLayout(layout2);
+
+		diag.setLayout(layout);
+
+		diag.exec(); // Show the dialog as a modal dialog - blocks user input to all other parts of the Qt application
+		return returnValue;
+	}
 }

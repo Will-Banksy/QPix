@@ -11,38 +11,66 @@ TabbedProjectView::TabbedProjectView(CanvasView* view, QList<Project*> projects,
 	tabbar->setTabsClosable(true);
 	tabbar->setMovable(true);
 
-	for(int i = 0; i < projects.count(); i++) {
-		addProject(projects.at(i));
-	}
-
 	connect(tabbar, &QTabBar::currentChanged, this, &TabbedProjectView::setCurrentProject);
 	connect(tabbar, &QTabBar::tabCloseRequested, this, &TabbedProjectView::handleTabClose);
 
+	for(int i = 0; i < projects.count(); i++) {
+		registerNewProject(projects.at(i));
+	}
+
 	QGridLayout* layout = new QGridLayout();
-// 	layout->addWidget(tabbar, 0, 0);
+	layout->addWidget(tabbar, 0, 0);
 	layout->addWidget(view, 1, 0);
 	setLayout(layout);
-
-	setCurrentProject(0);
 }
 
-void TabbedProjectView::addProject(Project* project) {
-	// FIXME Okay so really wierd - tabbar apparently has a really small address like 0x71 or 0x81 at this point, so trying to access the value of it, even to check if it's a nullptr, causes SIGSEGV
-	// WHY I do not know - In the constructor it had a normal one, and it's not like this function and the constructor are being called from different threads
-	tabbar->addTab(project->name);
-	tabbar->setTabData(tabbar->count() - 1, project->id);
+void TabbedProjectView::registerNewProject(Project* project) {
+	int tabIndex = tabbar->addTab(project->name);
+	tabbar->setTabData(tabIndex, project->id);
+	if(tabbar->count() == 1) {
+		setCurrentProject(0);
+	}
 }
 
-void TabbedProjectView::closeProject(Project* project) {
-	ProjectManager::closeProject(project);
+void TabbedProjectView::registerCloseProject(Project* project, int tabIndex) {
+	if(tabIndex != -1) {
+		tabbar->removeTab(tabIndex);
+		return;
+	}
+
+	for(int i = 0; i < tabbar->count(); i++) {
+		int projId = tabbar->tabData(i).toInt();
+		if(projId == project->id) {
+			tabbar->removeTab(i);
+		}
+	}
 }
 
 void TabbedProjectView::handleTabClose(int tabIndex) {
 	Project* project = ProjectManager::fromId(tabbar->tabData(tabIndex).toInt());
-	closeProject(project);
+	if(project->saved) {
+		project->close(tabIndex);
+	} else {
+		QMessageBox::StandardButton reply = QMessageBox::warning(window(), tr("Save Project - QPix"),
+																  tr("This project contains unsaved work. Do you want to save it?"),
+																  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+		if(reply == QMessageBox::Yes) {
+			project->save();
+			project->close(tabIndex);
+		} else if(reply == QMessageBox::No) {
+			project->close(tabIndex);
+		}
+	}
 }
 
 void TabbedProjectView::setCurrentProject(int tabIndex) {
+	if(tabbar->currentIndex() != tabIndex) {
+		tabbar->setCurrentIndex(tabIndex);
+	}
+	if(tabIndex == -1) {
+		view->setScene(nullptr);
+		return;
+	}
 	Project* project = ProjectManager::fromId(tabbar->tabData(tabIndex).toInt());
 	if(project) {
 		view->setScene(project->scene);
@@ -50,6 +78,21 @@ void TabbedProjectView::setCurrentProject(int tabIndex) {
 		view->setScene(nullptr);
 	}
 }
+
+QList<Project*> TabbedProjectView::getProjects() {
+	QList<Project*> projects;
+	for(int i = 0; i < tabbar->count(); i++) {
+		projects.append(ProjectManager::fromId(tabbar->tabData(i).toInt()));
+	}
+	return projects;
+}
+
+void TabbedProjectView::closeAllProjects() {
+	for(int i = 0; i < tabbar->count();) {
+		ProjectManager::fromId(tabbar->tabData(i).toInt())->close();
+	}
+}
+
 
 //TabbedProjectView::TabbedProjectView(CanvasView* view, QList<Project*> projects, QWidget* parent) : QWidget(parent), view(view) {
 //	tabbar = new QTabBar();

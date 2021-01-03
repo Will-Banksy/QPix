@@ -17,8 +17,10 @@ public:
 	QTabBar* tabbar;
 	CanvasView* view;
 
-	void addProject(Project* project);
-	void closeProject(Project* project);
+	void registerNewProject(Project* project);
+	void registerCloseProject(Project* project, int tabIndex = -1);
+	QList<Project*> getProjects();
+	void closeAllProjects();
 
 public slots:
 	void setCurrentProject(int tabIndex);
