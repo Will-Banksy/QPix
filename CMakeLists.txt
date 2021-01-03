@@ -14,7 +14,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -std=c++20")
 find_package(Qt5Widgets CONFIG REQUIRED)
 
 # Find the Qt5Core library
-find_package(Qt5Core)
+find_package(Qt5Core CONFIG REQUIRED)
 
 # Add the resources
 qt5_add_resources(QT_RESOURCES resources.qrc)
