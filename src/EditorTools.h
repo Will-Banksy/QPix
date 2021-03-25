@@ -24,7 +24,7 @@ class EditorTools {
 		static Brush* brush;
 		static ushort brushWidth;
 		static ushort brushHeight;
-		static bool lock; // When lock is true, cannot switch tools
+		static bool toolSwitchlock; // When lock is true, cannot switch tools
 
 		static void initTools();
 		static void setBrushSize(ushort size);

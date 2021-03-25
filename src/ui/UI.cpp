@@ -17,6 +17,8 @@
 #include <QPushButton>
 #include <QDockWidget>
 #include "FlowLayout2.h"
+#include <QShortcut>
+#include <cassert>
 
 UI::UI(Window* window) : window(window) {
 }
@@ -25,6 +27,10 @@ UI::~UI() {
 	// Qt should delete all widgets, so shouldn't need to do much deleting here
 	// But I think I probably need to delete the actions in the hashmap
 	Q_FOREACH(QAction* value, actions) {
+		delete value;
+	}
+
+	Q_FOREACH(QShortcut* value, toolShortcuts) {
 		delete value;
 	}
 }
@@ -112,7 +118,7 @@ void UI::createActions() {
 }
 
 void UI::createDocks() {
-	toolDock = new QDockWidget();
+	toolDock = new QDockWidget("Tools");
 	QWidget* widget = new QWidget();
 	FlowLayout2* layout = new FlowLayout2();
 	for(Tool* tool : EditorTools::tools) {
@@ -122,6 +128,15 @@ void UI::createDocks() {
 		}
 		layout->addWidget(btn);
 		toolButtons.append(btn);
+
+		// This creates window shortcuts
+		QShortcut* shortcut = new QShortcut(window);
+		shortcut->setKey(QKeySequence(tool->keyShortcut));
+// 		connect(shortcut, &QShortcut::activated, btn, &QToolButton::click);
+		connect(shortcut, &QShortcut::activated, [btn]() {
+			EditorTools::switchTool(btn->tool->id);
+		});
+		toolShortcuts.insert(tool, shortcut);
 	}
 	QVBoxLayout* outerLayout = new QVBoxLayout();
 	outerLayout->setAlignment(Qt::AlignTop);
@@ -131,7 +146,7 @@ void UI::createDocks() {
 	window->addDockWidget(Qt::LeftDockWidgetArea, toolDock, Qt::Vertical);
 }
 
-void UI::createToolbars() { // TODO Make it so that when the option widgets state changes (like a ToolOptionBool being ticked) then the option widget is updated in all windows
+void UI::createToolbars() {
 	QToolBar* toolbar = new QToolBar("Tool Config Toolbar");
 	toolConfigStack = new QStackedWidget();
 
@@ -139,19 +154,39 @@ void UI::createToolbars() { // TODO Make it so that when the option widgets stat
 		QWidget* container = new QWidget();
 		QHBoxLayout* layout = new QHBoxLayout();
 		layout->setAlignment(Qt::AlignLeft); // Don't stretch the widgets all the way across. Align them to the left
-		for(ToolOptionWidget* opWidget : tool->createOptions()) {
+		int i = 0;
+		QList<ToolOptionWidget*> opWidgets = tool->createOptions();
+		toolOptionWidgets.append(QList<ToolOptionWidget*>());
+		for(ToolOptionWidget* opWidget : opWidgets) {
+			ToolOptionSignals* opSignals = new ToolOptionSignals(tool->id, i);
+			connect(opSignals, &ToolOptionSignals::uiNeedsUpdate, [](int tool, int configIndex, QVariant value) {
+				for(Window* window : Application::windows) {
+					window->ui->changeToolConfigUI(tool, configIndex, value);
+				}
+			});
+			opWidget->toolOptionSignals = opSignals;
+
 			switch(opWidget->optionType()) {
 				case TOT_BOOL:
 					layout->addWidget((ToolOptionBool*)opWidget);
+					toolOptionWidgets[tool->id].append(opWidget);
 					break;
 
 				case TOT_MULTI:
 					layout->addWidget((ToolOptionMulti*)opWidget);
+					toolOptionWidgets[tool->id].append(opWidget);
+					break;
+
+				case TOT_INT:
+					layout->addWidget((ToolOptionInt*)opWidget);
+					toolOptionWidgets[tool->id].append(opWidget);
 					break;
 
 				default:
+					assert(false); // This should NEVER happen
 					break;
 			}
+			i++;
 		}
 		container->setLayout(layout);
 		toolConfigStack->insertWidget(tool->id, container);
@@ -187,6 +222,10 @@ void UI::switchToolUI(int selectedTool) {
 	toolConfigStack->setCurrentIndex(selectedTool);
 }
 
+void UI::changeToolConfigUI(int tool, int configIndex, QVariant value) {
+	toolOptionWidgets[tool][configIndex]->changeValue(value);
+}
+
 bool UI::windowCanClose() {
 	QList<Project*> projects = tabbedView->getProjects();
 	QList<Project*> unsavedProjects;
@@ -214,8 +253,6 @@ bool UI::windowCanClose() {
 			checkItem->setCheckState(Qt::Checked);
 
 			entries.append(checkItem);
-
-			std::cout << "[DIAG] ProjectId: " << unsavedProjects.at(i)->id << std::endl;
 
 			model->appendRow({ checkItem, new QStandardItem(unsavedProjects.at(i)->filepath) });
 		}
@@ -265,5 +302,14 @@ bool UI::windowCanClose() {
 
 		diag.exec(); // Show the dialog as a modal dialog - blocks user input to all other parts of the Qt application
 		return returnValue;
+	}
+}
+
+void UI::switchProject(Project* selectedProject) {
+	canvasView->updateScrollMargins();
+	if(selectedProject->viewScaleAmt < 1) {
+		canvasView->setRenderHint(QPainter::SmoothPixmapTransform, true); // If we are zoomed OUT, then smooth the drawn image
+	} else {
+		canvasView->setRenderHint(QPainter::SmoothPixmapTransform, false); // If we are zoomed IN, then definitely don't smooth the drawn image
 	}
 }

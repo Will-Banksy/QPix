@@ -3,6 +3,7 @@
 #include <iostream>
 #include "EditorTools.h"
 #include <QPainter>
+#include "Icons.h"
 
 ToolButton::ToolButton(Tool* tool, QWidget* parent) : QToolButton(parent) {
 	setCheckable(true); // This button gets toggled. Don't even need to do any click handling!
@@ -13,9 +14,10 @@ ToolButton::ToolButton(Tool* tool, QWidget* parent) : QToolButton(parent) {
 	setAutoExclusive(true); // Act like a radio button, group with all other toolbuttons with the same parent
 
 	this->tool = tool;
-	setIcon(QIcon(tool->iconPath));
-	setIconSize(QSize(24, 24)); // Set size of the icons so they're not automatically sized
-	setShortcut(QKeySequence(this->tool->keyShortcut)); // TODO: Disable shortcuts if we have the mouse pressed on the canvas
+	icon = Icons::iconsMap.value(tool->iconPath);
+// 	setIcon(QIcon(*icons::icons.value(tool->iconPath)));
+// 	setIconSize(QSize(24, 24)); // Set size of the icons so they're not automatically sized
+// 	setShortcut(QKeySequence(this->tool->keyShortcut)); // TODO: Disable shortcuts if we have the mouse pressed on the canvas
 	setStatusTip(QString(tool->name).append(" - ").append(tool->description));
 }
 
@@ -28,4 +30,11 @@ void ToolButton::onToggled(bool checked) {
 			EditorTools::switchTool(tool->id);
 		}
 	}
+}
+
+void ToolButton::paintEvent(QPaintEvent* event) {
+	QToolButton::paintEvent(event);
+	QPoint iconPos((width() / 2) - (icon->width() / 2), (height() / 2) - (icon->height() / 2));
+	QPainter painter(this);
+	painter.drawImage(iconPos, *icon);
 }

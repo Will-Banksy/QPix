@@ -5,13 +5,15 @@
 #include <iostream>
 #include <QMessageBox>
 #include "ProjectManager.h"
+#include "Window.h"
+#include <QScrollBar>
 
 TabbedProjectView::TabbedProjectView(CanvasView* view, QList<Project*> projects, QWidget* parent) : QWidget(parent), view(view) {
 	tabbar = new QTabBar();
 	tabbar->setTabsClosable(true);
 	tabbar->setMovable(true);
 
-	connect(tabbar, &QTabBar::currentChanged, this, &TabbedProjectView::setCurrentProject);
+	connect(tabbar, &QTabBar::currentChanged, this, QOverload<int>::of(&TabbedProjectView::setCurrentProject));
 	connect(tabbar, &QTabBar::tabCloseRequested, this, &TabbedProjectView::handleTabClose);
 
 	for(int i = 0; i < projects.count(); i++) {
@@ -53,12 +55,22 @@ void TabbedProjectView::handleTabClose(int tabIndex) {
 	} else {
 		QMessageBox::StandardButton reply = QMessageBox::warning(window(), tr("Save Project - QPix"),
 																  tr("This project contains unsaved work. Do you want to save it?"),
-																  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-		if(reply == QMessageBox::Yes) {
+																  QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+		if(reply == QMessageBox::Save) {
 			project->save();
 			project->close(tabIndex);
-		} else if(reply == QMessageBox::No) {
+		} else if(reply == QMessageBox::Discard) {
 			project->close(tabIndex);
+		}
+	}
+}
+
+void TabbedProjectView::setCurrentProject(Project* project) {
+	if(project) {
+		for(int i = 0; i < tabbar->count(); i++) {
+			if(ProjectManager::fromId(tabbar->tabData(i).toInt()) == project) {
+				setCurrentProject(i);
+			}
 		}
 	}
 }
@@ -74,8 +86,16 @@ void TabbedProjectView::setCurrentProject(int tabIndex) {
 	Project* project = ProjectManager::fromId(tabbar->tabData(tabIndex).toInt());
 	if(project) {
 		view->setScene(project->scene);
-		view->setTransform(project->viewTransform);
 		view->scaleAmt = project->viewScaleAmt;
+		project->window->ui->switchProject(project);
+		view->setTransform(project->viewTransform);
+		// FIXME Scrollbars are working weirdly with switching between multiple projects
+		if(project->scrollPos.x() == -1 && project->scrollPos.y() == -1) {
+			view->centerOn(project->scene->canvas);
+			std::cout << "Yes" << std::endl;
+		}
+		view->verticalScrollBar()->setValue(project->scrollPos.y());
+		view->horizontalScrollBar()->setValue(project->scrollPos.x());
 	} else {
 		view->setScene(nullptr);
 	}

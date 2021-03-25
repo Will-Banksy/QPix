@@ -15,6 +15,8 @@ class Canvas : public QGraphicsItem {
 		/// If you want to draw to the surface, draw to this buffer and commit()
 		QImage* buffer;
 
+		Project* project;
+
 		/// Commits changes to the buffer - basically writes the buffer to the image
 		void commit();
 		/// Reverts the buffer back to the image

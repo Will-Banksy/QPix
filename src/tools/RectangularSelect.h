@@ -1,24 +1,21 @@
-#ifndef LINE_H
-#define LINE_H
+#ifndef RECTANGULARSELECT_H
+#define RECTANGULARSELECT_H
 
 #include "Tool.h"
-#include "utils/Painter.h"
-#include "ui/Canvas.h"
 
 /**
  * @todo write docs
  */
-class Line : public Tool {
-private:
-	bool uniform;
-
+class RectangularSelect : public Tool {
 public:
-	Line(int id);
-	~Line() override = default;
+	RectangularSelect(int id);
+
 	void onMousePressed(QMouseEvent* evt, QPoint& cPos) override;
 	void onMouseReleased(QMouseEvent* evt, QPoint& cPos) override;
+	void onMouseClicked(QMouseEvent* evt, QPoint& cPos) override;
 	void onMouseDragged(QMouseEvent* evt, QPoint& cPos) override;
-	QList<ToolOptionWidget*> createOptions() override;
+
+	bool isSelector() override;
 };
 
-#endif // LINE_H
+#endif // RECTANGULARSELECT_H

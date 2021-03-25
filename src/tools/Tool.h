@@ -15,10 +15,7 @@
 namespace utils {} // I guess this is like a forward declaration of a namespace?
 using namespace utils;
 
-// TODO: Maybe add tool namespace?
-/**
- * @todo write docs
- */
+// Maybe add tool namespace?
 class Tool {
 	public:
 		enum MouseButton {
@@ -32,6 +29,12 @@ class Tool {
 			PENCIL,
 			ERASER,
 			FILL
+		};
+
+		enum TriggerType {
+			ON_RELEASE,
+			ON_DRAG,
+			ON_CLICK
 		};
 
 		class ToolSettings {
@@ -74,7 +77,7 @@ class Tool {
 		virtual void onMouseClicked(QMouseEvent* evt, QPoint& cPos);
 		virtual void onDragCancel(QMouseEvent* evt, QPoint& cPos); // This method is called when you're dragging with one mouse button and press another
 		virtual void onMouseMoved(QMouseEvent* evt, QPoint& cPos); // This method is called when you're moving the mouse when the mouse is not down
-		bool isSelector(); // Idk if this should be virtual
+		virtual bool isSelector();
 		virtual QList<ToolOptionWidget*> createOptions();
 
 	protected:

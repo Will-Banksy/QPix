@@ -20,9 +20,12 @@ public:
 
 	QTransform viewTransform;
 	double viewScaleAmt;
+	QPoint scrollPos;
 
 	void save();
 	void close(int tabIndex = -1);
+	/// Should always call this function instead of changing the variable directly
+	void setUnsaved();
 };
 
 #endif // PROJECT_H

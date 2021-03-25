@@ -3,7 +3,7 @@
 
 namespace utils {
 	// Declare inline functions --
-	static inline uint constrain(uint val, uint min, uint max) {
+	static inline uint32_t constrain(uint32_t val, uint32_t min, uint32_t max) {
 		return val < min ? min : (val > max ? max : val);
 	};
 
@@ -40,21 +40,21 @@ namespace utils {
 	}
 	// --
 
-	uint Colour::TRANSPARENT = (uint)0x00000000;
-	uint Colour::BLACK = 0xff000000;
-	uint Colour::WHITE = 0xffffffff;
-	uint Colour::RED   = 0xffff0000;
-	uint Colour::GREEN = 0xff00ff00;
-	uint Colour::BLUE  = 0xff0000ff;
-	uint Colour::CYAN  = 0xff00ffff;
-	uint Colour::MAGENTA = 0xffff00ff;
-	uint Colour::YELLOW  = 0xffffff00;
+	uint32_t Colour::TRANSPARENT = (uint32_t)0x00000000;
+	uint32_t Colour::BLACK = 0xff000000;
+	uint32_t Colour::WHITE = 0xffffffff;
+	uint32_t Colour::RED   = 0xffff0000;
+	uint32_t Colour::GREEN = 0xff00ff00;
+	uint32_t Colour::BLUE  = 0xff0000ff;
+	uint32_t Colour::CYAN  = 0xff00ffff;
+	uint32_t Colour::MAGENTA = 0xffff00ff;
+	uint32_t Colour::YELLOW  = 0xffffff00;
 
-	uint Colour::toIntARGB(uint alpha, uint red, uint green, uint blue) {
+	uint32_t Colour::toIntARGB(uint32_t alpha, uint32_t red, uint32_t green, uint32_t blue) {
 		return (alpha << 24) + (red << 16) + (green << 8) + blue;
 	}
 
-	uint Colour::toIntACMYK(uint alpha, uint cyan, uint magenta, uint yellow, uint key) {
+	uint32_t Colour::toIntACMYK(uint32_t alpha, uint32_t cyan, uint32_t magenta, uint32_t yellow, uint32_t key) {
 		float c = (float)cyan;
 		float m = (float)magenta;
 		float y = (float)yellow;
@@ -64,14 +64,14 @@ namespace utils {
 		float g1 = round(255 * (1 - m / 255) * (1 - k / 255));
 		float b1 = round(255 * (1 - y / 255) * (1 - k / 255));
 
-		uint r = constrain((uint)r1, 0, 255);
-		uint g = constrain((uint)g1, 0, 255);
-		uint b = constrain((uint)b1, 0, 255);
+		uint32_t r = constrain((uint32_t)r1, 0, 255);
+		uint32_t g = constrain((uint32_t)g1, 0, 255);
+		uint32_t b = constrain((uint32_t)b1, 0, 255);
 
 		return toIntARGB(alpha, r, g, b);
 	}
 
-	uint Colour::toIntAHSB(uint alpha, uint hue, uint saturation, uint brightness) {
+	uint32_t Colour::toIntAHSB(uint32_t alpha, uint32_t hue, uint32_t saturation, uint32_t brightness) {
 		float H = (float)hue;
 		float S = (float)saturation / 100;
 		float Br = (float)brightness / 100;
@@ -92,7 +92,7 @@ namespace utils {
 		return toIntARGB(alpha, red, green, blue);
 	}
 
-	uint Colour::toIntAHSL(uint alpha, uint hue, uint saturation, uint lightness) {
+	uint32_t Colour::toIntAHSL(uint32_t alpha, uint32_t hue, uint32_t saturation, uint32_t lightness) {
 		float H = (float)hue;
 		float S = (float)saturation / 100;
 		float L = (float)lightness / 100;
@@ -115,17 +115,17 @@ namespace utils {
 		return toIntARGB(alpha, R, G, B);
 	}
 
-	ushort Colour::getDifference(uint colour1, uint colour2, bool useAlpha) {
+	uint16_t Colour::getDifference(uint32_t colour1, uint32_t colour2, bool useAlpha) {
 		int diffA = sq(getAlpha(colour2) - getAlpha(colour1));
 		int diffR = sq(getRed(colour2) - getRed(colour1));
 		int diffG = sq(getGreen(colour2) - getGreen(colour1));
 		int diffB = sq(getBlue(colour2) - getBlue(colour1));
 		if(useAlpha) {
 			// Max difference: 510 (which is 255 * 2)
-			return (ushort)round(sqrt(diffA + diffR + diffG + diffB));
+			return (uint16_t)round(sqrt(diffA + diffR + diffG + diffB));
 		} else {
 			// Max difference: 441.673 => 442
-			return (ushort)round(sqrt(diffR + diffG + diffB));
+			return (uint16_t)round(sqrt(diffR + diffG + diffB));
 		}
 	}
 }

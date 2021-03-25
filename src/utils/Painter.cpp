@@ -5,6 +5,7 @@
 #include "Helper.h"
 #include "Colour.h"
 #include <cmath>
+#include "EditorTools.h"
 
 namespace utils {
 	inline int abs(int val) {
@@ -91,16 +92,58 @@ namespace utils {
 		}
 	}
 
+	void Painter::drawLinePixelPerfect(QImage& target, int startX, int startY, int endX, int endY, uint col, const Brush& brush, QList<QPair<QPoint, uint>>& currentStroke) {
+		uint* bytes = (uint*)target.bits();
+
+		if((EditorTools::brushWidth != 1) || (EditorTools::brushHeight != 1)) {
+			drawLine(target, startX, startY, endX, endY, col, brush);
+			return;
+		}
+
+		QList<QPoint> newLine = utils::plotLine(startX, startY, endX, endY);
+
+		QPoint* prevPoint = nullptr;
+		if(!currentStroke.isEmpty()) {
+			prevPoint = &currentStroke[currentStroke.count() - 1].first;
+		}
+
+		for(int i = 0; i < newLine.count(); i++) {
+			if(prevPoint) {
+				if(*prevPoint == newLine.at(i)) {
+					continue;
+				}
+			}
+			currentStroke.append(QPair<QPoint, uint>(newLine[i], getPixel(target, newLine[i].x(), newLine[i].y())));
+			brush.applyBrush(newLine[i].x(), newLine[i].y(), bytes, target.size(), col);
+			prevPoint = &newLine[i];
+		}
+
+		QList<QPoint> path;
+		for(int i = 0; i < currentStroke.count(); i++) {
+			path.append(currentStroke.at(i).first);
+		}
+
+		for(int i = 1; i < path.count() - 1; i++) {
+			if(((path[i - 1].x() == path[i].x() || path[i - 1].y() == path[i].y())
+					&& (path[i + 1].x() == path[i].x() || path[i+1].y() == path[i].y())
+					&&  path[i - 1].x() != path[i + 1].x()
+					&&  path[i - 1].y() != path[i + 1].y())) {
+				brush.applyBrush(path[i].x(), path[i].y(), bytes, target.size(), currentStroke.at(i).second);//target.setPixel(path[i].x(), path[i].y(), currentStroke.at(i).second);
+				currentStroke.removeAt(i);
+			}
+		}
+	}
+
 	// I would say this is fast enough, for now
 	void Painter::fillArea(QImage& target, int startX, int startY, uint col, const Brush& brush, int tolerance, bool fill8Way) {
+		startX = utils::mod(startX, target.width());
+		startY = utils::mod(startY, target.height());
+
 		bool** filled = utils::create2DArray<bool>(target.width(), target.height(), false);
 
 		uint targetColour = target.pixel(startX, startY);
 
 		uint* bytes = (uint*)target.bits(); // Get the bytes for fast writing/reading. The bytes are in order: A, R, G, B, A, R, G, B, ... so I can just collect them as a uint
-// 		bytes[0] = Colour::BLUE;
-// 		bytes[1] = Colour::BLACK;
-// 		bytes[2] = Colour::toIntARGB(128, 128, 128, 255);
 
 		QQueue<QPoint> q;
 
@@ -168,5 +211,11 @@ namespace utils {
 	bool Painter::canFill(uint targetColour, uint colour, int tolerance) {
 		ushort diff = Colour::getDifference(targetColour, colour, true);
 		return utils::map(diff, 0, 510, 0, 255) <= tolerance;
+	}
+
+	uint Painter::getPixel(QImage& target, int i, int j) {
+		i = utils::mod(i, target.width());
+		j = utils::mod(j, target.height());
+		return target.pixel(i, j);
 	}
 }

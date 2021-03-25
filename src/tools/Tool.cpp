@@ -1,5 +1,7 @@
 #include "Tool.h"
 #include "EditorTools.h"
+#include <QShortcut>
+#include "Application.h"
 
 Tool::Tool(int id) {
 	this->id = id;
@@ -14,6 +16,8 @@ void Tool::onMousePressed(QMouseEvent* evt, QPoint& cPos) {
 	curr = QPoint(cPos);
 	currMouseButton = getMouseButton(evt);
 	start = QPoint(cPos);
+	EditorTools::toolSwitchlock = true;
+// 	std::cout << "onMousePressed" << std::endl;
 }
 
 void Tool::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
@@ -25,6 +29,10 @@ void Tool::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
 	curr = QPoint(cPos);
 	currMouseButton = getMouseButton(evt);
 	firstDragEvent = false;
+	if(evt->buttons() == Qt::NoButton) {
+		EditorTools::toolSwitchlock = false;
+	}
+// 	std::cout << "onMouseReleased" << std::endl;
 }
 
 void Tool::onMouseClicked(QMouseEvent* evt, QPoint& cPos) {
@@ -32,6 +40,7 @@ void Tool::onMouseClicked(QMouseEvent* evt, QPoint& cPos) {
 	currMouseButton = getMouseButton(evt);
 	prev = QPoint(curr);
 	start = QPoint(prev);
+// 	std::cout << "onMouseClicked" << std::endl;
 }
 
 void Tool::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
@@ -43,9 +52,11 @@ void Tool::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
 	curr = QPoint(cPos);
 // 	currMouseButton = getMouseButton(evt); // QMouseEvent.button() is always Qt::NoButton for mouse move events
 	firstDragEvent = false;
+// 	std::cout << "onMouseDragged" << std::endl;
 }
 
 void Tool::onDragCancel(QMouseEvent* evt, QPoint& cPos) {
+	canvas->overlay->fill(0x00000000);
 	if(firstDragEvent)
 		prev = QPoint(start);
 	else
@@ -55,6 +66,8 @@ void Tool::onDragCancel(QMouseEvent* evt, QPoint& cPos) {
 	firstDragEvent = false;
 
 	canvas->revert();
+	EditorTools::toolSwitchlock = false;
+// 	std::cout << "onDragCancel" << std::endl;
 }
 
 void Tool::onMouseMoved(QMouseEvent* evt, QPoint& cPos) {
@@ -86,4 +99,8 @@ uint Tool::getColour() {
 
 QList<ToolOptionWidget*> Tool::createOptions() {
 	return QList<ToolOptionWidget*>();
+}
+
+bool Tool::isSelector() {
+	return false;
 }

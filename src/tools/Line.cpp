@@ -6,6 +6,8 @@ Line::Line(int id) : Tool(id) {
 	description = "Draws lines";
 	keyShortcut = "L";
 	iconPath = ":/line.png";
+
+	uniform = false;
 }
 
 // TODO: Change methods contents
@@ -29,8 +31,8 @@ void Line::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
 
 	uint col = getColour();
 
-	if(settings.oneToOneRatio) {
-		// Need function to call here
+	if(uniform) {
+		Painter::drawUniformLine(*canvas->overlay, start.x(), start.y(), curr.x(), curr.y(), col, *EditorTools::brush);
 	} else {
 		Painter::drawLine(*canvas->overlay, start.x(), start.y(), curr.x(), curr.y(), col, *EditorTools::brush);
 	}
@@ -44,11 +46,19 @@ void Line::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
 
 	uint col = getColour();
 
-	if(settings.oneToOneRatio) {
-		// Need function to call here
+	if(uniform) {
+		Painter::drawUniformLine(*canvas->buffer, start.x(), start.y(), curr.x(), curr.y(), col, *EditorTools::brush);
 	} else {
 		Painter::drawLine(*canvas->buffer, start.x(), start.y(), curr.x(), curr.y(), col, *EditorTools::brush);
 	}
 
 	canvas->commit();
+}
+
+QList<ToolOptionWidget*> Line::createOptions() {
+	return {
+		new ToolOptionBool(uniform, [this](QVariant newValue) {
+			uniform = newValue.toBool();
+		}, "Uniform Line")
+	};
 }

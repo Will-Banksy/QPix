@@ -36,7 +36,6 @@ namespace utils {
 			VariableBrush(BrushShape shape = RECT) : Brush(VARIABLE), m_shape(shape) {};
 			void applyBrush(int i_, int j_, uint* colArray, QSize imageSize, uint col) const override;
 
-// 			const BrushType m_type = VARIABLE;
 			const BrushShape m_shape;
 	};
 
@@ -45,7 +44,6 @@ namespace utils {
 			FixedBrush(ushort width, ushort height, QList<QPoint> points) : Brush(FIXED), m_brushMatrix(BrushMatrix(width, height, points)) {}
 			void applyBrush(int i_, int j_, uint* colArray, QSize imageSize, uint col) const override;
 
-// 			const BrushType m_type = FIXED;
 			const BrushMatrix m_brushMatrix;
 	};
 }

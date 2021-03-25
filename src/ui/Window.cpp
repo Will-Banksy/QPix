@@ -3,11 +3,12 @@
 #include <QCloseEvent>
 #include "TabbedProjectView.h"
 
-Window::Window() {
+Window::Window() : QMainWindow() {
+	Application::registerNewWindow(this);
 	ui = new UI(this);
 	ui->setupUI();
 	dontCheckClose = false;
-	Application::registerNewWindow(this);
+	show();
 }
 
 Window::~Window() {

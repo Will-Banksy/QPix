@@ -18,6 +18,7 @@
 		<file alias="eraser.png">data/tools/eraser.png</file>
 		<file alias="fill.png">data/tools/fill.png</file>
 		<file alias="line.png">data/tools/line.png</file>
+		<file alias="move.png">data/tools/move.png</file>
 
 		<file alias="style.qss">data/style.qss</file>
 		<file alias="colours.json">data/colours.json</file>

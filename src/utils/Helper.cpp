@@ -5,6 +5,7 @@
 #include <iostream>
 #include <QJsonObject>
 #include <cmath>
+#include <QImage>
 
 // using namespace utils;
 
@@ -80,5 +81,33 @@ namespace utils {
 	// a = divisor, n = dividend, See Knuth's definition: https://en.wikipedia.org/wiki/Modulo_operation#In_programming_languages
 	int mod(int a, int n) {
 		return a - n * floor((float)a / n);
+	}
+
+	QList<QPoint> plotLine(int startX, int startY, int endX, int endY) {
+		int& x0 = startX;
+		int& y0 = startY;
+		int& x1 = endX;
+		int& y1 = endY;
+
+		int dx =  abs(x1-x0), sx = x0<x1 ? 1 : -1;
+		int dy = -abs(y1-y0), sy = y0<y1 ? 1 : -1;
+		int err = dx+dy, e2; /* error value e_xy */
+
+		QList<QPoint> points;
+
+		for(;;){  /* loop */
+			// Call the function with the () operator
+			// 			action(x0, y0, col, settings);
+			points.append(QPoint(x0, y0));
+			if (x0==x1 && y0==y1) break;
+			e2 = 2*err;
+			if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
+				if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
+		}
+		return points;
+	}
+
+	bool contains(QImage& image, QPoint& point) {
+		return (point.x() >= 0 && point.x() < image.width() && point.y() >= 0 && point.y() < image.height());
 	}
 }

@@ -1,0 +1,11 @@
+{
+	"@back-dark": "#222831",
+	"@back-light": "#30343B",
+
+	"@button-normal": "#393E46",
+	"@button-hover": "#515A66",
+
+	"@accent": "#00BAC2",
+
+	"@text": "#E8E8E8"
+}

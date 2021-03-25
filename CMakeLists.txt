@@ -25,6 +25,7 @@ set(pixeleditor_CPP
 	src/Project.cpp
 	src/Application.cpp
 	src/ProjectManager.cpp
+	src/Icons.cpp
 
 	src/ui/Window.cpp
 	src/ui/UI.cpp
@@ -42,6 +43,8 @@ set(pixeleditor_CPP
 	src/tools/Eraser.cpp
 	src/tools/Fill.cpp
 	src/tools/Line.cpp
+	src/tools/ScrollHand.cpp
+	src/tools/RectangularSelect.cpp
 
 	src/utils/Painter.cpp
 	src/utils/Helper.cpp
@@ -57,6 +60,7 @@ set(SOURCES
 	src/Project.h
 	src/Application.h
 	src/ProjectManager.h
+	src/Icons.h
 
 	src/ui/Window.h
 	src/ui/UI.h
@@ -74,6 +78,8 @@ set(SOURCES
 	src/tools/Eraser.h
 	src/tools/Fill.h
 	src/tools/Line.h
+	src/tools/ScrollHand.h
+	src/tools/RectangularSelect.h
 
 	src/utils/Painter.h
 	src/utils/Helper.h

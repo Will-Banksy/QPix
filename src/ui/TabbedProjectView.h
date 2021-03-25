@@ -6,6 +6,7 @@
 
 class CanvasView;
 class QTabBar;
+class UI;
 
 class TabbedProjectView : public QWidget {
 	Q_OBJECT
@@ -23,6 +24,7 @@ public:
 	void closeAllProjects();
 
 public slots:
+	void setCurrentProject(Project* project); // So far unused
 	void setCurrentProject(int tabIndex);
 	void handleTabClose(int tabIndex);
 };

@@ -8,6 +8,8 @@ Pencil::Pencil(int id) : Tool(id) {
 	description = "Draws pixels";
 	keyShortcut = "P";
 	iconPath = ":/pencil.png";
+
+	pixelPerfect = false;
 }
 
 Pencil::~Pencil() {
@@ -24,7 +26,11 @@ void Pencil::onMousePressed(QMouseEvent* evt, QPoint& cPos) {
 
 	uint col = getColour();
 
-	Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), curr.x(), curr.y(), col, *EditorTools::brush);
+	if(pixelPerfect) {
+		Painter::drawLinePixelPerfect(*canvas->buffer, curr.x(), curr.y(), curr.x(), curr.y(), col, *EditorTools::brush, currentStroke);
+	} else {
+		Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), curr.x(), curr.y(), col, *EditorTools::brush);
+	}
 }
 
 void Pencil::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
@@ -35,10 +41,10 @@ void Pencil::onMouseDragged(QMouseEvent* evt, QPoint& cPos) {
 
 	uint col = getColour();
 
-	if(settings.pixelPerfect) {
-		// Need function to call here
+	if(pixelPerfect) {
+		Painter::drawLinePixelPerfect(*canvas->buffer, prev.x(), prev.y(), curr.x(), curr.y(), col, *EditorTools::brush, currentStroke);
 	} else {
-		Painter::drawLine(*canvas->buffer, curr.x(), curr.y(), prev.x(), prev.y(), col, *EditorTools::brush);
+		Painter::drawLine(*canvas->buffer, prev.x(), prev.y(), curr.x(), curr.y(), col, *EditorTools::brush);
 	}
 }
 
@@ -50,10 +56,10 @@ void Pencil::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
 
 	uint col = getColour();
 
-	if(settings.pixelPerfect) {
-		// Need function to call here
+	if(pixelPerfect) {
+		Painter::drawLinePixelPerfect(*canvas->buffer, prev.x(), prev.y(), curr.x(), curr.y(), col, *EditorTools::brush, currentStroke);
 	} else {
-		Painter::drawLine(*canvas->buffer, prev.x(), curr.y(), prev.x(), prev.y(), col, *EditorTools::brush);
+		Painter::drawLine(*canvas->buffer, prev.x(), prev.y(), curr.x(), curr.y(), col, *EditorTools::brush);
 	}
 
 	canvas->commit();
@@ -87,11 +93,8 @@ void Pencil::onMouseReleased(QMouseEvent* evt, QPoint& cPos) {
 
 QList<ToolOptionWidget*> Pencil::createOptions() {
 	return {
-		new ToolOptionBool([](QVariant newValue) {
-			std::cout << "[BOOL] NewValue: " << newValue.toBool() << std::endl;
-		}, "Hello"),
-		new ToolOptionMulti([](QVariant newValue) {
-			std::cout << "[MULTI] NewValue: " << newValue.toInt() << std::endl;
-		}, { "Item 1", "Item 2", "Item 3" })
+		new ToolOptionBool(pixelPerfect, [this](QVariant newValue) {
+			pixelPerfect = newValue.toBool();
+		}, "Pixel Perfect")
 	};
 }
