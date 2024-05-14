@@ -1,5 +1,5 @@
 # Minimum required version of cmake to build this project
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5)
 
 # Set project name and version, and languages used
 project(QPix VERSION 1.0 LANGUAGES CXX)
@@ -27,6 +27,9 @@ set(pixeleditor_CPP
 	src/ProjectManager.cpp
 	src/Icons.cpp
 
+	src/model/AppModel.cpp
+	src/model/ProjectModel.cpp
+
 	src/ui/Window.cpp
 	src/ui/UI.cpp
 	src/ui/Canvas.cpp
@@ -36,6 +39,10 @@ set(pixeleditor_CPP
 	src/ui/TabbedProjectView.cpp
 
 	src/ui/widgets/ToolButton.cpp
+
+	src/ui/components/AppView.cpp
+	src/ui/components/ProjectView.cpp
+	src/ui/components/ProjectCanvasView.cpp
 
 	src/tools/ToolOptionWidget.cpp
 	src/tools/Tool.cpp
@@ -62,6 +69,9 @@ set(SOURCES
 	src/ProjectManager.h
 	src/Icons.h
 
+	src/model/AppModel.h
+	src/model/ProjectModel.h
+
 	src/ui/Window.h
 	src/ui/UI.h
 	src/ui/Canvas.h
@@ -71,6 +81,10 @@ set(SOURCES
 	src/ui/TabbedProjectView.h
 
 	src/ui/widgets/ToolButton.h
+
+	src/ui/components/AppView.h
+	src/ui/components/ProjectView.h
+	src/ui/components/ProjectCanvasView.h
 
 	src/tools/ToolOptionWidget.h
 	src/tools/Tool.h

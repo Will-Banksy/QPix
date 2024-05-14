@@ -9,7 +9,7 @@ QList<Window*> Application::windows;
 int Application::init(int argc, char *argv[]) {
 	QApplication app(argc, argv);
 
-// 	app.setStyle("fusion");
+	// app.setStyle("fusion");
 
 	EditorTools::initTools();
 

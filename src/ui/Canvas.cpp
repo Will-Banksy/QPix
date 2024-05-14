@@ -22,7 +22,7 @@ Canvas::Canvas() : QGraphicsItem() {
 	buffer = new QImage(*surface);
 
 	if(!background) {
-		background = new QPixmap(":/Transparency-Dark.png");
+		background = new QPixmap(":/canvas_bg_dark.png");
 	}
 
 	// So we get the exposedRect (visible rectangle) as a QStyleOptionGraphicsItem parameter in paint

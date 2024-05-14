@@ -1,6 +1,6 @@
 <RCC>
 	<qresource>
-		<file alias="Transparency-Dark.png">data/Transparency-Dark.png</file>
+		<file alias="canvas_bg_dark.png">data/canvas_bg_dark.png</file>
 
 		<file alias="placeholder.png">data/controls/placeholder.png</file>
 		<file alias="close.png">data/controls/close.png</file>

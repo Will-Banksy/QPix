@@ -1,12 +1,14 @@
-#include "ui/PixelEditor.h"
+// #include "ui/PixelEditor.h"
 #include <QApplication>
 #include <QStyle>
 #include <iostream>
 #include <QFile>
 #include <QCommonStyle>
-#include "utils/Helper.h"
+// #include "utils/Helper.h"
 #include <cmath>
 #include "Application.h"
+#include "ui/components/AppView.h"
+#include "model/AppModel.h"
 
 int main(int argc, char *argv[]) {
 // 	uchar byte = 0b00000100;
@@ -33,5 +35,17 @@ int main(int argc, char *argv[]) {
 
 // 	return app.exec();
 
-	return Application::init(argc, argv);
+	// return Application::init(argc, argv); // NOTE: Normal QPix
+
+	QApplication app(argc, argv);
+
+	AppModel model = AppModel();
+	model.newProject();
+
+	AppView view = AppView(&model);
+	view.show();
+
+	int ret = app.exec();
+
+	std::cerr << model.projects()->size() << std::endl;
 }
