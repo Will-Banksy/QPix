@@ -6,11 +6,11 @@
 #include <QWheelEvent>
 #include "utils/Helper.h"
 
-const int NUM_ZOOM_FACTORS = 19;
+const int NUM_ZOOM_FACTORS = 20;
 const float ZOOM_FACTORS[NUM_ZOOM_FACTORS] = {
 	0.01, 0.02, 0.04, 0.08, 0.16, 0.32, 0.5, 0.75,
 	1.0,
-	1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 12.0, 16.0
+	1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 12.0, 16.0, 32.0
 };
 
 ProjectView::ProjectView(ProjectModel* model, AppModel* appModel) : QGraphicsView(), m_Model(model), m_AppModel(appModel), m_Zoom(1.0) {
@@ -33,12 +33,19 @@ ProjectView::ProjectView(ProjectModel* model, AppModel* appModel) : QGraphicsVie
 
 	this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 	this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-	this->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+	// this->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 	this->setResizeAnchor(QGraphicsView::AnchorViewCenter);
 
 	this->setScene(scene);
 
+	item->setPos(
+		this->viewport()->width() / 2.0,
+		this->viewport()->height() / 2.0
+	);
+
 	m_CanvasView = item;
+
+	this->updateScrollMargins();
 }
 
 ProjectView::~ProjectView() {
@@ -86,16 +93,29 @@ void ProjectView::wheelEvent(QWheelEvent* event) {
 
 	// this->resetTransform();
 	// this->setTransform(QTransform::fromScale(newZoom, newZoom));
+	// m_CanvasView->setScale(newZoom);
 	// this->scale(newZoom / m_Zoom, newZoom / m_Zoom);
 	// this->scale(factor, factor);
 
-	QPointF cursorPos = event->position();
+	float factor = newZoom / m_Zoom;
 
+	QPointF cursorPos = this->mapToScene(event->position().toPoint());
+	QPointF itemPos = m_CanvasView->pos();
+
+	QPointF toItem = (itemPos - cursorPos);
+	float toItemLen = sqrt(toItem.x() * toItem.x() + toItem.y() * toItem.y());
+	QPointF toItemScaled = toItem * factor;
+	float toItemScaledLen = sqrt(toItemScaled.x() * toItemScaled.x() + toItemScaled.y() * toItemScaled.y());
+
+	QPointF newItemPos = toItemScaled + cursorPos;
+
+	m_CanvasView->setPos(newItemPos);
+	m_CanvasView->setScale(newZoom);
+
+	m_Zoom = newZoom;
 	this->updateScrollMargins();
 
 	this->update();
-
-	m_Zoom = newZoom;
 }
 
 void ProjectView::resizeEvent(QResizeEvent* event) {
@@ -104,6 +124,22 @@ void ProjectView::resizeEvent(QResizeEvent* event) {
 }
 
 void ProjectView::updateScrollMargins() {
+	// float itemWidth = m_Zoom * m_Model->surface()->width();
+	// float itemHeight = m_Zoom * m_Model->surface()->height();
+
+	// m_CanvasView->setPos(
+	// 	floor((qreal)this->viewport()->width() / 2.0),
+	// 	floor((qreal)this->viewport()->height() / 2.0)
+	// );
+	// this->setSceneRect(
+	// 	(qreal)floor(this->viewport()->width() / 2.0),
+	// 	(qreal)floor(this->viewport()->height() / 2.0),
+	// 	(float)floor(m_Model->surface()->width() * m_Zoom),
+	// 	(float)floor(m_Model->surface()->height() * m_Zoom)
+	// );
+
+	// ---
+
 	float cwidth = m_Zoom * m_Model->surface()->width();
 	float cheight = m_Zoom * m_Model->surface()->width();
 
@@ -116,10 +152,18 @@ void ProjectView::updateScrollMargins() {
 	marginHor /= m_Zoom;
 	marginVer /= m_Zoom;
 
-	this->setSceneRect(QRect(
-		int(-marginHor),
-		int(-marginVer),
+	QPointF canvasPosGlobal = this->mapToGlobal(m_CanvasView->pos()); // TODO: And then resore this?
+
+	QRect sceneRect = QRect( // FIXME: Make the scene rect work nicely - Perhaps simply origin the scene rect on (0, 0) and constrain the Item to those bounds... but the scene rect still kinda fucks things
+		// int(-marginHor),
+		// int(-marginVer),
+		0,
+		0,
 		int(marginHor * 2) + m_Model->surface()->width(),
 		int(marginVer * 2) + m_Model->surface()->height()
-	));
+	);
+
+	std::cout << "Scene Rect: (" << sceneRect.x() << ", " << sceneRect.y() << ", " << sceneRect.width() << ", " << sceneRect.height() << ")" << std::endl;
+
+	// this->setSceneRect(sceneRect);
 }

@@ -13,6 +13,8 @@ ProjectCanvasView::ProjectCanvasView(ProjectModel* model, AppModel* appModel)
 		s_Background = new QPixmap(":/canvas_bg_dark.png");
 	}
 
+	m_Overlay->fill(Qt::GlobalColor::transparent);
+
 	this->setFlags(ItemUsesExtendedStyleOption);
 }
 

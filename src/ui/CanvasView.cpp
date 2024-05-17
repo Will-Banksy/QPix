@@ -2,7 +2,7 @@
 #include <QMouseEvent>
 #include "EditorTools.h"
 #include "ProjectScene.h"
-#include <QOpenGLWidget>
+// #include <QOpenGLWidget>
 #include <Project.h>
 #include <cmath>
 #include "utils/Helper.h"

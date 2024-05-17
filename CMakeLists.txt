@@ -11,13 +11,13 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -std=c++20")
 
 # Find the QtWidgets library
-find_package(Qt5Widgets CONFIG REQUIRED)
+find_package(Qt6Widgets CONFIG REQUIRED)
 
-# Find the Qt5Core library
-find_package(Qt5Core CONFIG REQUIRED)
+# Find the Qt6Core library
+find_package(Qt6Core CONFIG REQUIRED)
 
 # Add the resources
-qt5_add_resources(QT_RESOURCES resources.qrc)
+qt6_add_resources(QT_RESOURCES resources.qrc)
 
 set(pixeleditor_CPP
 	src/main.cpp
@@ -109,7 +109,7 @@ add_executable(qpix ${SOURCES} ${QT_RESOURCES})
 target_include_directories(qpix PRIVATE src)
 
 # Use the Widgets module from Qt 5 - do it for target qpix
-target_link_libraries(qpix Qt5::Widgets)
+target_link_libraries(qpix Qt6::Widgets)
 
 # Install the executable
 install(TARGETS qpix DESTINATION bin)
