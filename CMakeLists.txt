@@ -19,6 +19,8 @@ find_package(Qt6Core CONFIG REQUIRED)
 # Add the resources
 qt6_add_resources(QT_RESOURCES resources.qrc)
 
+qt6_standard_project_setup()
+
 set(pixeleditor_CPP
 	src/main.cpp
 	src/EditorTools.cpp

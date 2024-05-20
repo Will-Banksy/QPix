@@ -3,7 +3,6 @@
 #include <QGridLayout>
 #include <QGraphicsView>
 #include "ProjectView.h"
-#include <iostream>
 #include <QPushButton>
 #include <QSizePolicy>
 
@@ -16,8 +15,6 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 
 	connect(tabs, &QTabWidget::tabCloseRequested, this, &AppView::closeProject);
 
-	std::cerr << "AppView" << std::endl;
-
 	this->m_Tabs = tabs;
 
 	for(ProjectModel* project : *model->projects()) {
@@ -28,7 +25,9 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 
 	QPushButton* newTabBtn = new QPushButton("New");
 
-	connect(newTabBtn, &QPushButton::clicked, m_Model, &AppModel::newProject);
+	connect(newTabBtn, &QPushButton::clicked, [this](bool checked) {
+		this->m_Model->newProject(DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT);
+	});
 
 	QGridLayout* layout = new QGridLayout();
 	layout->addWidget(newTabBtn, 0, 0);
@@ -38,6 +37,7 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 	central->setLayout(layout);
 	this->setCentralWidget(central);
 }
+
 
 AppView::~AppView() {
 }

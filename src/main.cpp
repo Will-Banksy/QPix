@@ -9,6 +9,7 @@
 #include "Application.h"
 #include "ui/components/AppView.h"
 #include "model/AppModel.h"
+#include "model/ProjectModel.h"
 
 int main(int argc, char *argv[]) {
 // 	uchar byte = 0b00000100;
@@ -42,7 +43,7 @@ int main(int argc, char *argv[]) {
 	app.setStyle("fusion");
 
 	AppModel model = AppModel();
-	model.newProject();
+	model.newProject(DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT);
 
 	AppView view = AppView(&model);
 	view.show();

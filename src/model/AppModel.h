@@ -14,7 +14,8 @@ public:
 	QList<ProjectModel*>* projects();
 
 public slots:
-	void newProject();
+	void newProject(int width, int height);
+	void openProject(QString& path);
 	void closeProject(ProjectModel* project);
 
 signals:

@@ -10,8 +10,14 @@ QList<ProjectModel*>* AppModel::projects() {
 	return &this->m_Projects;
 }
 
-void AppModel::newProject() {
+void AppModel::newProject(int width, int height) {
 	ProjectModel* newProject = new ProjectModel();
+	this->m_Projects.append(newProject);
+	emit projectAdded(newProject);
+}
+
+void AppModel::openProject(QString& path) {
+	ProjectModel* newProject = new ProjectModel(path);
 	this->m_Projects.append(newProject);
 	emit projectAdded(newProject);
 }

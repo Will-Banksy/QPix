@@ -16,6 +16,7 @@ ProjectCanvasView::ProjectCanvasView(ProjectModel* model, AppModel* appModel)
 	m_Overlay->fill(Qt::GlobalColor::transparent);
 
 	this->setFlags(ItemUsesExtendedStyleOption);
+	this->setTransformOriginPoint(QPointF(0, 0));
 }
 
 ProjectCanvasView::~ProjectCanvasView() {
@@ -32,10 +33,6 @@ void ProjectCanvasView::commit() {
 void ProjectCanvasView::revert() {
 	memcpy(m_Buffer->bits(), m_Model->surface()->bits(), m_Buffer->width() * m_Buffer->height() * 4);
 }
-
-// QSize ProjectCanvasView::imageBounds() {
-// 	return QSize(m_Model->surface()->width(), m_Model->surface()->height());
-// }
 
 void ProjectCanvasView::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) {
 	// painter->setClipRect(option->exposedRect);
