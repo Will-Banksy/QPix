@@ -5,14 +5,7 @@
 #include <QWheelEvent>
 #include "utils/Helper.h"
 
-const int NUM_ZOOM_FACTORS = 21;
-const float ZOOM_FACTORS[NUM_ZOOM_FACTORS] = {
-	0.01, 0.02, 0.04, 0.08, 0.16, 0.32, 0.5, 0.75,
-	1.0,
-	1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 12.0, 16.0, 32.0, 64.0
-};
-
-ProjectView::ProjectView(ProjectModel* model, AppModel* appModel) : QGraphicsView(), m_Model(model), m_AppModel(appModel), m_Zoom(1.0) {
+ProjectView::ProjectView(ProjectModel* model, AppModel* appModel) : QGraphicsView(), m_Model(model), m_AppModel(appModel) {
 	QGraphicsScene* scene = new QGraphicsScene(this);
 
 	// QGraphicsSimpleTextItem* simpleTextItem = scene->addSimpleText("HUGE TEXT LINE AIOAHFHAGOAGNBUABGUOABGUOEBAGUIOAEBNGAGOAOUGOAUNGODIGNAOEUG");
@@ -44,33 +37,56 @@ ProjectView::ProjectView(ProjectModel* model, AppModel* appModel) : QGraphicsVie
 
 	m_CanvasView = item;
 
-	this->updateScrollMargins();
+	connect(model, &ProjectModel::zoomUpdated, this, &ProjectView::setZoom);
+
+	this->updateScrollMargins(m_Model->zoom());
 }
 
 ProjectView::~ProjectView() {
+	delete m_CanvasView;
 }
 
 ProjectModel* ProjectView::model() {
 	return this->m_Model;
 }
 
-void ProjectView::wheelEvent(QWheelEvent* event) {
-	// Calculate the new zoom value
-	int zoomI = 0;
-	for(int i = 0; i < NUM_ZOOM_FACTORS; i++) {
-		if(ZOOM_FACTORS[i] == m_Zoom) {
-			zoomI = i;
-			break;
-		}
-	}
-	bool zoomIn = event->angleDelta().y() > 0;
-	float newZoom = 0;
-	if(zoomIn) {
-		newZoom = ZOOM_FACTORS[zoomI + 1 >= NUM_ZOOM_FACTORS ? NUM_ZOOM_FACTORS - 1 : zoomI + 1];
+void ProjectView::setZoom(float oldZoom, float newZoom, QPointF* zoomOrigin) {
+	float factor = newZoom / m_Model->zoom();
+
+	assert(newZoom != 0);
+
+	if(zoomOrigin == nullptr) {
+		// Zoom around centre of canvas
+
+		this->updateScrollMargins(newZoom);
+
+		QSizeF cSizeOld = m_Model->surface()->size().toSizeF() * oldZoom;
+		QSizeF cSizeNew = m_Model->surface()->size().toSizeF() * newZoom;
+
+		float widthDiff = cSizeNew.width() - cSizeOld.width();
+		float heightDiff = cSizeNew.height() - cSizeOld.height();
+
+		float newX = m_CanvasView->pos().x() - widthDiff / 2.0;
+		float newY = m_CanvasView->pos().y() - heightDiff / 2.0;
+
+		m_CanvasView->setScale(newZoom);
+		m_CanvasView->setPos(newX, newY);
 	} else {
-		if(zoomI != 0) {
-			newZoom = ZOOM_FACTORS[zoomI - 1];
-		}
+		// Zoom around origin
+
+		QPointF originPos = this->mapToScene(zoomOrigin->toPoint());
+		QPointF itemPos = m_CanvasView->pos();
+
+		QPointF toItem = (itemPos - originPos);
+		float toItemLen = sqrt(toItem.x() * toItem.x() + toItem.y() * toItem.y());
+		QPointF toItemScaled = toItem * factor;
+		float toItemScaledLen = sqrt(toItemScaled.x() * toItemScaled.x() + toItemScaled.y() * toItemScaled.y());
+
+		QPointF newItemPos = toItemScaled + originPos;
+
+		m_CanvasView->setPos(newItemPos);
+		this->updateScrollMargins(newZoom);
+		m_CanvasView->setScale(newZoom);
 	}
 
 	if(newZoom < 1) {
@@ -81,34 +97,22 @@ void ProjectView::wheelEvent(QWheelEvent* event) {
 		this->setRenderHint(QPainter::SmoothPixmapTransform, false);
 	}
 
-	float factor = newZoom / m_Zoom;
-
-	QPointF cursorPos = this->mapToScene(event->position().toPoint());
-	QPointF itemPos = m_CanvasView->pos();
-
-	QPointF toItem = (itemPos - cursorPos);
-	float toItemLen = sqrt(toItem.x() * toItem.x() + toItem.y() * toItem.y());
-	QPointF toItemScaled = toItem * factor;
-	float toItemScaledLen = sqrt(toItemScaled.x() * toItemScaled.x() + toItemScaled.y() * toItemScaled.y());
-
-	QPointF newItemPos = toItemScaled + cursorPos;
-
-	m_CanvasView->setPos(newItemPos);
-	// m_CanvasView->setPos(cursorPos);
-	m_CanvasView->setScale(newZoom);
-
-	m_Zoom = newZoom;
-	this->updateScrollMargins();
-
 	this->update();
+}
+
+void ProjectView::wheelEvent(QWheelEvent* event) {
+	bool zoomIn = event->angleDelta().y() > 0;
+
+	QPointF mousePos = event->position();
+	m_Model->stepZoom(zoomIn, &mousePos);
 }
 
 void ProjectView::resizeEvent(QResizeEvent* event) {
-	this->updateScrollMargins();
+	this->updateScrollMargins(m_Model->zoom());
 	this->update();
 }
 
-void ProjectView::updateScrollMargins() {
+void ProjectView::updateScrollMargins(float withZoom) {
 	// float itemWidth = m_Zoom * m_Model->surface()->width();
 	// float itemHeight = m_Zoom * m_Model->surface()->height();
 
@@ -160,7 +164,7 @@ void ProjectView::updateScrollMargins() {
 	// ---
 
 	QPointF cPos = m_CanvasView->pos();
-	QSizeF cSize = m_Model->surface()->size().toSizeF() * m_Zoom;
+	QSizeF cSize = m_Model->surface()->size().toSizeF() * withZoom;
 
 	QSizeF vpSize = this->viewport()->size().toSizeF();
 

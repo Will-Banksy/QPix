@@ -15,6 +15,9 @@ public:
 
 	ProjectModel* model();
 
+public slots:
+	void setZoom(float oldZoom, float newZoom, QPointF* zoomOrigin);
+
 protected:
 	void wheelEvent(QWheelEvent* event) override;
 	void resizeEvent(QResizeEvent* event) override;
@@ -28,9 +31,8 @@ private:
 	AppModel* m_AppModel;
 
 	ProjectCanvasView* m_CanvasView;
-	float m_Zoom;
 
-	void updateScrollMargins();
+	void updateScrollMargins(float withZoom);
 	// bool m_MouseDown;
 	// bool m_HasMovedMouse;
 	// bool m_IgnoreRelease;

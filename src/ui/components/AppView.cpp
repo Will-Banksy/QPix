@@ -5,6 +5,8 @@
 #include "ProjectView.h"
 #include <QPushButton>
 #include <QSizePolicy>
+#include <QStatusBar>
+#include "status/StatusZoomView.h"
 
 AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 	QTabWidget* tabs = new QTabWidget();
@@ -13,9 +15,18 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 	tabs->tabBar()->setExpanding(true);
 	tabs->tabBar()->setDocumentMode(true);
 
-	connect(tabs, &QTabWidget::tabCloseRequested, this, &AppView::closeProject);
-
 	this->m_Tabs = tabs;
+
+	connect(tabs, &QTabWidget::tabCloseRequested, this, &AppView::closeProject);
+	connect(tabs, &QTabWidget::currentChanged, [this](int index) {
+		ProjectView* view = (ProjectView*)this->m_Tabs->widget(index);
+		if(view != nullptr) {
+			ProjectModel* project = view->model();
+			emit this->m_Model->updateCurrProject(Nullable(project));
+		} else {
+			emit this->m_Model->updateCurrProject(Nullable<ProjectModel>());
+		}
+	});
 
 	for(ProjectModel* project : *model->projects()) {
 		this->addProject(project);
@@ -36,8 +47,10 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 	QWidget* central = new QWidget();
 	central->setLayout(layout);
 	this->setCentralWidget(central);
-}
 
+	this->statusBar();
+	this->statusBar()->addPermanentWidget(new StatusZoomView(model));
+}
 
 AppView::~AppView() {
 }

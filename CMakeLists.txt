@@ -46,6 +46,8 @@ set(pixeleditor_CPP
 	src/ui/components/ProjectView.cpp
 	src/ui/components/ProjectCanvasView.cpp
 
+	src/ui/components/status/StatusZoomView.cpp
+
 	src/tools/ToolOptionWidget.cpp
 	src/tools/Tool.cpp
 	src/tools/Pencil.cpp
@@ -88,6 +90,8 @@ set(SOURCES
 	src/ui/components/ProjectView.h
 	src/ui/components/ProjectCanvasView.h
 
+	src/ui/components/status/StatusZoomView.h
+
 	src/tools/ToolOptionWidget.h
 	src/tools/Tool.h
 	src/tools/Pencil.h
@@ -102,6 +106,7 @@ set(SOURCES
 	src/utils/Colour.h
 	src/utils/Brush.h
 	src/utils/BrushMatrix.h
+	src/utils/Nullable.h
 )
 
 # Tell CMake to create the executable qpix

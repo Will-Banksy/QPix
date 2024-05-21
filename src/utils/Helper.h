@@ -12,7 +12,7 @@ namespace utils {
 	// char* addstrs(char* str1, char* str2, int str1len, int str2len);
 	float map(float val, float start1, float stop1, float start2, float stop2);
 	QString getStyleSheet();
-	uint* colAt(uint* argbArr, int width, int i, int j);
+	uint32_t* colAt(uint32_t* argbArr, int width, int i, int j);
 	QRect expandRound(const QRectF& rect);
 	/// Where bitPos is the index of the byte counting from the right hand side of the byte
 	void setBit(quint8& byte, quint8 bitPos, bool val);

@@ -49,7 +49,7 @@ namespace utils {
 		return styleSheet;
 	}
 
-	uint* colAt(uint* argbArr, int width, int i, int j) {
+	uint32_t* colAt(uint32_t* argbArr, int width, int i, int j) {
 		int index = i + j * width;
 		return &argbArr[index];
 	}
