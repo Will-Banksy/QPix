@@ -22,9 +22,9 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 		ProjectView* view = (ProjectView*)this->m_Tabs->widget(index);
 		if(view != nullptr) {
 			ProjectModel* project = view->model();
-			emit this->m_Model->updateCurrProject(Nullable(project));
+			this->m_Model->updateCurrProject(Nullable(project));
 		} else {
-			emit this->m_Model->updateCurrProject(Nullable<ProjectModel>());
+			this->m_Model->updateCurrProject(Nullable<ProjectModel>());
 		}
 	});
 
@@ -67,5 +67,5 @@ void AppView::closeProject(int index) {
 	this->m_Model->closeProject(project);
 
 	this->m_Tabs->removeTab(index);
-	delete projectView;
+	projectView->deleteLater();
 }

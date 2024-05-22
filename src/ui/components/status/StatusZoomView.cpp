@@ -1,48 +1,54 @@
 #include "StatusZoomView.h"
 #include <QDoubleSpinBox>
 #include <QLineEdit>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPainter>
+#include <QComboBox>
 
-StatusZoomView::StatusZoomView(AppModel* model) : QAbstractSpinBox(), m_Model(model) {
-	this->setFixedWidth(80);
-	this->setReadOnly(true);
+StatusZoomView::StatusZoomView(AppModel* model) : QWidget(), m_Model(model), m_ZoomComboBox(new QComboBox()) {
+	QLabel* label = new QLabel("Zoom:");
 
-	this->updateValueFrom(model->currProject());
+	m_ZoomComboBox->setEditable(false);
+	for(int i = 0; i < NUM_ZOOM_FACTORS; i++) {
+		m_ZoomComboBox->insertItem(i, QString::number(ZOOM_FACTORS[i] * 100) + "%", ZOOM_FACTORS[i]);
+	}
 
-	connect(model, &AppModel::currProjectUpdated, this, &StatusZoomView::updateValueFrom);
+	this->setIndexFromProject(m_Model->currProject());
+
+	connect(m_ZoomComboBox, &QComboBox::currentIndexChanged, this, &StatusZoomView::setZoomFromIndex);
+	connect(model, &AppModel::currProjectUpdated, this, &StatusZoomView::setIndexFromProject);
+
+	QHBoxLayout* layout = new QHBoxLayout();
+	layout->setContentsMargins(0, 0, 0, 0);
+
+	layout->addWidget(label);
+	layout->addWidget(m_ZoomComboBox);
+
+	this->setLayout(layout);
 }
 
 StatusZoomView::~StatusZoomView() {
 }
 
-QValidator::State StatusZoomView::validate(QString& input, int& pos) const {
-	return QValidator::State::Acceptable;
-}
-
-void StatusZoomView::stepBy(int steps) {
-	if(m_Model->currProject().isNotNull()) {
-		m_Model->currProject().unwrap()->stepZoom(steps > 0, nullptr);
+void StatusZoomView::setZoomFromIndex(int index) {
+	if(this->m_Model->currProject().isNotNull()) {
+		this->m_Model->currProject().unwrap()->setZoom(ZOOM_FACTORS[index]);
 	}
 }
 
-void StatusZoomView::updateValueFrom(Nullable<ProjectModel> project) {
+void StatusZoomView::setIndexFromProject(Nullable<ProjectModel> project) {
 	if(project.isNotNull()) {
-		this->lineEdit()->setText(QString::number(project.unwrap()->zoom() * 100));
-	} else {
-		this->lineEdit()->setText("100");
-	}
-	this->update();
-}
-
-QAbstractSpinBox::StepEnabled StatusZoomView::stepEnabled() const {
-	if(m_Model->currProject().isNull()) {
-		return QAbstractSpinBox::StepNone;
-	} else {
-		if(m_Model->currProject().unwrap()->zoom() == ZOOM_FACTORS[0]) {
-			return QAbstractSpinBox::StepUpEnabled;
-		} else if(m_Model->currProject().unwrap()->zoom() == ZOOM_FACTORS[NUM_ZOOM_FACTORS - 1]) {
-			return QAbstractSpinBox::StepDownEnabled;
-		} else {
-			return QAbstractSpinBox::StepUpEnabled | QAbstractSpinBox::StepDownEnabled;
+		this->m_ZoomComboBox->setEnabled(true);
+		for(int i = 0; i < NUM_ZOOM_FACTORS; i++) {
+			if(ZOOM_FACTORS[i] == project.unwrap()->zoom()) {
+				this->m_ZoomComboBox->setCurrentIndex(i);
+				return;
+			}
 		}
+		assert(false);
+	} else {
+		this->m_ZoomComboBox->setCurrentIndex(DEFAULT_ZOOM_FACTOR_IDX);
+		this->m_ZoomComboBox->setEnabled(false);
 	}
 }

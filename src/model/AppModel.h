@@ -29,7 +29,7 @@ public slots: // TODO: How many of these are actually used as slots? Can change 
 	/// Deletes and removes the supplied project from the AppModel
 	void closeProject(ProjectModel* project);
 
-	/// Call this to set the current project to the supplied one, after emitting the currProjectUpdated signal.
+	/// Call this to set the current project to the supplied one, before emitting the currProjectUpdated signal.
 	/// Also useful for simply informing this AppModel of updates to the current project
 	void updateCurrProject(Nullable<ProjectModel> project);
 

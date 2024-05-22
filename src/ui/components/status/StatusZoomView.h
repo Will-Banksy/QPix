@@ -4,24 +4,22 @@
 #include <QAbstractSpinBox>
 #include "model/AppModel.h"
 
-class StatusZoomView : public QAbstractSpinBox {
+class QComboBox;
+
+class StatusZoomView : public QWidget {
 	Q_OBJECT
 
 public:
 	explicit StatusZoomView(AppModel* model);
 	~StatusZoomView() override;
 
-	QValidator::State validate(QString& input, int& pos) const override;
-	void stepBy(int steps) override;
-
 public slots:
-	void updateValueFrom(Nullable<ProjectModel> project);
-
-protected:
-	QAbstractSpinBox::StepEnabled stepEnabled() const override;
+	void setZoomFromIndex(int index);
+	void setIndexFromProject(Nullable<ProjectModel> project);
 
 private:
 	AppModel* m_Model;
+	QComboBox* m_ZoomComboBox;
 };
 
 #endif // STATUSZOOMVIEW_H

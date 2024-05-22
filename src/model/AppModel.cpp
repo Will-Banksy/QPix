@@ -44,7 +44,7 @@ void AppModel::closeProject(ProjectModel* project) {
 	}
 }
 
-void AppModel::updateCurrProject(Nullable<ProjectModel> project) {
-	emit currProjectUpdated(project);
+void AppModel::updateCurrProject(Nullable<ProjectModel> project) { // NOTE: m_CurrProject is now set before emitting currProjectUpdated - Desired behaviour?
 	m_CurrProject = project;
+	emit currProjectUpdated(project);
 }

@@ -7,6 +7,7 @@ const int DEFAULT_CANVAS_WIDTH = 32;
 const int DEFAULT_CANVAS_HEIGHT = 32;
 
 const int NUM_ZOOM_FACTORS = 21;
+const int DEFAULT_ZOOM_FACTOR_IDX = 8;
 const float ZOOM_FACTORS[NUM_ZOOM_FACTORS] = {
 	0.01, 0.02, 0.04, 0.08, 0.16, 0.32, 0.5, 0.75,
 	1.0,
