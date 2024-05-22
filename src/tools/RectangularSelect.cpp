@@ -4,7 +4,7 @@ RectangularSelect::RectangularSelect(int id) : Tool(id) {
 	name = "Rectangular Select";
 	description = "Selects a rectangular region";
 	keyShortcut = "M";
-	iconPath = ":/pencil.png";
+	iconPath = ":/tools/pencil.png";
 }
 
 // TODO

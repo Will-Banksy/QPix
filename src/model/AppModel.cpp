@@ -1,6 +1,12 @@
 #include "AppModel.h"
 
-AppModel::AppModel() : QObject(), m_Projects(QList<ProjectModel*>()), m_CurrProject(Nullable<ProjectModel>()) {
+AppModel::AppModel() : QObject(),
+	m_Projects(QList<ProjectModel*>()),
+	m_CurrProject(Nullable<ProjectModel>()),
+	m_AvailableTools(Tool::initialiseTools()),
+	m_CurrentTool(m_AvailableTools[0]),
+	m_PrimaryColour(QColorConstants::Black),
+	m_SecondaryColour(QColorConstants::Transparent) {
 }
 
 AppModel::~AppModel() {
@@ -15,6 +21,14 @@ QList<ProjectModel*>* AppModel::projects() {
 
 Nullable<ProjectModel> AppModel::currProject() {
 	return Nullable(m_CurrProject);
+}
+
+QColor AppModel::primaryColour() {
+	return m_PrimaryColour;
+}
+
+QColor AppModel::secondaryColour() {
+	return m_SecondaryColour;
 }
 
 void AppModel::newProject(int width, int height) {

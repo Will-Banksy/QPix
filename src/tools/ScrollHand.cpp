@@ -6,7 +6,7 @@ ScrollHand::ScrollHand(int id) : Tool(id) {
 	name = "Scroll Hand";
 	description = "Moves the view";
 	keyShortcut = " ";
-	iconPath = ":/move.png";
+	iconPath = ":/tools/move.png";
 }
 
 ScrollHand::~ScrollHand() {

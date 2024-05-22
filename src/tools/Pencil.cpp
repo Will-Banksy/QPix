@@ -7,7 +7,7 @@ Pencil::Pencil(int id) : Tool(id) {
 	name = "Pencil";
 	description = "Draws pixels";
 	keyShortcut = "P";
-	iconPath = ":/pencil.png";
+	iconPath = ":/tools/pencil.png";
 
 	pixelPerfect = false;
 }

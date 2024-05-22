@@ -4,7 +4,7 @@
 #include <QGraphicsView>
 #include "model/ProjectModel.h"
 #include "model/AppModel.h"
-#include "ProjectCanvasView.h"
+#include "canvas/ProjectCanvasView.h"
 
 class ProjectView : public QGraphicsView {
 	Q_OBJECT

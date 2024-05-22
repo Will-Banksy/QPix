@@ -5,7 +5,7 @@ Fill::Fill(int id) : Tool(id) {
 	name = "Fill";
 	description = "Fills an area";
 	keyShortcut = "B";
-	iconPath = ":/fill.png";
+	iconPath = ":/tools/fill.png";
 
 	fill8Way = false;
 	tolerance = 0;

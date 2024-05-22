@@ -14,11 +14,11 @@
 		<file alias="scrollbar-hor-hover.png">data/controls/scrollbar-hor-hover.png</file>
 		<file alias="scrollbar-ver-hover.png">data/controls/scrollbar-ver-hover.png</file>
 
-		<file alias="pencil.png">data/tools/pencil.png</file>
-		<file alias="eraser.png">data/tools/eraser.png</file>
-		<file alias="fill.png">data/tools/fill.png</file>
-		<file alias="line.png">data/tools/line.png</file>
-		<file alias="move.png">data/tools/move.png</file>
+		<file alias="tools/pencil.png">data/tools/pencil.png</file>
+		<file alias="tools/eraser.png">data/tools/eraser.png</file>
+		<file alias="tools/fill.png">data/tools/fill.png</file>
+		<file alias="tools/line.png">data/tools/line.png</file>
+		<file alias="tools/move.png">data/tools/move.png</file>
 
 		<file alias="style.qss">data/style.qss</file>
 		<file alias="colours.json">data/colours.json</file>

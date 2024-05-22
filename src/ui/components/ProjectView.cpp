@@ -1,7 +1,7 @@
 #include "ProjectView.h"
 #include <QGraphicsSimpleTextItem>
 #include <QScrollBar>
-#include "ProjectCanvasView.h"
+#include "canvas/ProjectCanvasView.h"
 #include <QWheelEvent>
 #include "utils/Helper.h"
 

@@ -32,6 +32,9 @@ set(pixeleditor_CPP
 	src/model/AppModel.cpp
 	src/model/ProjectModel.cpp
 
+	src/model/tools/Tool.cpp
+	src/model/tools/PencilTool.cpp
+
 	src/ui/Window.cpp
 	src/ui/UI.cpp
 	src/ui/Canvas.cpp
@@ -44,7 +47,8 @@ set(pixeleditor_CPP
 
 	src/ui/components/AppView.cpp
 	src/ui/components/ProjectView.cpp
-	src/ui/components/ProjectCanvasView.cpp
+
+	src/ui/components/canvas/ProjectCanvasView.cpp
 
 	src/ui/components/status/StatusZoomView.cpp
 
@@ -76,6 +80,9 @@ set(SOURCES
 	src/model/AppModel.h
 	src/model/ProjectModel.h
 
+	src/model/tools/Tool.h
+	src/model/tools/PencilTool.h
+
 	src/ui/Window.h
 	src/ui/UI.h
 	src/ui/Canvas.h
@@ -88,7 +95,8 @@ set(SOURCES
 
 	src/ui/components/AppView.h
 	src/ui/components/ProjectView.h
-	src/ui/components/ProjectCanvasView.h
+
+	src/ui/components/canvas/ProjectCanvasView.h
 
 	src/ui/components/status/StatusZoomView.h
 

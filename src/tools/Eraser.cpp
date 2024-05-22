@@ -6,7 +6,7 @@ Eraser::Eraser(int id) : Tool(id) {
 	name = "Eraser";
 	description = "Erases pixels";
 	keyShortcut = "E";
-	iconPath = ":/eraser.png";
+	iconPath = ":/tools/eraser.png";
 }
 
 Eraser::~Eraser() {

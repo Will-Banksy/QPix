@@ -5,7 +5,7 @@ Line::Line(int id) : Tool(id) {
 	name = "Line";
 	description = "Draws lines";
 	keyShortcut = "L";
-	iconPath = ":/line.png";
+	iconPath = ":/tools/line.png";
 
 	uniform = false;
 }
