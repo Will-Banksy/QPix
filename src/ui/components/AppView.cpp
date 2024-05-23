@@ -28,7 +28,7 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 		}
 	});
 
-	for(ProjectModel* project : *model->projects()) {
+    for(ProjectModel* project : model->projects()) {
 		this->addProject(project);
 	}
 

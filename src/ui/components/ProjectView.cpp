@@ -3,9 +3,17 @@
 #include <QScrollBar>
 #include "canvas/ProjectCanvasView.h"
 #include <QWheelEvent>
-#include "utils/Helper.h"
+#include "utils/Utils.h"
+#include <iostream>
 
-ProjectView::ProjectView(ProjectModel* model, AppModel* appModel) : QGraphicsView(), m_Model(model), m_AppModel(appModel) {
+ProjectView::ProjectView(ProjectModel* model, AppModel* appModel) : QGraphicsView(),
+	m_Model(model),
+	m_AppModel(appModel),
+	m_MouseDown(false),
+	m_MouseButton(Qt::MouseButton::NoButton),
+	m_HasMovedMouse(false),
+	m_IgnoreRelease(false),
+	m_PrevCanvasCoord(-1, -1) {
 	QGraphicsScene* scene = new QGraphicsScene(this);
 
 	// QGraphicsSimpleTextItem* simpleTextItem = scene->addSimpleText("HUGE TEXT LINE AIOAHFHAGOAGNBUABGUOABGUOEBAGUIOAEBNGAGOAOUGOAUNGODIGNAOEUG");
@@ -30,8 +38,8 @@ ProjectView::ProjectView(ProjectModel* model, AppModel* appModel) : QGraphicsVie
 
 	item->setPos(
 		this->mapToScene(
-			this->viewport()->width() / 2.0 - m_Model->surface()->width() / 2.0,
-			this->viewport()->height() / 2.0 - m_Model->surface()->height() / 2.0
+			this->viewport()->width() / 2.0 - m_Model->surface().width() / 2.0,
+			this->viewport()->height() / 2.0 - m_Model->surface().height() / 2.0
 		)
 	);
 
@@ -57,11 +65,12 @@ void ProjectView::setZoom(float oldZoom, float newZoom, QPointF* zoomOrigin) {
 
 	if(zoomOrigin == nullptr) {
 		// Zoom around centre of canvas
+		// BUG: When the canvas is zoomed in and near the edge of the viewport, zooming out tends to centre the canvas in the viewport
 
 		this->updateScrollMargins(newZoom);
 
-		QSizeF cSizeOld = m_Model->surface()->size().toSizeF() * oldZoom;
-		QSizeF cSizeNew = m_Model->surface()->size().toSizeF() * newZoom;
+		QSizeF cSizeOld = m_Model->surface().size().toSizeF() * oldZoom;
+		QSizeF cSizeNew = m_Model->surface().size().toSizeF() * newZoom;
 
 		float widthDiff = cSizeNew.width() - cSizeOld.width();
 		float heightDiff = cSizeNew.height() - cSizeOld.height();
@@ -78,9 +87,9 @@ void ProjectView::setZoom(float oldZoom, float newZoom, QPointF* zoomOrigin) {
 		QPointF itemPos = m_CanvasView->pos();
 
 		QPointF toItem = (itemPos - originPos);
-		float toItemLen = sqrt(toItem.x() * toItem.x() + toItem.y() * toItem.y());
+        // float toItemLen = sqrt(toItem.x() * toItem.x() + toItem.y() * toItem.y());
 		QPointF toItemScaled = toItem * factor;
-		float toItemScaledLen = sqrt(toItemScaled.x() * toItemScaled.x() + toItemScaled.y() * toItemScaled.y());
+        // float toItemScaledLen = sqrt(toItemScaled.x() * toItemScaled.x() + toItemScaled.y() * toItemScaled.y());
 
 		QPointF newItemPos = toItemScaled + originPos;
 
@@ -112,59 +121,85 @@ void ProjectView::resizeEvent(QResizeEvent* event) {
 	this->update();
 }
 
+void ProjectView::mousePressEvent(QMouseEvent *event) { // TODO: Move all this logic and etc. into AppModel?
+	QGraphicsView::mousePressEvent(event);
+
+	QPoint pos = this->mapToCanvas(event->pos());
+	AbstractTool* currentTool = m_AppModel->currentTool();
+
+	if(m_MouseDown) {
+		if(currentTool->usageType() == ToolUsageType::Drag) {
+			std::cerr << "Tool drag cancel" << std::endl;
+			currentTool->onDrag(m_Model->buffer(), pos, event->button(), ToolDragState::Cancel, m_AppModel);
+			m_Model->revertBuffer();
+			m_CanvasView->update();
+		}
+		m_IgnoreRelease = true;
+		// m_MouseDown = false;
+	} else {
+		if(currentTool->usageType() == ToolUsageType::Drag) {
+			std::cerr << "Tool drag press" << std::endl;
+			currentTool->onDrag(m_Model->buffer(), pos, event->button(), ToolDragState::Press, m_AppModel);
+		}
+		m_MouseDown = true;
+		m_MouseButton = event->button();
+		m_IgnoreRelease = false;
+	}
+
+	m_CanvasView->update();
+}
+
+void ProjectView::mouseReleaseEvent(QMouseEvent *event) {
+	QGraphicsView::mouseReleaseEvent(event);
+
+	if(event->button() != m_MouseButton) {
+		return;
+	}
+
+	QPoint pos = this->mapToCanvas(event->pos());
+	AbstractTool* currentTool = m_AppModel->currentTool();
+
+
+	if(!m_IgnoreRelease) {
+		if(currentTool->usageType() == ToolUsageType::Drag) {
+			std::cerr << "Tool drag release" << std::endl;
+			currentTool->onDrag(m_Model->buffer(), pos, m_MouseButton, ToolDragState::Release, m_AppModel);
+			m_Model->commitBuffer();
+			m_CanvasView->update();
+		} else if(!m_HasMovedMouse && currentTool->usageType() == ToolUsageType::Click) {
+			std::cerr << "Tool click" << std::endl;
+			currentTool->onClick(m_Model->buffer(), pos, m_MouseButton, m_AppModel);
+			m_Model->commitBuffer();
+			m_CanvasView->update();
+		}
+	}
+
+	m_MouseDown = false;
+	m_HasMovedMouse = false;
+	m_MouseButton = Qt::MouseButton::NoButton;
+}
+
+void ProjectView::mouseMoveEvent(QMouseEvent *event) {
+	QGraphicsView::mouseMoveEvent(event);
+
+	QPoint pos = this->mapToCanvas(event->pos());
+	AbstractTool* currentTool = m_AppModel->currentTool();
+
+	if(m_PrevCanvasCoord != pos) {
+		if(m_MouseDown && !m_IgnoreRelease && currentTool->usageType() == ToolUsageType::Drag) {
+			std::cerr << "Tool drag" << std::endl;
+			currentTool->onDrag(m_Model->buffer(), pos, m_MouseButton, ToolDragState::Drag, m_AppModel);
+			m_CanvasView->update();
+		}
+
+		m_HasMovedMouse = true;
+		m_PrevCanvasCoord = pos;
+	}
+}
+
 void ProjectView::updateScrollMargins(float withZoom) {
-	// float itemWidth = m_Zoom * m_Model->surface()->width();
-	// float itemHeight = m_Zoom * m_Model->surface()->height();
-
-	// m_CanvasView->setPos(
-	// 	floor((qreal)this->viewport()->width() / 2.0),
-	// 	floor((qreal)this->viewport()->height() / 2.0)
-	// );
-	// this->setSceneRect(
-	// 	(qreal)floor(this->viewport()->width() / 2.0),
-	// 	(qreal)floor(this->viewport()->height() / 2.0),
-	// 	(float)floor(m_Model->surface()->width() * m_Zoom),
-	// 	(float)floor(m_Model->surface()->height() * m_Zoom)
-	// );
-
-	// ---
-
-	// float cwidth = m_Zoom * m_Model->surface()->width();
-	// float cheight = m_Zoom * m_Model->surface()->height();
-
-	// float halfWidth = this->viewport()->width() / 2.0;
-	// float halfHeight = this->viewport()->height() / 2.0;
-
-	// float marginHor = utils::constrain<float>(halfWidth - cwidth, 0, halfWidth) + halfWidth;
-	// float marginVer = utils::constrain<float>(halfHeight - cheight, 0, halfHeight) + halfHeight;
-
-	// marginHor /= m_Zoom;
-	// marginVer /= m_Zoom;
-
-	// QPointF canvasPosGlobal = this->mapToGlobal(m_CanvasView->pos()); // TODO: And then resore this?
-
-	// QRect sceneRect = QRect( // FIXME: Make the scene rect work nicely - Perhaps simply origin the scene rect on (0, 0) and constrain the Item to those bounds... but the scene rect still kinda fucks things
-	// 	// int(-marginHor),
-	// 	// int(-marginVer),
-	// 	0,
-	// 	0,
-	// 	int(marginHor * 2) + m_Model->surface()->width(),
-	// 	int(marginVer * 2) + m_Model->surface()->height()
-	// );
-
-	// std::cout << "Scene Rect: (" << sceneRect.x() << ", " << sceneRect.y() << ", " << sceneRect.width() << ", " << sceneRect.height() << ")" << std::endl;
-
-	// this->setSceneRect(sceneRect);
-
-	// ---
-
-	// this->horizontalScrollBar()->setRange(0, 500);
-	// this->verticalScrollBar()->setRange(0, 500);
-
-	// ---
-
 	QPointF cPos = m_CanvasView->pos();
-	QSizeF cSize = m_Model->surface()->size().toSizeF() * withZoom;
+	QSizeF cSize = m_Model->surface().size().toSizeF() * withZoom;
 
 	QSizeF vpSize = this->viewport()->size().toSizeF();
 
@@ -184,4 +219,14 @@ void ProjectView::updateScrollMargins(float withZoom) {
 		sceneWidth,
 		sceneHeight
 	);
+}
+
+QPoint ProjectView::mapToCanvas(const QPoint& pt) {
+	QPointF posF = m_CanvasView->mapFromScene(this->mapToScene(pt));
+	QPoint pos = QPoint(
+		(int)floor(posF.x()),
+		(int)floor(posF.y())
+	);
+
+	return pos;
 }

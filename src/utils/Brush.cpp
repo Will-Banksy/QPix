@@ -1,6 +1,6 @@
 #include "Brush.h"
 #include "EditorTools.h"
-#include "Helper.h"
+#include "Utils.h"
 
 namespace utils {
 	void Brush::applyBrush(int i, int j, uint* colArray, QSize imageSize, uint col) const {

@@ -5,7 +5,7 @@
 // #include <QOpenGLWidget>
 #include <Project.h>
 #include <cmath>
-#include "utils/Helper.h"
+#include "utils/Utils.h"
 #include <QScrollBar>
 
 CanvasView::CanvasView(QWidget* parent) : QGraphicsView(parent) {

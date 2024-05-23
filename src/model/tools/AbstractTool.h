@@ -18,25 +18,28 @@ enum class ToolDragState {
 	Cancel
 };
 
-class Tool : public QObject {
+class AbstractTool : public QObject {
 	Q_OBJECT
 
 public:
-	explicit Tool();
-	virtual ~Tool() = 0;
+    explicit AbstractTool();
+    virtual ~AbstractTool();
+
+	// TODO: Do I allow tools to define their own cancellation behaviour? Could allow some nice optimisation
 
 	/// Called for tools that have usage type Drag, when the user is dragging the mouse
 	/// while a mouse button is pressed. Also called on initial button press, on release,
 	/// and on drag cancel - which of these is the case is indicated by the "state" parameter.
 	///
 	/// Drag cancel occurs when a drag was started with one button and another button was pressed
-	/// without releasing the first button. Tools are expected to cancel operation in this case
-	virtual void onDrag(QImage& surface, QPoint pt, ToolDragState state, AppModel* model);
+	/// without releasing the first button. The image state will be automatically reset in most
+	/// situations, meaning that tools should not edit the image when drag cancel occurs
+	virtual void onDrag(QImage& surface, QPoint pt, Qt::MouseButton button, ToolDragState state, AppModel* model);
 
 	/// Called for tools that have usage type Click, when the user clicks on a pixel
-	virtual void onClick(QImage& surface, QPoint pt, AppModel* model);
+	virtual void onClick(QImage& surface, QPoint pt, Qt::MouseButton button, AppModel* model);
 
-	static QList<Tool*> initialiseTools();
+    static QList<AbstractTool*> initialiseTools();
 
 	QString name();
 	QString description();

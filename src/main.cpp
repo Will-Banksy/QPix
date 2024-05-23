@@ -4,7 +4,6 @@
 #include <iostream>
 #include <QFile>
 #include <QCommonStyle>
-// #include "utils/Helper.h"
 #include <cmath>
 #include "Application.h"
 #include "ui/components/AppView.h"
@@ -44,11 +43,14 @@ int main(int argc, char *argv[]) {
 
 	AppModel model = AppModel();
 	model.newProject(DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT);
+	model.newProject(800, 800);
 
 	AppView view = AppView(&model);
 	view.show();
 
 	int ret = app.exec();
 
-	std::cerr << model.projects()->size() << std::endl;
+    std::cerr << model.projects().size() << std::endl;
+
+    return ret;
 }

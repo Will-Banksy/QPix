@@ -1,4 +1,4 @@
-#include "Helper.h"
+#include "Utils.h"
 #include <QJsonDocument>
 #include <QFile>
 #include <QJsonArray>
@@ -19,7 +19,7 @@
 // 	return newarr;
 // }
 
-namespace utils {
+namespace utils { // TODO: Relocate contents to Utils class
 	float map(float val, float start1, float stop1, float start2, float stop2) {
 		return start2 + (stop2 - start2) * ((val - start1) / (stop1 - start1));
 	}

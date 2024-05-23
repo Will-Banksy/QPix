@@ -10,8 +10,10 @@ public:
 	explicit ProjectCanvasView(ProjectModel* model, AppModel* appModel);
 	~ProjectCanvasView() override;
 
-	void commit();
-	void revert();
+	// /// Commits the contents of the drawing buffer to the surface
+	// void commit();
+	// /// Reverts changes to the drawing buffer by copying the surface
+	// void revert();
 
 protected:
 	void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget) override;
@@ -20,10 +22,7 @@ protected:
 private:
 	ProjectModel* m_Model;
 	AppModel* m_AppModel;
-	/// For displaying action previews
-	QImage* m_Overlay;
-	/// Buffer on top of surface - the actual stored content
-	QImage* m_Buffer;
+
 	/// Background texture
 	static QPixmap* s_Background;
 };

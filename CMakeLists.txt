@@ -32,8 +32,9 @@ set(pixeleditor_CPP
 	src/model/AppModel.cpp
 	src/model/ProjectModel.cpp
 
-	src/model/tools/Tool.cpp
+	src/model/tools/AbstractTool.cpp
 	src/model/tools/PencilTool.cpp
+	src/model/tools/BucketTool.cpp
 
 	src/ui/Window.cpp
 	src/ui/UI.cpp
@@ -52,6 +53,8 @@ set(pixeleditor_CPP
 
 	src/ui/components/status/StatusZoomView.cpp
 
+	src/ui/components/toolbars/ToolSelectView.cpp
+
 	src/tools/ToolOptionWidget.cpp
 	src/tools/Tool.cpp
 	src/tools/Pencil.cpp
@@ -62,10 +65,11 @@ set(pixeleditor_CPP
 	src/tools/RectangularSelect.cpp
 
 	src/utils/Painter.cpp
-	src/utils/Helper.cpp
+	src/utils/Utils.cpp
 	src/utils/Colour.cpp
 	src/utils/Brush.cpp
 	src/utils/BrushMatrix.cpp
+	src/utils/PaintUtils.cpp
 )
 
 set(SOURCES
@@ -80,8 +84,9 @@ set(SOURCES
 	src/model/AppModel.h
 	src/model/ProjectModel.h
 
-	src/model/tools/Tool.h
+	src/model/tools/AbstractTool.h
 	src/model/tools/PencilTool.h
+	src/model/tools/BucketTool.h
 
 	src/ui/Window.h
 	src/ui/UI.h
@@ -100,6 +105,8 @@ set(SOURCES
 
 	src/ui/components/status/StatusZoomView.h
 
+	src/ui/components/toolbars/ToolSelectView.h
+
 	src/tools/ToolOptionWidget.h
 	src/tools/Tool.h
 	src/tools/Pencil.h
@@ -110,11 +117,12 @@ set(SOURCES
 	src/tools/RectangularSelect.h
 
 	src/utils/Painter.h
-	src/utils/Helper.h
+	src/utils/Utils.h
 	src/utils/Colour.h
 	src/utils/Brush.h
 	src/utils/BrushMatrix.h
 	src/utils/Nullable.h
+	src/utils/PaintUtils.h
 )
 
 # Tell CMake to create the executable qpix

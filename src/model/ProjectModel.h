@@ -26,19 +26,25 @@ public:
 	///	Returns the absolute path to the file for this project, or "unsaved" is there is no path.
 	/// This should not be used definitively however - Use hasPath() to determine whether this project
 	/// corresponds to a file
-	QString path();
+    const QString& path() const;
 
 	/// Returns whether this project corresponds to a file
-	bool hasPath();
+    bool hasPath() const;
 
 	/// Returns whether the most recent change to this project has been saved
-	bool saved();
+    bool saved() const;
 
 	/// Returns the current drawable surface
-	QImage* surface();
+    QImage& surface() const;
+
+	/// Returns the overlay image
+	QImage& overlay() const;
+
+	/// Returns the drawing buffer for the current drawable surface
+	QImage& buffer() const;
 
 	/// Returns the zoom factor, that necessarily lies in the ZOOM_FACTORS array
-	float zoom();
+    float zoom() const;
 
 	/// Update the zoom factor, zooming around zoomOrigin (in viewport coordinates) if specified. Emits zoomUpdated
 	void setZoom(float newZoom, QPointF* zoomOrigin = nullptr);
@@ -48,6 +54,11 @@ public:
 
 	/// Asserts that the most recent change has not been saved (i.e. sets m_Saved to false)
 	void setUnsaved();
+
+	/// Commits the contents of the drawing buffer to the surface
+	void commitBuffer();
+	/// Reverts changes to the drawing buffer by copying the surface
+	void revertBuffer();
 
 signals:
 	/// Emitted when anything is updated. Emitted by setZoom and setUnsaved
@@ -67,6 +78,10 @@ private:
 	/// The current drawable surface (// TODO: Decide what exactly to do for multi-layer support
 	/// - Current thinking is to simply have a list of surfaces and this stays as the "current drawable surface")
 	QImage* m_Surface;
+	/// For displaying action previews
+	QImage* m_Overlay;
+	/// Buffer on top of surface - the actual stored content
+	QImage* m_Buffer;
 };
 
 #endif // PROJECTMODEL_H

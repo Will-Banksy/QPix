@@ -1,5 +1,5 @@
-#ifndef HELPER_H
-#define HELPER_H
+#ifndef UTILS_H
+#define UTILS_H
 
 #include <stdlib.h>
 #include <QString>
@@ -52,4 +52,4 @@ namespace utils {
 	}
 }
 
-#endif // HELPER_H
+#endif // UTILS_H

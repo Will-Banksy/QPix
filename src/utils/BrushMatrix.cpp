@@ -1,6 +1,6 @@
 #include "BrushMatrix.h"
 #include <QtGlobal>
-#include "Helper.h"
+#include "Utils.h"
 
 namespace utils {
 	inline uint ceil(float val) {

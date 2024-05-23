@@ -3,8 +3,8 @@
 AppModel::AppModel() : QObject(),
 	m_Projects(QList<ProjectModel*>()),
 	m_CurrProject(Nullable<ProjectModel>()),
-	m_AvailableTools(Tool::initialiseTools()),
-	m_CurrentTool(m_AvailableTools[0]),
+    m_AvailableTools(AbstractTool::initialiseTools()),
+	m_CurrentTool(m_AvailableTools.at(0)),
 	m_PrimaryColour(QColorConstants::Black),
 	m_SecondaryColour(QColorConstants::Transparent) {
 }
@@ -15,28 +15,36 @@ AppModel::~AppModel() {
 	}
 }
 
-QList<ProjectModel*>* AppModel::projects() {
-	return &this->m_Projects;
+const QList<ProjectModel*>& AppModel::projects() const {
+    return this->m_Projects;
 }
 
-Nullable<ProjectModel> AppModel::currProject() {
+Nullable<ProjectModel> AppModel::currProject() const {
 	return Nullable(m_CurrProject);
 }
 
-QColor AppModel::primaryColour() {
+const QList<AbstractTool*>& AppModel::availableTools() const {
+    return m_AvailableTools;
+}
+
+AbstractTool* AppModel::currentTool() const {
+    return m_CurrentTool;
+}
+
+QColor AppModel::primaryColour() const {
 	return m_PrimaryColour;
 }
 
-QColor AppModel::secondaryColour() {
+QColor AppModel::secondaryColour() const {
 	return m_SecondaryColour;
 }
 
 void AppModel::newProject(int width, int height) {
-	ProjectModel* newProject = new ProjectModel();
+	ProjectModel* newProject = new ProjectModel(width, height);
 	this->m_Projects.append(newProject);
 	emit projectAdded(newProject);
 	connect(newProject, &ProjectModel::anythingUpdated, [this, newProject]() {
-		emit updateCurrProject(Nullable(newProject));
+        updateCurrProject(Nullable(newProject));
 	});
 }
 
@@ -45,7 +53,7 @@ void AppModel::openProject(QString& path) {
 	this->m_Projects.append(newProject);
 	emit projectAdded(newProject);
 	connect(newProject, &ProjectModel::anythingUpdated, [this, newProject]() {
-		emit updateCurrProject(Nullable(newProject));
+        updateCurrProject(Nullable(newProject));
 	});
 }
 

@@ -2,7 +2,7 @@
 #include <QQueue>
 #include <QPoint>
 #include <QPointF>
-#include "Helper.h"
+#include "Utils.h"
 #include "Colour.h"
 #include <cmath>
 #include "EditorTools.h"

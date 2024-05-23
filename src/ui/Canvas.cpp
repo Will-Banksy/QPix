@@ -3,7 +3,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QStyleOptionGraphicsItem>
-#include "utils/Helper.h"
+#include "utils/Utils.h"
 #include "utils/Colour.h"
 #include <iostream>
 #include <Project.h>

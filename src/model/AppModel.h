@@ -1,10 +1,10 @@
-#ifndef APPMODEL_H
+﻿#ifndef APPMODEL_H
 #define APPMODEL_H
 
 #include <QtCore>
 #include "ProjectModel.h"
 #include "utils/Nullable.h"
-#include "model/tools/Tool.h"
+#include "model/tools/AbstractTool.h"
 #include <QColor>
 
 class AppModel : public QObject {
@@ -15,13 +15,16 @@ public:
 	~AppModel() override;
 
 	/// Retrieves the list of projects contained in the AppModel
-	QList<ProjectModel*>* projects();
+    const QList<ProjectModel*>& projects() const;
 
 	/// Retrieves the current project - This may be null so is wrapped in a Nullable to force handling of this
-	Nullable<ProjectModel> currProject();
+    Nullable<ProjectModel> currProject() const;
 
-	QColor primaryColour();
-	QColor secondaryColour();
+    QColor primaryColour() const;
+    QColor secondaryColour() const;
+
+    const QList<AbstractTool*>& availableTools() const;
+    AbstractTool *currentTool() const;
 
 public slots: // TODO: How many of these are actually used as slots? Can change some to just functions for sure
 	/// Creates a new project with the supplied settings. Emits projectAdded
@@ -49,8 +52,8 @@ private:
 	QList<ProjectModel*> m_Projects;
 	Nullable<ProjectModel> m_CurrProject;
 
-	QList<Tool*> m_AvailableTools;
-	Tool* m_CurrentTool;
+    QList<AbstractTool*> m_AvailableTools;
+    AbstractTool* m_CurrentTool;
 
 	QColor m_PrimaryColour;
 	QColor m_SecondaryColour;
