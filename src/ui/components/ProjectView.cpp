@@ -98,6 +98,10 @@ void ProjectView::setZoom(float oldZoom, float newZoom, QPointF* zoomOrigin) {
 		m_CanvasView->setScale(newZoom);
 	}
 
+	// TODO: Investigate other downscaling algorithms - Aseprite's downscaling algorithm seemingly preserves more pixel information than the QPainter::SmoothPixmapTransform
+	//       I don't know if it's possible to implement and use other scaling algorithms in Qt, but if I can a start might be the Lanczos filter
+	//       Look at QGraphicsEffect, this seems like it might work
+	//       Could always blur the canvas when it's scaled down, and still use QPainter::SmoothPixmapTransform - that might give better detail? Might be expensive though
 	if(newZoom < 1) {
 		// If we are zoomed OUT, then smooth the drawn image
 		this->setRenderHint(QPainter::SmoothPixmapTransform, true);
@@ -128,12 +132,12 @@ void ProjectView::mousePressEvent(QMouseEvent *event) { // TODO: Move all this l
 	AbstractTool* currentTool = m_AppModel->currentTool();
 
 	if(m_MouseDown) {
-		if(currentTool->usageType() == ToolUsageType::Drag) {
-			std::cerr << "Tool drag cancel" << std::endl;
-			currentTool->onDrag(m_Model->buffer(), pos, event->button(), ToolDragState::Cancel, m_AppModel);
-			m_Model->revertBuffer();
-			m_CanvasView->update();
-		}
+		// if(currentTool->usageType() == ToolUsageType::Drag) {
+		std::cerr << "Tool cancel" << std::endl;
+		currentTool->onDrag(m_Model->buffer(), pos, event->button(), ToolDragState::Cancel, m_AppModel);
+		m_Model->revertBuffer();
+		m_CanvasView->update();
+		// }
 		m_IgnoreRelease = true;
 		// m_MouseDown = false;
 	} else {
@@ -141,10 +145,16 @@ void ProjectView::mousePressEvent(QMouseEvent *event) { // TODO: Move all this l
 			std::cerr << "Tool drag press" << std::endl;
 			currentTool->onDrag(m_Model->buffer(), pos, event->button(), ToolDragState::Press, m_AppModel);
 		}
+		if(currentTool->usageType() == ToolUsageType::Click) {
+			std::cerr << "Tool click" << std::endl;
+			currentTool->onClick(m_Model->buffer(), pos, event->button(), m_AppModel);
+		}
 		m_MouseDown = true;
 		m_MouseButton = event->button();
 		m_IgnoreRelease = false;
 	}
+
+	m_HasMovedMouse = false;
 
 	m_CanvasView->update();
 }
@@ -159,19 +169,21 @@ void ProjectView::mouseReleaseEvent(QMouseEvent *event) {
 	QPoint pos = this->mapToCanvas(event->pos());
 	AbstractTool* currentTool = m_AppModel->currentTool();
 
-
 	if(!m_IgnoreRelease) {
 		if(currentTool->usageType() == ToolUsageType::Drag) {
 			std::cerr << "Tool drag release" << std::endl;
 			currentTool->onDrag(m_Model->buffer(), pos, m_MouseButton, ToolDragState::Release, m_AppModel);
 			m_Model->commitBuffer();
 			m_CanvasView->update();
-		} else if(!m_HasMovedMouse && currentTool->usageType() == ToolUsageType::Click) {
-			std::cerr << "Tool click" << std::endl;
-			currentTool->onClick(m_Model->buffer(), pos, m_MouseButton, m_AppModel);
+		} else if(currentTool->usageType() == ToolUsageType::Click) {
 			m_Model->commitBuffer();
-			m_CanvasView->update();
 		}
+		//  else if(!m_HasMovedMouse && currentTool->usageType() == ToolUsageType::Click) {
+		// 	std::cerr << "Tool click" << std::endl;
+		// 	currentTool->onClick(m_Model->buffer(), pos, m_MouseButton, m_AppModel);
+		// 	m_Model->commitBuffer();
+		// 	m_CanvasView->update();
+		// }
 	}
 
 	m_MouseDown = false;

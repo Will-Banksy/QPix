@@ -7,8 +7,13 @@
 #include <QSizePolicy>
 #include <QStatusBar>
 #include "status/StatusZoomView.h"
+#include "toolbars/ToolSelectView.h"
+#include "floating/FloatingView.h"
+#include "floating/HoverInfoEventFilter.h"
 
 AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
+	// Tab widget
+
 	QTabWidget* tabs = new QTabWidget();
 	tabs->setTabsClosable(true);
 	tabs->setMovable(true);
@@ -34,11 +39,20 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 
 	connect(m_Model, &AppModel::projectAdded, this, &AppView::addProject);
 
+	// New tab button
+
 	QPushButton* newTabBtn = new QPushButton("New");
+	newTabBtn->installEventFilter(new HoverInfoEventFilter(
+		m_Model,
+		"New Project",
+		"Creates a new default project"
+	));
 
 	connect(newTabBtn, &QPushButton::clicked, [this](bool checked) {
 		this->m_Model->newProject(DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT);
 	});
+
+	// Central widget
 
 	QGridLayout* layout = new QGridLayout();
 	layout->addWidget(newTabBtn, 0, 0);
@@ -48,8 +62,19 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 	central->setLayout(layout);
 	this->setCentralWidget(central);
 
+	// Toolbars
+
+	ToolSelectView* toolToolbar = new ToolSelectView(m_Model);
+	this->addToolBar(Qt::ToolBarArea::LeftToolBarArea, toolToolbar);
+
+	// Status bar
+
 	this->statusBar();
 	this->statusBar()->addPermanentWidget(new StatusZoomView(model));
+
+	// Floating widget
+
+	FloatingView* floating = new FloatingView(this, model);
 }
 
 AppView::~AppView() {

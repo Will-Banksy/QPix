@@ -1,5 +1,6 @@
 #include "AbstractTool.h"
 #include "PencilTool.h"
+#include "BucketTool.h"
 
 AbstractTool::AbstractTool() : QObject() {
 }
@@ -15,7 +16,8 @@ void AbstractTool::onClick(QImage& surface, QPoint pt, Qt::MouseButton button, A
 
 QList<AbstractTool*> AbstractTool::initialiseTools() {
 	return {
-        (AbstractTool*)new PencilTool()
+        (AbstractTool*)new PencilTool(),
+		(AbstractTool*)new BucketTool(),
 	};
 }
 

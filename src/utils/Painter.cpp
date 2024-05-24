@@ -139,7 +139,7 @@ namespace utils {
 		startX = utils::mod(startX, target.width());
 		startY = utils::mod(startY, target.height());
 
-		bool** filled = utils::create2DArray<bool>(target.width(), target.height(), false);
+		bool** filled = utils::create2dArray<bool>(target.width(), target.height(), false);
 
 		uint targetColour = target.pixel(startX, startY);
 

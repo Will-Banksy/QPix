@@ -29,7 +29,7 @@ namespace utils {
 	// Reason is that the WHOLE function/class/thing that is templated needs to be known at compile time, so it can actually generate the function/class/thing according to it's usage
 	// And of course, definitions in header files are matched to their implementations (if elsewhere) at linking time, which is too late
 	template<typename T>
-	T** create2DArray(int width, int height, T fillWith = 0) {
+	T** create2dArray(int width, int height, T fillWith = 0) {
 		T** arr = new T*[width];
 
 		for(int i = 0; i < width; i++) {

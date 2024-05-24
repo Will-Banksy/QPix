@@ -13,6 +13,9 @@ AppModel::~AppModel() {
 	for(ProjectModel* model : m_Projects) {
 		model->deleteLater();
 	}
+	for(AbstractTool* tool : m_AvailableTools) {
+		tool->deleteLater();
+	}
 }
 
 const QList<ProjectModel*>& AppModel::projects() const {
@@ -69,4 +72,9 @@ void AppModel::closeProject(ProjectModel* project) {
 void AppModel::updateCurrProject(Nullable<ProjectModel> project) { // NOTE: m_CurrProject is now set before emitting currProjectUpdated - Desired behaviour?
 	m_CurrProject = project;
 	emit currProjectUpdated(project);
+}
+
+void AppModel::changeTool(AbstractTool* tool) {
+	m_CurrentTool = tool;
+	emit toolChanged(tool);
 }

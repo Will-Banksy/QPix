@@ -41,12 +41,24 @@ public slots: // TODO: How many of these are actually used as slots? Can change 
 	/// Also useful for simply informing this AppModel of updates to the current project
 	void updateCurrProject(Nullable<ProjectModel> project);
 
+	/// Changes the current tool to the one passed in
+	void changeTool(AbstractTool* tool);
+
 signals:
 	/// Emitted when a project (supplied) is added to the AppModel. Emitted by newProject, openProject
 	void projectAdded(ProjectModel* project);
 
 	/// Emitted when a project (supplied) is updated or set as the current project. Emitted by updateCurrProject
 	void currProjectUpdated(Nullable<ProjectModel> project);
+
+	/// Emitted when the current tool is changed
+	void toolChanged(AbstractTool* newTool);
+
+	/// Emitted when a widget wants to display some floating information to the user
+	void floatingInfoRequested(QWidget* src, const QString& title, const QString& body);
+
+	/// Emitted when a widget wants to no longer display any floating windows
+	void hideFloating();
 
 private:
 	QList<ProjectModel*> m_Projects;

@@ -55,6 +55,10 @@ set(pixeleditor_CPP
 
 	src/ui/components/toolbars/ToolSelectView.cpp
 
+	src/ui/components/floating/FloatingView.cpp
+	src/ui/components/floating/FloatingInfoView.cpp
+	src/ui/components/floating/HoverInfoEventFilter.cpp
+
 	src/tools/ToolOptionWidget.cpp
 	src/tools/Tool.cpp
 	src/tools/Pencil.cpp
@@ -106,6 +110,10 @@ set(SOURCES
 	src/ui/components/status/StatusZoomView.h
 
 	src/ui/components/toolbars/ToolSelectView.h
+
+	src/ui/components/floating/FloatingView.h
+	src/ui/components/floating/FloatingInfoView.h
+	src/ui/components/floating/HoverInfoEventFilter.h
 
 	src/tools/ToolOptionWidget.h
 	src/tools/Tool.h

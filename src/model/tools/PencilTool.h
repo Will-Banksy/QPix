@@ -1,3 +1,6 @@
+#ifndef PENCILTOOL_H
+#define PENCILTOOL_H
+
 #include "AbstractTool.h"
 
 class PencilTool : public AbstractTool {
@@ -13,3 +16,5 @@ private:
 	/// List of points comprising each line in the current stroke, for pixel perfect strokes
 	QList<QPoint> m_CurrentStroke;
 };
+
+#endif // PENCILTOOL_H

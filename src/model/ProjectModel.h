@@ -6,12 +6,12 @@
 const int DEFAULT_CANVAS_WIDTH = 32;
 const int DEFAULT_CANVAS_HEIGHT = 32;
 
-const int NUM_ZOOM_FACTORS = 21;
+const int NUM_ZOOM_FACTORS = 23;
 const int DEFAULT_ZOOM_FACTOR_IDX = 8;
 const float ZOOM_FACTORS[NUM_ZOOM_FACTORS] = {
 	0.01, 0.02, 0.04, 0.08, 0.16, 0.32, 0.5, 0.75,
 	1.0,
-	1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 12.0, 16.0, 32.0, 64.0
+	1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 12.0, 16.0, 24.0, 32.0, 48.0, 64.0
 };
 
 class ProjectModel : public QObject { // TODO: Perhaps create project types, or have a tab not directly correspond to a project... or idk, some way to have different types of tabs
