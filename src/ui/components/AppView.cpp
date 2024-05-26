@@ -12,6 +12,8 @@
 #include "floating/HoverInfoEventFilter.h"
 
 AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
+	this->setWindowTitle("QPix");
+
 	// Tab widget
 
 	QTabWidget* tabs = new QTabWidget();
@@ -44,8 +46,10 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 	QPushButton* newTabBtn = new QPushButton("New");
 	newTabBtn->installEventFilter(new HoverInfoEventFilter(
 		m_Model,
+		newTabBtn,
 		"New Project",
-		"Creates a new default project"
+		"Creates a new default project",
+		FloatingPosition::Bottom
 	));
 
 	connect(newTabBtn, &QPushButton::clicked, [this](bool checked) {

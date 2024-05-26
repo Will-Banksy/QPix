@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <QString>
 #include <QRect>
+#include <QPalette>
 
 class QImage;
 class QPoint;
@@ -14,14 +15,29 @@ namespace utils {
 	QString getStyleSheet();
 	uint32_t* colAt(uint32_t* argbArr, int width, int i, int j);
 	QRect expandRound(const QRectF& rect);
+
+	/// Loads the colour palette from the src path, and copies and modifies basePalette with the colours defined in the src file in JSON
+	/// format, returning the modified QPalette
+	QPalette loadPaletteFrom(const QString& src, QPalette& basePalette);
+
+	/// Creates a copy of inner that is adjusted to lie within outer
+	QRect adjustedToWithin(const QRect& outer, const QRect& inner);
+
+	/// Calculates the area of a QRect
+	int area(const QRect& rect);
+
 	/// Where bitPos is the index of the byte counting from the right hand side of the byte
 	void setBit(quint8& byte, quint8 bitPos, bool val);
+
 	/// Where bitPos is the index of the byte counting from the right hand side of the byte
 	bool getBit(const quint8& byte, quint8 bitPos);
+
 	/// Necessary because C++ uses the dumb modulo, like Java and C#, and unlike Python, surprisingly
 	int mod(int divisor, int dividend);
-	/// Simply returns a list of the points in a line from start to end
+
+	/// Simply returns a list of the points in a line from start to end, using Bresenham's line algorithm
 	QList<QPoint> plotLine(int startX, int startY, int endX, int endY);
+
 	/// Returns true if the image bounds contains the point
 	bool contains(QImage& image, QPoint& point);
 

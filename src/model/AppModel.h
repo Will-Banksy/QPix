@@ -6,6 +6,7 @@
 #include "utils/Nullable.h"
 #include "model/tools/AbstractTool.h"
 #include <QColor>
+#include "ui/components/floating/FloatingView.h"
 
 class AppModel : public QObject {
 	Q_OBJECT
@@ -55,7 +56,7 @@ signals:
 	void toolChanged(AbstractTool* newTool);
 
 	/// Emitted when a widget wants to display some floating information to the user
-	void floatingInfoRequested(QWidget* src, const QString& title, const QString& body);
+	void floatingInfoRequested(QWidget* src, const QString& title, const QString& body, FloatingPosition position);
 
 	/// Emitted when a widget wants to no longer display any floating windows
 	void hideFloating();

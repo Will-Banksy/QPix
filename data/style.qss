@@ -1,185 +1,147 @@
-/*
- * This is a Qt style sheet. This style sheet will be the default style for my application
- *
- * Animations workaround?: https://stackoverflow.com/questions/40287398/pyqt5-stylesheet-animation
- *
- * Variables (for colours) are defined in colours.json
- */
-
-* {
-	background-color: @back-dark;
-	color: @text;
-	border: none;
-	outline: none;
-	margin: 0;
-	padding: 0;
-}
-
-/* QToolButton (and subclasses) styles */
-QToolButton {
-	border: none;
-	background: none;
-	background-color: @button-normal;
-	color: black;
+QPushButton, QToolButton, QComboBox {
+	background: palette(button);
 	border-radius: 2px;
-}
-
-QToolButton:pressed {
-	border: none;
-	background-color: @button-hover;
-}
-
-QToolButton:hover {
-	border: none;
-	background-color: @button-hover;
+	padding: 2px 4px;
 }
 
 QToolButton:checked {
-	border: 2px solid @accent;
-	background-color: @button-normal;
+	background: palette(light);
 }
 
-QToolButton:checked:hover {
-	border: 2px solid @accent;
-	background-color: @button-hover;
-}
-
-/* QGraphicsView (and subclasses) styles */
-QGraphicsView {
-	border: 1px solid @button-hover;
-	border-radius: 2px;
-}
-
-/* QDockWidget (and subclasses) styles */
-QDockWidget {
-	titlebar-close-icon: url(:/placeholder.png); /* You CAN put a list of icons and their states here, but there isn't a unique 'hover' and 'pressed' state */
-	titlebar-normal-icon: url(:/placeholder.png);
-}
-
-QDockWidget::close-button,
-QDockWidget::float-button {
-	background: none;
-	border: none;
-}
-
-/* And because there isn't those unique states, I'm just doing this as a workaround */
-QDockWidget::close-button {
-	image: url(:/close.png);
-}
-QDockWidget::close-button:hover {
-	image: url(:/close-hover.png);
-}
-QDockWidget::close-button:pressed {
-	image: url(:/close-pressed.png);
-}
-
-QDockWidget::float-button {
-	image: url(:/float.png);
-}
-QDockWidget::float-button:hover {
-	image: url(:/float-hover.png);
-}
-QDockWidget::float-button:pressed {
-	image: url(:/float-pressed.png);
-}
-
-QDockWidget::title {
-	color: @text;
-	border: 1px solid @button-hover;
-	border-bottom: none;
-	padding: 3px 6px 3px 6px;
+QTabBar::tab {
+	background: palette(button);
 	border-top-left-radius: 2px;
 	border-top-right-radius: 2px;
+	padding: 4px;
 }
 
-.DockContent { /* The dot followed by a name targets all widgets that have that name as their class property (by default, it seems the class property of a QWidget is it's class name, for example QDockWidget or QToolButton) */
-	border: 1px solid @button-hover;
-	border-top: none;
-	border-bottom-left-radius: 2px;
-	border-bottom-right-radius: 2px;
+QTabBar::tab:selected {
+	background: palette(light);
 }
 
-/*QMainWindow::separator { Use this to style the separator/splitter between QDockWidgets and other widgets in QMainWindow
-	background: @accent;
-}*/
+QComboBox::drop-down {
+	subcontrol-origin: padding;
+	subcontrol-position: right;
+	border: none;
+	border-left: 1px solid palette(light);
+	/* border-bottom: 8px solid palette(button);
+	border-top: 8px solid palette(button); */
+	border-top-left-radius: 2px;
+	border-top-right-radius: 2px;
+	width: 20px;
+	height: 20px;
+}
 
-/* QScrollBar (and subclasses) styles */
+QComboBox::down-arrow {
+	image: url(:/data/controls/arrow_down.svg);
+}
+
+QComboBox::down-arrow:on {
+	image: url(:/data/controls/arrow_up.svg);
+}
+
+QComboBox QAbstractItemView {
+	border: 1px solid palette(base);
+}
+
+QComboBox QAbstractItemView::item {
+	border: none;
+	background: palette(window);
+	padding: 2px 4px;
+}
+
+QComboBox QAbstractItemView::item:selected {
+	background-color: palette(button);
+}
+
+QScrollBar {
+	border: 1px solid palette(base);
+}
+
 QScrollBar:horizontal {
-/* 	height: 10px; If you change the height, the widget doesn't register it as such, so that you can scroll 'off' what you're scrolling on, where you see background where the scroll bar would cover if it didn't have it's size set here */
-	border-top: 1px solid @button-normal;
+	height: 12px;
+}
+
+QScrollBar:horizontal {
+	width: 12px;
+}
+
+QScrollBar::handle {
+	background: palette(button);
 }
 
 QScrollBar::handle:horizontal {
-	min-width: 20px;
-	border-image: url(:/scrollbar-hor-normal.png) 7 8 7 8;
-	border: 7px transparent;
-}
-
-QScrollBar::handle:horizontal:hover {
-	border-image: url(:/scrollbar-hor-hover.png) 7 8 7 8;
+	margin: 0px 12px;
+	border-left: 1px solid palette(base);
+	border-right: 1px solid palette(base);
 }
 
 QScrollBar::handle:vertical {
-	min-height: 20px;
-	border-image: url(:/scrollbar-ver-normal.png) 8 7 8 7;
-	border: 7px transparent;
+	margin: 12px 0px;
+	border-top: 1px solid palette(base);
+	border-bottom: 1px solid palette(base);
 }
 
-QScrollBar::handle:vertical:hover {
-	border-image: url(:/scrollbar-ver-hover.png) 8 7 8 7;
+QScrollBar::add-line, QScrollBar::sub-line {
+	background: palette(button);
+	border: 1px solid palette(base);
 }
 
-QScrollBar::add-line {
-	width: 0px;
-	height: 0px;
+QScrollBar::up-arrow, QScrollBar::down-arrow, QScrollBar::left-arrow, QScrollBar::right-arrow {
+	subcontrol-position: center;
+	width: 16px;
+	height: 16px;
 }
 
-QScrollBar::sub-line {
-	width: 0px;
-	height: 0px;
+QScrollBar::up-arrow {
+	image: url(:/data/controls/arrow_up.svg);
 }
 
-QScrollBar:vertical {
-	border-left: 1px solid @button-normal;
+QScrollBar::down-arrow {
+	image: url(:/data/controls/arrow_down.svg);
 }
 
-/* TODO: Need to actually style menus - remember to disable global menu bar for testing */
-
-QMenu {
-	background-color: @back-dark;
-	/*border-top: 1px solid @button-normal;
-	border-bottom: 1px solid @button-normal;*/
-	border-radius: 2px;
+QScrollBar::left-arrow {
+	image: url(:/data/controls/arrow_left.svg);
 }
 
-QMenu::item {
-	margin: 0px;
-	padding: 2px 5px 2px 5px;
-	border-left: 1px solid @button-normal;
-	border-right: 1px solid @button-normal;
+QScrollBar::right-arrow {
+	image: url(:/data/controls/arrow_right.svg);
 }
 
-*[isFirstChild="true"] {
-	border-top: 1px solid @button-normal;
-	border-radius: 2px 2px 0px 0px;
+QToolBar {
+	spacing: 6px;
+	padding: 4px;
+	border: 1px solid palette(window);
 }
 
-/*QMenu::item:last-child {
-	border-bottom: 1px solid @button-normal;
-	border-radius: 0px 0px 2px 2px;
+QToolBar::handle:horizontal {
+	margin-right: 5px;
+	padding-right: 2px;
 }
 
-QMenu::item:first-child {
-	border-top: 1px solid @button-normal;
-	border-radius: 2px 2px 0px 0px;
-}*/
-
-QMenu::item:selected {
-	background-color: @accent;
-	border-color: @accent;
+QToolBar::handle:vertical {
+	margin-bottom: 5px;
+	padding-bottom: 2px;
 }
 
-QMenuBar::item {
-	margin: 0px;
-	padding: 2px 5px 2px 5px;
+QToolBar::handle {
+	background: palette(button);
+}
+
+QToolBar QToolButton {
+	padding: 4px;
+}
+
+#floating {
+	background: palette(window);
+	border-radius: 8px;
+	padding: 0px; /* No effect */
+	margin: 0px; /* No effect */
+}
+
+/* FIXME: No worky :( Padding doesn't seem to worky on the #floating either, but I want to set padding in CSS :( Both might be not working for the same reason */
+#floating-item {
+	margin: 0px; /* No effect */
+	padding: 0px; /* No effect */
 }

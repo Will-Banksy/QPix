@@ -4,12 +4,14 @@
 #include <QToolButton>
 #include <QActionGroup>
 #include <iostream>
+#include "../floating/HoverInfoEventFilter.h"
 
 ToolSelectView::ToolSelectView(AppModel* model) : QToolBar(), m_ActionGroup(new QActionGroup(this)) {
+	this->setFloatable(false);
+
 	for(AbstractTool* tool : model->availableTools()) {
 		QAction* selectToolAction = new QAction(QIcon(tool->iconPath()), tool->name());
 		selectToolAction->setCheckable(true);
-		selectToolAction->setToolTip(tool->description());
 
 		// Connect signals so that each button checked state corresponds with the tool selected in the model
 		connect(selectToolAction, &QAction::toggled, [model, tool](bool checked) {
@@ -25,8 +27,6 @@ ToolSelectView::ToolSelectView(AppModel* model) : QToolBar(), m_ActionGroup(new 
 			}
 		});
 
-		// TODO: We want to be able to use floating infos for tooltips here... Which means we need a widget. QToolButton
-
 		if(model->currentTool() == tool) {
 			std::cerr << "currentTool is this, setting checked" << std::endl;
 			selectToolAction->setChecked(true);
@@ -35,9 +35,25 @@ ToolSelectView::ToolSelectView(AppModel* model) : QToolBar(), m_ActionGroup(new 
 		m_ActionGroup->addAction(selectToolAction);
 	}
 
-	m_ActionGroup->setEnabled(true); // TODO: Perhaps only enable when a canvas is available
+	m_ActionGroup->setEnabled(true); // NOTE: Perhaps only enable when a canvas is available
 	m_ActionGroup->setExclusive(true);
 	this->addActions(m_ActionGroup->actions());
+
+	// Now loop over all the actions and get the related widgets
+
+	QList<QAction*> actions = m_ActionGroup->actions();
+	for(int i = 0; i < model->availableTools().size(); i++) {
+		QAction* action = actions.at(i);
+		AbstractTool* tool = model->availableTools().at(i);
+
+		QWidget* widget = this->widgetForAction(action);
+		widget->installEventFilter(new HoverInfoEventFilter(
+			model,
+			widget,
+			tool->name(),
+			tool->description()
+		));
+	}
 }
 
 ToolSelectView::~ToolSelectView() {

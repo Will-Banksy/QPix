@@ -9,7 +9,7 @@ ProjectCanvasView::ProjectCanvasView(ProjectModel* model, AppModel* appModel) : 
 	m_Model(model), m_AppModel(appModel) {
 
 	if(!s_Background) {
-		s_Background = new QPixmap(":/canvas_bg_dark.png");
+		s_Background = new QPixmap(":/data/canvas_bg_dark.png");
 	}
 
 	this->setFlags(ItemUsesExtendedStyleOption);

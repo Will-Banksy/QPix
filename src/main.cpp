@@ -9,6 +9,9 @@
 #include "ui/components/AppView.h"
 #include "model/AppModel.h"
 #include "model/ProjectModel.h"
+#include <QMap>
+#include <QPalette>
+#include "utils/Utils.h"
 
 int main(int argc, char *argv[]) {
 // 	uchar byte = 0b00000100;
@@ -35,11 +38,21 @@ int main(int argc, char *argv[]) {
 
 // 	return app.exec();
 
-	// return Application::init(argc, argv); // NOTE: Normal QPix
+	// return Application::init(argc, argv); // NOTE: Normal QPix - Probably broken though.
 
 	QApplication app(argc, argv);
 
 	app.setStyle("fusion");
+
+	// Load palette from json
+	QPalette base = app.palette();
+	QPalette pal = utils::loadPaletteFrom(":/data/palette.json", base);
+	app.setPalette(pal);
+
+	QFile qss(":/data/style.qss");
+	qss.open(QFile::ReadOnly);
+	QString styleSheet = QString::fromUtf8(qss.readAll());
+	app.setStyleSheet(styleSheet);
 
 	AppModel model = AppModel();
 	model.newProject(DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT);

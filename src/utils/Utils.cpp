@@ -34,7 +34,7 @@ namespace utils { // TODO: Relocate contents to Utils class
 		QJsonDocument doc = QJsonDocument::fromJson(data);
 
 		// Load the QSS file
-		QFile qss(":/style.qss");
+		QFile qss(":/style_old.qss");
 		qss.open(QFile::ReadOnly);
 		QString styleSheet = QString::fromUtf8(qss.readAll());
 
@@ -64,6 +64,77 @@ namespace utils { // TODO: Relocate contents to Utils class
 		int w = x2 - x1;
 		int h = y2 - y1;
 		return QRect(x1, y1, w, h);
+	}
+
+	QPalette loadPaletteFrom(const QString& src, QPalette& basePalette) {
+		// Declare mapping from string to QPalette::ColorRole
+		static std::map<QString, QPalette::ColorRole> const table = {
+			{ "Window", QPalette::Window },
+			{ "WindowText", QPalette::WindowText },
+			{ "Base", QPalette::Base },
+			{ "AlternateBase", QPalette::AlternateBase },
+			{ "ToolTipBase", QPalette::ToolTipBase },
+			{ "ToolTipText", QPalette::ToolTipText },
+			{ "PlaceholderText", QPalette::PlaceholderText },
+			{ "Text", QPalette::Text },
+			{ "Button", QPalette::Button },
+			{ "ButtonText", QPalette::ButtonText },
+			{ "BrightText", QPalette::BrightText },
+			{ "Light", QPalette::Light },
+			{ "Midlight", QPalette::Midlight },
+			{ "Dark", QPalette::Dark },
+			{ "Mid", QPalette::Mid },
+			{ "Shadow", QPalette::Shadow },
+			{ "Highlight", QPalette::Highlight },
+			{ "Accent", QPalette::Accent },
+			{ "HighlightedText", QPalette::HighlightedText }
+		};
+
+		// Open
+		QFile file = QFile(src); // TODO: This needs some error handling
+		file.open(QIODevice::ReadOnly);
+		QByteArray json = file.readAll();
+
+		QPalette newPalette = QPalette(basePalette);
+
+		// Parse
+		QJsonDocument doc = QJsonDocument::fromJson(json);
+
+		QJsonObject baseObj = doc.object();
+		for(QString key : baseObj.keys()) {
+			QString value = baseObj.value(key).toString();
+
+			if(auto it = table.find(key); it != table.end()) {
+				QPalette::ColorRole role = it->second;
+
+				QColor col = QColor::fromString(value);
+
+				newPalette.setColor(role, col);
+			}
+		}
+
+		return newPalette;
+	}
+
+	QRect adjustedToWithin(const QRect& outer, const QRect& inner) {
+		QRect r = QRect(inner);
+		if(r.x() < outer.x()) {
+			r.setX(outer.x());
+		}
+		if(r.y() < outer.y()) {
+			r.setY(outer.y());
+		}
+		if(r.right() > outer.right()) {
+			r.setX(outer.right() - r.width());
+		}
+		if(r.bottom() > outer.bottom()) {
+			r.setY(outer.bottom() - r.height());
+		}
+		return r;
+	}
+
+	int area(const QRect& rect) {
+		return rect.width() * rect.height();
 	}
 
 	void setBit(quint8& byte, quint8 bitPos, bool val) {

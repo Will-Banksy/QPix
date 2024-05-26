@@ -1,0 +1,23 @@
+{
+	"Window": "black",
+	"WindowText": "white",
+	"Base": "#171717",
+	"AlternateBase": "green",
+	"ToolTipBase": "blue",
+	"ToolTipText": "white",
+	"PlaceholderText": "blue",
+	"Text": "white",
+	"Button": "#303030",
+	"ButtonText": "white",
+	"BrightText": "white",
+
+	"Light": "#505050",
+	"Midlight": "",
+	"Dark": "",
+	"Mid": "",
+	"Shadow": "",
+
+	"Highlight": "white",
+	"Accent": "white",
+	"HighlightedText": "white"
+}

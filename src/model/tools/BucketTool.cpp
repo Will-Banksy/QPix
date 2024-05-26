@@ -5,7 +5,7 @@
 BucketTool::BucketTool() : AbstractTool() {
 	m_Name = "Fill Bucket";
 	m_Description = "Fills a region";
-	m_IconPath = ":/tools/fill.png";
+	m_IconPath = ":/data/tools/fill.png";
 	m_UsageType = ToolUsageType::Click;
 }
 

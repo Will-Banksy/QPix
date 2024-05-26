@@ -1,26 +1,19 @@
 <RCC>
 	<qresource>
-		<file alias="canvas_bg_dark.png">data/canvas_bg_dark.png</file>
+		<file>data/canvas_bg_dark.png</file>
 
-		<file alias="placeholder.png">data/controls/placeholder.png</file>
-		<file alias="close.png">data/controls/close.png</file>
-		<file alias="close-hover.png">data/controls/close-hover.png</file>
-		<file alias="close-pressed.png">data/controls/close-pressed.png</file>
-		<file alias="float.png">data/controls/float.png</file>
-		<file alias="float-hover.png">data/controls/float-hover.png</file>
-		<file alias="float-pressed.png">data/controls/float-pressed.png</file>
-		<file alias="scrollbar-hor-normal.png">data/controls/scrollbar-hor-normal.png</file>
-		<file alias="scrollbar-ver-normal.png">data/controls/scrollbar-ver-normal.png</file>
-		<file alias="scrollbar-hor-hover.png">data/controls/scrollbar-hor-hover.png</file>
-		<file alias="scrollbar-ver-hover.png">data/controls/scrollbar-ver-hover.png</file>
+		<file>data/controls/arrow_down.svg</file>
+		<file>data/controls/arrow_up.svg</file>
+		<file>data/controls/arrow_left.svg</file>
+		<file>data/controls/arrow_right.svg</file>
 
-		<file alias="tools/pencil.png">data/tools/pencil.png</file>
-		<file alias="tools/eraser.png">data/tools/eraser.png</file>
-		<file alias="tools/fill.png">data/tools/fill.png</file>
-		<file alias="tools/line.png">data/tools/line.png</file>
-		<file alias="tools/move.png">data/tools/move.png</file>
+		<file>data/tools/pencil.png</file>
+		<file>data/tools/eraser.png</file>
+		<file>data/tools/fill.png</file>
+		<file>data/tools/line.png</file>
+		<file>data/tools/move.png</file>
 
-		<file alias="style.qss">data/style.qss</file>
-		<file alias="colours.json">data/colours.json</file>
+		<file>data/palette.json</file>
+		<file>data/style.qss</file>
 	</qresource>
 </RCC>

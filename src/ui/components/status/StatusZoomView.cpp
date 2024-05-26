@@ -5,6 +5,8 @@
 #include <QLabel>
 #include <QPainter>
 #include <QComboBox>
+#include "../floating/HoverInfoEventFilter.h"
+#include <QStyledItemDelegate>
 
 StatusZoomView::StatusZoomView(AppModel* model) : QWidget(), m_Model(model), m_ZoomComboBox(new QComboBox()) {
 	QLabel* label = new QLabel("Zoom:");
@@ -13,6 +15,16 @@ StatusZoomView::StatusZoomView(AppModel* model) : QWidget(), m_Model(model), m_Z
 	for(int i = 0; i < NUM_ZOOM_FACTORS; i++) {
 		m_ZoomComboBox->insertItem(i, QString::number(ZOOM_FACTORS[i] * 100) + "%", ZOOM_FACTORS[i]);
 	}
+
+	m_ZoomComboBox->installEventFilter(new HoverInfoEventFilter(
+		m_Model,
+		this,
+		"Zoom",
+		"Change the zoom factor",
+		FloatingPosition::Top
+	));
+
+	m_ZoomComboBox->setItemDelegate(new QStyledItemDelegate()); // Need this for QSS to be able to style items: https://stackoverflow.com/questions/13308341/qcombobox-abstractitemviewitem
 
 	this->setIndexFromProject(m_Model->currProject());
 

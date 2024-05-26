@@ -8,6 +8,14 @@
 // 	ColourDialog
 // };
 
+enum class FloatingPosition {
+	Right,
+	Left,
+	Bottom,
+	Top,
+	Unspecified
+};
+
 class AppModel;
 class FloatingInfoView;
 
@@ -20,7 +28,7 @@ public:
 
 public slots:
 	/// Shows a floating window near the src widget, displaying the title in bold above the body text
-	void showFloatingInfo(QWidget* src, const QString& title, const QString& body);
+	void showFloatingInfo(QWidget* src, const QString& title, const QString& body, FloatingPosition position);
 
 	/// Shows a floating window near the src widget, displaying a colour selector set to the current colour
 	void showColourSelect(QWidget* src, QColor current);
@@ -30,6 +38,9 @@ public slots:
 
 private:
 	FloatingInfoView* m_InfoView;
+
+	/// Reposition this floating view to near the src widget
+	void reposition(QWidget* src, FloatingPosition position);
 };
 
 #endif // FLOATINGVIEW_H

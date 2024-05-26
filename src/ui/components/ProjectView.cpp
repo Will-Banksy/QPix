@@ -79,6 +79,7 @@ void ProjectView::setZoom(float oldZoom, float newZoom, QPointF* zoomOrigin) {
 		float newY = m_CanvasView->pos().y() - heightDiff / 2.0;
 
 		m_CanvasView->setScale(newZoom);
+		this->updateScrollMargins(newZoom);
 		m_CanvasView->setPos(newX, newY);
 	} else {
 		// Zoom around origin

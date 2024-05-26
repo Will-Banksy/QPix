@@ -44,6 +44,10 @@ void PaintUtils::fillArea(QImage& target, int x, int y, QRgb colour, int toleran
 	// - https://www.youtube.com/watch?v=LvacRISl99Y
 	// - https://www.codeproject.com/Articles/5312368/Five-Fast-Flood-Fills
 
+	if(x < 0 || y < 0 || x >= target.width() || y >= target.height()) {
+		return;
+	}
+
 	QRgb* bytes = (uint32_t*)target.scanLine(0); // Assumes a 32-bit format
 
 	QRgb origCol = bytes[x + y * target.width()];
