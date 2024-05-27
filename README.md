@@ -1,14 +1,16 @@
 # QPix
 
---- WIP ---
+--- WIP, very incomplete ---
 
-A simple little pixel art editor, using the Qt libraries
+A simple little pixel art editor, using Qt Widgets.
+
+![Screenshot](screenshots/Smiley.png)
 
 ## Compile And Run
 
 You need Qt6 and CMake 3.5 or higher (I'm using Qt 6.6.2 but it should work on earlier versions)
 
-You will also need a C++20 compliant compiler
+You will also need a C++20 compliant compiler.
 
 ### Compile
 

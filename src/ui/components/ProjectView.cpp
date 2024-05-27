@@ -65,9 +65,6 @@ void ProjectView::setZoom(float oldZoom, float newZoom, QPointF* zoomOrigin) {
 
 	if(zoomOrigin == nullptr) {
 		// Zoom around centre of canvas
-		// BUG: When the canvas is zoomed in and near the edge of the viewport, zooming out tends to centre the canvas in the viewport
-
-		this->updateScrollMargins(newZoom);
 
 		QSizeF cSizeOld = m_Model->surface().size().toSizeF() * oldZoom;
 		QSizeF cSizeNew = m_Model->surface().size().toSizeF() * newZoom;
@@ -79,8 +76,8 @@ void ProjectView::setZoom(float oldZoom, float newZoom, QPointF* zoomOrigin) {
 		float newY = m_CanvasView->pos().y() - heightDiff / 2.0;
 
 		m_CanvasView->setScale(newZoom);
-		this->updateScrollMargins(newZoom);
 		m_CanvasView->setPos(newX, newY);
+		this->updateScrollMargins(newZoom);
 	} else {
 		// Zoom around origin
 
@@ -95,8 +92,8 @@ void ProjectView::setZoom(float oldZoom, float newZoom, QPointF* zoomOrigin) {
 		QPointF newItemPos = toItemScaled + originPos;
 
 		m_CanvasView->setPos(newItemPos);
-		this->updateScrollMargins(newZoom);
 		m_CanvasView->setScale(newZoom);
+		this->updateScrollMargins(newZoom);
 	}
 
 	// TODO: Investigate other downscaling algorithms - Aseprite's downscaling algorithm seemingly preserves more pixel information than the QPainter::SmoothPixmapTransform
