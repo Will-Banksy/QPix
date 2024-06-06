@@ -25,7 +25,7 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 	this->m_Tabs = tabs;
 
 	connect(tabs, &QTabWidget::tabCloseRequested, this, &AppView::closeProject);
-	connect(tabs, &QTabWidget::currentChanged, [this](int index) {
+	connect(tabs, &QTabWidget::currentChanged, this, [this](int index) {
 		ProjectView* view = (ProjectView*)this->m_Tabs->widget(index);
 		if(view != nullptr) {
 			ProjectModel* project = view->model();
@@ -52,7 +52,7 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 		FloatingPosition::Bottom
 	));
 
-	connect(newTabBtn, &QPushButton::clicked, [this](bool checked) {
+	connect(newTabBtn, &QPushButton::clicked, this, [this](bool checked) {
 		this->m_Model->newProject(DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT);
 	});
 

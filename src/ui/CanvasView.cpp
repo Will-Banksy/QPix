@@ -24,12 +24,12 @@ CanvasView::CanvasView(QWidget* parent) : QGraphicsView(parent) {
 	setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 	setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
-	connect(horizontalScrollBar(), &QScrollBar::valueChanged, [this](int val) {
+	connect(horizontalScrollBar(), &QScrollBar::valueChanged, this, [this](int val) {
 		if(scene()) {
 			((ProjectScene*)scene())->project->scrollPos.setX(val);
 		}
 	});
-	connect(verticalScrollBar(), &QScrollBar::valueChanged, [this](int val) {
+	connect(verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int val) {
 		if(scene()) {
 			((ProjectScene*)scene())->project->scrollPos.setY(val);
 		}

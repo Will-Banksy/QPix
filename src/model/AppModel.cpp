@@ -46,7 +46,7 @@ void AppModel::newProject(int width, int height) {
 	ProjectModel* newProject = new ProjectModel(width, height);
 	this->m_Projects.append(newProject);
 	emit projectAdded(newProject);
-	connect(newProject, &ProjectModel::anythingUpdated, [this, newProject]() {
+	connect(newProject, &ProjectModel::anythingUpdated, this, [this, newProject]() {
         updateCurrProject(Nullable(newProject));
 	});
 }
@@ -55,7 +55,7 @@ void AppModel::openProject(QString& path) {
 	ProjectModel* newProject = new ProjectModel(path);
 	this->m_Projects.append(newProject);
 	emit projectAdded(newProject);
-	connect(newProject, &ProjectModel::anythingUpdated, [this, newProject]() {
+	connect(newProject, &ProjectModel::anythingUpdated, this, [this, newProject]() {
         updateCurrProject(Nullable(newProject));
 	});
 }

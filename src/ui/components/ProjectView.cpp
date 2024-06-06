@@ -47,7 +47,7 @@ ProjectView::ProjectView(ProjectModel* model, AppModel* appModel) : QGraphicsVie
 
 	connect(model, &ProjectModel::zoomUpdated, this, &ProjectView::setZoom);
 
-	connect(appModel, &AppModel::canvasDragModeRequested, [this](bool scrollDrag) {
+	connect(appModel, &AppModel::canvasDragModeRequested, this, [this](bool scrollDrag) {
 		if(scrollDrag) {
 			this->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
 		} else {

@@ -14,12 +14,12 @@ ToolSelectView::ToolSelectView(AppModel* model) : QToolBar(), m_ActionGroup(new 
 		selectToolAction->setCheckable(true);
 
 		// Connect signals so that each button checked state corresponds with the tool selected in the model
-		connect(selectToolAction, &QAction::toggled, [model, tool](bool checked) {
+		connect(selectToolAction, &QAction::toggled, this, [model, tool](bool checked) {
 			if(checked) {
 				model->changeTool(tool);
 			}
 		});
-		connect(model, &AppModel::toolChanged, [selectToolAction, tool](AbstractTool* newTool) {
+		connect(model, &AppModel::toolChanged, this, [selectToolAction, tool](AbstractTool* newTool) {
 			if(newTool == tool) {
 				selectToolAction->setChecked(true);
 			}
