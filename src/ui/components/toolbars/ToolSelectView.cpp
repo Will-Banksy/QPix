@@ -15,20 +15,17 @@ ToolSelectView::ToolSelectView(AppModel* model) : QToolBar(), m_ActionGroup(new 
 
 		// Connect signals so that each button checked state corresponds with the tool selected in the model
 		connect(selectToolAction, &QAction::toggled, [model, tool](bool checked) {
-			std::cerr << "selectToolAction toggled" << std::endl;
 			if(checked) {
 				model->changeTool(tool);
 			}
 		});
 		connect(model, &AppModel::toolChanged, [selectToolAction, tool](AbstractTool* newTool) {
-			std::cerr << "toolChanged" << std::endl;
 			if(newTool == tool) {
 				selectToolAction->setChecked(true);
 			}
 		});
 
 		if(model->currentTool() == tool) {
-			std::cerr << "currentTool is this, setting checked" << std::endl;
 			selectToolAction->setChecked(true);
 		}
 

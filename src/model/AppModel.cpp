@@ -75,6 +75,8 @@ void AppModel::updateCurrProject(Nullable<ProjectModel> project) { // NOTE: m_Cu
 }
 
 void AppModel::changeTool(AbstractTool* tool) {
+	m_CurrentTool->onSelectedChanged(false, this);
 	m_CurrentTool = tool;
+	m_CurrentTool->onSelectedChanged(true, this);
 	emit toolChanged(tool);
 }

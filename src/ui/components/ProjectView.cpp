@@ -47,6 +47,14 @@ ProjectView::ProjectView(ProjectModel* model, AppModel* appModel) : QGraphicsVie
 
 	connect(model, &ProjectModel::zoomUpdated, this, &ProjectView::setZoom);
 
+	connect(appModel, &AppModel::canvasDragModeRequested, [this](bool scrollDrag) {
+		if(scrollDrag) {
+			this->setDragMode(QGraphicsView::DragMode::ScrollHandDrag);
+		} else {
+			this->setDragMode(QGraphicsView::DragMode::NoDrag);
+		}
+	});
+
 	this->updateScrollMargins(m_Model->zoom());
 }
 
@@ -129,6 +137,10 @@ void ProjectView::mousePressEvent(QMouseEvent *event) { // TODO: Move all this l
 	QPoint pos = this->mapToCanvas(event->pos());
 	AbstractTool* currentTool = m_AppModel->currentTool();
 
+	if(currentTool->usageType() == ToolUsageType::None) {
+		return;
+	}
+
 	if(m_MouseDown) {
 		// if(currentTool->usageType() == ToolUsageType::Drag) {
 		std::cerr << "Tool cancel" << std::endl;
@@ -167,6 +179,10 @@ void ProjectView::mouseReleaseEvent(QMouseEvent *event) {
 	QPoint pos = this->mapToCanvas(event->pos());
 	AbstractTool* currentTool = m_AppModel->currentTool();
 
+	if(currentTool->usageType() == ToolUsageType::None) {
+		return;
+	}
+
 	if(!m_IgnoreRelease) {
 		if(currentTool->usageType() == ToolUsageType::Drag) {
 			std::cerr << "Tool drag release" << std::endl;
@@ -194,6 +210,10 @@ void ProjectView::mouseMoveEvent(QMouseEvent *event) {
 
 	QPoint pos = this->mapToCanvas(event->pos());
 	AbstractTool* currentTool = m_AppModel->currentTool();
+
+	if(currentTool->usageType() == ToolUsageType::None) {
+		return;
+	}
 
 	if(m_PrevCanvasCoord != pos) {
 		if(m_MouseDown && !m_IgnoreRelease && currentTool->usageType() == ToolUsageType::Drag) {

@@ -7,6 +7,7 @@
 class AppModel;
 
 enum class ToolUsageType {
+	None,
 	Drag,
 	Click,
 };
@@ -39,6 +40,9 @@ public:
 	/// Called for tools that have usage type Click, when the user clicks on a pixel
 	virtual void onClick(QImage& surface, QPoint pt, Qt::MouseButton button, AppModel* model);
 
+	/// Called when a tool is selected (true) or deselected (false). Most tools will not use this
+	virtual void onSelectedChanged(bool selected, AppModel* model);
+
     static QList<AbstractTool*> initialiseTools();
 
 	QString name();
@@ -50,7 +54,7 @@ protected:
 	ToolUsageType m_UsageType = ToolUsageType::Click;
 	QString m_Name = "Unnamed Tool";
 	QString m_Description = "This tool has not been given a description";
-	QString m_IconPath = ":/tools/pencil.png";
+	QString m_IconPath = ":/data/tools/pencil.png";
 };
 
 #endif // TOOL_H

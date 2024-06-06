@@ -1,6 +1,7 @@
 #include "AbstractTool.h"
 #include "PencilTool.h"
 #include "BucketTool.h"
+#include "HandTool.h"
 
 AbstractTool::AbstractTool() : QObject() {
 }
@@ -14,10 +15,14 @@ void AbstractTool::onDrag(QImage& surface, QPoint pt, Qt::MouseButton button, To
 void AbstractTool::onClick(QImage& surface, QPoint pt, Qt::MouseButton button, AppModel* model) {
 }
 
+void AbstractTool::onSelectedChanged(bool selected, AppModel* model) {
+}
+
 QList<AbstractTool*> AbstractTool::initialiseTools() {
 	return {
         (AbstractTool*)new PencilTool(),
 		(AbstractTool*)new BucketTool(),
+		(AbstractTool*)new HandTool(),
 	};
 }
 

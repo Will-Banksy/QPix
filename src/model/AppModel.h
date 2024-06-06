@@ -55,11 +55,16 @@ signals:
 	/// Emitted when the current tool is changed
 	void toolChanged(AbstractTool* newTool);
 
+	// Signals below are mostly a mechanism for parts of the app to update UI through the AppModel - there is no accompanying slots, as these are not really something the AppModel processes or stores internally
+
 	/// Emitted when a widget wants to display some floating information to the user
 	void floatingInfoRequested(QWidget* src, const QString& title, const QString& body, FloatingPosition position);
 
 	/// Emitted when a widget wants to no longer display any floating windows
 	void hideFloating();
+
+	/// Emitted when the drag mode of project views should be changed (usually by the selection/deselection of the hand tool)
+	void canvasDragModeRequested(bool scrollDrag);
 
 private:
 	QList<ProjectModel*> m_Projects;

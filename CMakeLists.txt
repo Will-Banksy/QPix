@@ -35,6 +35,7 @@ set(pixeleditor_CPP
 	src/model/tools/AbstractTool.cpp
 	src/model/tools/PencilTool.cpp
 	src/model/tools/BucketTool.cpp
+	src/model/tools/HandTool.cpp
 
 	src/ui/Window.cpp
 	src/ui/UI.cpp
@@ -91,6 +92,7 @@ set(SOURCES
 	src/model/tools/AbstractTool.h
 	src/model/tools/PencilTool.h
 	src/model/tools/BucketTool.h
+	src/model/tools/HandTool.h
 
 	src/ui/Window.h
 	src/ui/UI.h
