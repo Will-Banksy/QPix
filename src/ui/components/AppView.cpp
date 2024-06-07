@@ -12,6 +12,8 @@
 #include "floating/tooltip/HoverInfoEventFilter.h"
 #include <QResizeEvent>
 
+// BUG: Moving between tabs and resizing can centre other canvases sometimes, or otherwise unexpectedly change the scroll position of other projects
+
 AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 	this->setWindowTitle("QPix");
 
