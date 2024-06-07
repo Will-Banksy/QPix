@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QPainter>
 #include <QComboBox>
-#include "../floating/HoverInfoEventFilter.h"
+#include "../floating/tooltip/HoverInfoEventFilter.h"
 #include <QStyledItemDelegate>
 
 StatusZoomView::StatusZoomView(AppModel* model) : QWidget(), m_Model(model), m_ZoomComboBox(new QComboBox()) {

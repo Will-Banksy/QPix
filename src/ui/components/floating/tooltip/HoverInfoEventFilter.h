@@ -2,7 +2,7 @@
 #define HOVERINFOEVENTFILTER_H
 
 #include <QObject>
-#include "FloatingView.h"
+#include "../FloatingView.h"
 
 class QEvent;
 class AppModel;

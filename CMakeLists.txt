@@ -29,13 +29,16 @@ set(pixeleditor_CPP
 	src/ProjectManager.cpp
 	src/Icons.cpp
 
+
 	src/model/AppModel.cpp
 	src/model/ProjectModel.cpp
+
 
 	src/model/tools/AbstractTool.cpp
 	src/model/tools/PencilTool.cpp
 	src/model/tools/BucketTool.cpp
 	src/model/tools/HandTool.cpp
+
 
 	src/ui/Window.cpp
 	src/ui/UI.cpp
@@ -47,6 +50,7 @@ set(pixeleditor_CPP
 
 	src/ui/widgets/ToolButton.cpp
 
+
 	src/ui/components/AppView.cpp
 	src/ui/components/ProjectView.cpp
 
@@ -57,8 +61,13 @@ set(pixeleditor_CPP
 	src/ui/components/toolbars/ToolSelectView.cpp
 
 	src/ui/components/floating/FloatingView.cpp
-	src/ui/components/floating/FloatingInfoView.cpp
-	src/ui/components/floating/HoverInfoEventFilter.cpp
+
+	src/ui/components/floating/tooltip/FloatingTooltipView.cpp
+	src/ui/components/floating/tooltip/FloatingInfoView.cpp
+	src/ui/components/floating/tooltip/HoverInfoEventFilter.cpp
+
+	src/ui/components/floating/modal/FloatingModalView.cpp
+
 
 	src/tools/ToolOptionWidget.cpp
 	src/tools/Tool.cpp
@@ -68,6 +77,7 @@ set(pixeleditor_CPP
 	src/tools/Line.cpp
 	src/tools/ScrollHand.cpp
 	src/tools/RectangularSelect.cpp
+
 
 	src/utils/Painter.cpp
 	src/utils/Utils.cpp
@@ -86,13 +96,16 @@ set(SOURCES
 	src/ProjectManager.h
 	src/Icons.h
 
+
 	src/model/AppModel.h
 	src/model/ProjectModel.h
+
 
 	src/model/tools/AbstractTool.h
 	src/model/tools/PencilTool.h
 	src/model/tools/BucketTool.h
 	src/model/tools/HandTool.h
+
 
 	src/ui/Window.h
 	src/ui/UI.h
@@ -104,6 +117,7 @@ set(SOURCES
 
 	src/ui/widgets/ToolButton.h
 
+
 	src/ui/components/AppView.h
 	src/ui/components/ProjectView.h
 
@@ -114,8 +128,13 @@ set(SOURCES
 	src/ui/components/toolbars/ToolSelectView.h
 
 	src/ui/components/floating/FloatingView.h
-	src/ui/components/floating/FloatingInfoView.h
-	src/ui/components/floating/HoverInfoEventFilter.h
+
+	src/ui/components/floating/tooltip/FloatingTooltipView.h
+	src/ui/components/floating/tooltip/FloatingInfoView.h
+	src/ui/components/floating/tooltip/HoverInfoEventFilter.h
+
+	src/ui/components/floating/modal/FloatingModalView.h
+
 
 	src/tools/ToolOptionWidget.h
 	src/tools/Tool.h
@@ -125,6 +144,7 @@ set(SOURCES
 	src/tools/Line.h
 	src/tools/ScrollHand.h
 	src/tools/RectangularSelect.h
+
 
 	src/utils/Painter.h
 	src/utils/Utils.h

@@ -20,52 +20,6 @@
 // }
 
 namespace utils { // TODO: Relocate contents to Utils class
-	float map(float val, float start1, float stop1, float start2, float stop2) {
-		return start2 + (stop2 - start2) * ((val - start1) / (stop1 - start1));
-	}
-
-	QString getStyleSheet() {
-		// Open the JSON file
-		QFile json(":/colours.json");
-		json.open(QIODevice::ReadOnly);
-		QByteArray data = json.readAll();
-
-		// Parse it as JSON
-		QJsonDocument doc = QJsonDocument::fromJson(data);
-
-		// Load the QSS file
-		QFile qss(":/style_old.qss");
-		qss.open(QFile::ReadOnly);
-		QString styleSheet = QString::fromUtf8(qss.readAll());
-
-		// Get the keys and iterate over them
-		QJsonObject obj = doc.object();
-		for(QString key : obj.keys()) {
-			QString val = obj.value(key).toString();
-
-			styleSheet.replace(key, val);
-		}
-
-		return styleSheet;
-	}
-
-	uint32_t* colAt(uint32_t* argbArr, int width, int i, int j) {
-		int index = i + j * width;
-		return &argbArr[index];
-	}
-
-	QRect expandRound(const QRectF& rect) {
-		QPointF p1 = rect.topLeft();
-		QPointF p2 = rect.bottomRight();
-		int x1 = floor(p1.x());
-		int y1 = floor(p1.y());
-		int x2 = ceil(p2.x());
-		int y2 = ceil(p2.y());
-		int w = x2 - x1;
-		int h = y2 - y1;
-		return QRect(x1, y1, w, h);
-	}
-
 	QPalette loadPaletteFrom(const QString& src, QPalette& basePalette) {
 		// Declare mapping from string to QPalette::ColorRole
 		static std::map<QString, QPalette::ColorRole> const table = {
@@ -135,6 +89,130 @@ namespace utils { // TODO: Relocate contents to Utils class
 
 	int area(const QRect& rect) {
 		return rect.width() * rect.height();
+	}
+
+	QPoint repositionFloating(const QWidget* self, const QWidget* src, FloatingPosition position) {
+		if(position == FloatingPosition::ScreenCentre) {
+			QSize half_ws = src->window()->size() / 2;
+			return QPoint(
+				src->window()->width() / 2 - self->width() / 2,
+				src->window()->height() / 2 - self->height() / 2
+			);
+		}
+
+		const QPoint gap = QPoint(8, 8);
+
+		QPointF srcPos = src->mapTo(src->window(), QPoint(0, 0));
+		QSize srcSize = src->size();
+
+		int newX = srcPos.x() + (srcSize.width() / 2) - self->width() / 2;
+		int newY = srcPos.y() + (srcSize.height() / 2) - self->height() / 2;
+
+		QPointF newPos = QPoint(newX, newY);
+
+		QPoint toRight = newPos.toPoint() + QPoint(srcSize.width() / 2, 0) + QPoint(self->width() / 2, 0) + QPoint(gap.x(), 0);
+		QRect toRightRect = QRect(toRight, self->size());
+		QPoint toLeft = newPos.toPoint() - QPoint(srcSize.width() / 2, 0) - QPoint(self->width() / 2, 0) - QPoint(gap.x(), 0);
+		QRect toLeftRect = QRect(toLeft, self->size());
+		QPoint toBottom = newPos.toPoint() + QPoint(0, srcSize.height() / 2) + QPoint(0, self->height() / 2) + QPoint(0, gap.y());
+		QRect toBottomRect = QRect(toBottom, self->size());
+		QPoint toTop = newPos.toPoint() - QPoint(0, srcSize.height() / 2) - QPoint(0, self->height() / 2) - QPoint(0, gap.y());
+		QRect toTopRect = QRect(toTop, self->size());
+
+		QRect outerRect = QRect(0, 0, self->window()->width(), self->window()->height());
+
+		switch(position) {
+			case FloatingPosition::Right: {
+				QRect adjusted = utils::adjustedToWithin(outerRect, toRightRect);
+				return adjusted.topLeft();
+			}
+			case FloatingPosition::Left: {
+				QRect adjusted = utils::adjustedToWithin(outerRect, toLeftRect);
+				return adjusted.topLeft();
+			}
+			case FloatingPosition::Bottom: {
+				QRect adjusted = utils::adjustedToWithin(outerRect, toBottomRect);
+				return adjusted.topLeft();
+			}
+			case FloatingPosition::Top: {
+				QRect adjusted = utils::adjustedToWithin(outerRect, toTopRect);
+				return adjusted.topLeft();
+			}
+			case FloatingPosition::Unspecified: {
+				int toRightIntersectionArea = utils::area(outerRect.intersected(toRightRect));
+				int toLeftIntersectionArea = utils::area(outerRect.intersected(toLeftRect));
+				int toBottomIntersectionArea = utils::area(outerRect.intersected(toBottomRect));
+				int toTopIntersectionArea = utils::area(outerRect.intersected(toTopRect));
+
+				int minArea = std::max({
+					toRightIntersectionArea,
+					toLeftIntersectionArea,
+					toBottomIntersectionArea,
+					toTopIntersectionArea
+				});
+
+				QRect rect = QRect();
+				if(minArea == toRightIntersectionArea) {
+					rect = toRightRect;
+				} else if(minArea == toLeftIntersectionArea) {
+					rect = toLeftRect;
+				} else if(minArea == toBottomIntersectionArea) {
+					rect = toBottomRect;
+				} else if(minArea == toTopIntersectionArea) {
+					rect = toTopRect;
+				}
+
+				QRect adjusted = utils::adjustedToWithin(outerRect, rect);
+
+				return adjusted.topLeft();
+			}
+		}
+	}
+
+	float map(float val, float start1, float stop1, float start2, float stop2) {
+		return start2 + (stop2 - start2) * ((val - start1) / (stop1 - start1));
+	}
+
+	QString getStyleSheet() {
+		// Open the JSON file
+		QFile json(":/colours.json");
+		json.open(QIODevice::ReadOnly);
+		QByteArray data = json.readAll();
+
+		// Parse it as JSON
+		QJsonDocument doc = QJsonDocument::fromJson(data);
+
+		// Load the QSS file
+		QFile qss(":/style_old.qss");
+		qss.open(QFile::ReadOnly);
+		QString styleSheet = QString::fromUtf8(qss.readAll());
+
+		// Get the keys and iterate over them
+		QJsonObject obj = doc.object();
+		for(QString key : obj.keys()) {
+			QString val = obj.value(key).toString();
+
+			styleSheet.replace(key, val);
+		}
+
+		return styleSheet;
+	}
+
+	uint32_t* colAt(uint32_t* argbArr, int width, int i, int j) {
+		int index = i + j * width;
+		return &argbArr[index];
+	}
+
+	QRect expandRound(const QRectF& rect) {
+		QPointF p1 = rect.topLeft();
+		QPointF p2 = rect.bottomRight();
+		int x1 = floor(p1.x());
+		int y1 = floor(p1.y());
+		int x2 = ceil(p2.x());
+		int y2 = ceil(p2.y());
+		int w = x2 - x1;
+		int h = y2 - y1;
+		return QRect(x1, y1, w, h);
 	}
 
 	void setBit(quint8& byte, quint8 bitPos, bool val) {

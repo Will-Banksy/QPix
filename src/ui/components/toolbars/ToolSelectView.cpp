@@ -4,7 +4,7 @@
 #include <QToolButton>
 #include <QActionGroup>
 #include <iostream>
-#include "../floating/HoverInfoEventFilter.h"
+#include "../floating/tooltip/HoverInfoEventFilter.h"
 
 ToolSelectView::ToolSelectView(AppModel* model) : QToolBar(), m_ActionGroup(new QActionGroup(this)) {
 	this->setFloatable(false);

@@ -9,7 +9,8 @@
 #include "status/StatusZoomView.h"
 #include "toolbars/ToolSelectView.h"
 #include "floating/FloatingView.h"
-#include "floating/HoverInfoEventFilter.h"
+#include "floating/tooltip/HoverInfoEventFilter.h"
+#include <QResizeEvent>
 
 AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 	this->setWindowTitle("QPix");
@@ -78,10 +79,14 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 
 	// Floating widget
 
-	FloatingView* floating = new FloatingView(this, model);
+	this->m_Floating = new FloatingView(this, model);
 }
 
 AppView::~AppView() {
+}
+
+void AppView::resizeEvent(QResizeEvent* event) {
+	m_Floating->setGeometry(0, 0, event->size().width(), event->size().height());
 }
 
 void AppView::addProject(ProjectModel* project) {

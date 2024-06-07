@@ -11,9 +11,13 @@ public:
 	explicit AppView(AppModel* model);
 	~AppView() override;
 
+protected:
+	void resizeEvent(QResizeEvent* event) override;
+
 private:
 	AppModel* m_Model;
 	QTabWidget* m_Tabs;
+	FloatingView* m_Floating;
 
 private slots:
 	void addProject(ProjectModel* project);
