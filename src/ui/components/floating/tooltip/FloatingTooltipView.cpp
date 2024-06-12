@@ -19,9 +19,6 @@ FloatingTooltipView::FloatingTooltipView(QWidget* parent, AppModel* model) : QWi
 	layout->addWidget(m_InfoView);
 
 	this->setLayout(layout);
-
-	connect(model, &AppModel::floatingInfoRequested, this, &FloatingTooltipView::showFloatingInfo);
-	connect(model, &AppModel::hideFloating, this, &FloatingTooltipView::hide);
 }
 
 FloatingTooltipView::~FloatingTooltipView() {

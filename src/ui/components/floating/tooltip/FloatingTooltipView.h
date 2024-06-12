@@ -11,7 +11,7 @@ class FloatingTooltipView : public QWidget {
 
 public:
 	explicit FloatingTooltipView(QWidget* parent, AppModel* model);
-	~FloatingTooltipView();
+	~FloatingTooltipView() override;
 
 public slots:
 	/// Shows a floating window near the src widget, displaying the title in bold above the body text

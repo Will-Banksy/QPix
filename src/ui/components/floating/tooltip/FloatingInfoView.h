@@ -10,7 +10,7 @@ class FloatingInfoView : public QWidget {
 
 public:
 	explicit FloatingInfoView();
-	~FloatingInfoView();
+	~FloatingInfoView() override;
 
 	void setTitle(const QString& text);
 	void setBody(const QString& text);

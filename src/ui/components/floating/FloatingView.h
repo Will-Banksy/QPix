@@ -23,11 +23,20 @@ public:
 	~FloatingView();
 
 public slots:
-	/// Shows a floating window near the src widget, displaying the title in bold above the body text
-	void showFloatingInfo(QWidget* src, const QString& title, const QString& body, FloatingPosition position);
+	/// Shows a tooltip near the src widget, displaying the title in bold above the body text
+	void showFloatingInfo(QWidget* src, const QString& title, const QString& body, FloatingPosition position); // TODO: Rename "Floating Info" to tooltip and generally sort out my terminology
 
-	/// Hides the floating windows
+	/// Hides the tooltip
 	void hideTooltips();
+
+	/// Shows a popup
+	void showColourSelectPopup(QWidget* src); // TODO: Take reaction function?
+
+	/// Dismisses the popup
+	void dismissPopup();
+
+protected:
+	void mousePressEvent(QMouseEvent* event) override;
 
 private:
 	FloatingTooltipView* m_TooltipView;

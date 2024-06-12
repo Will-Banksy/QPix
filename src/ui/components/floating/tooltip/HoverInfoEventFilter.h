@@ -13,10 +13,10 @@ class HoverInfoEventFilter : public QObject {
 
 public:
 	explicit HoverInfoEventFilter(AppModel* model, QWidget* widget, QString title, QString body, FloatingPosition position = FloatingPosition::Unspecified);
-	~HoverInfoEventFilter();
+	~HoverInfoEventFilter() override;
 
 protected:
-	bool eventFilter(QObject* obj, QEvent* event);
+	bool eventFilter(QObject* obj, QEvent* event) override;
 
 private:
 	AppModel* m_Model;
