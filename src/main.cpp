@@ -5,7 +5,6 @@
 #include <QFile>
 #include <QCommonStyle>
 #include <cmath>
-#include "Application.h"
 #include "ui/components/AppView.h"
 #include "model/AppModel.h"
 #include "model/ProjectModel.h"

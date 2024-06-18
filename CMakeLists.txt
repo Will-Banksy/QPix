@@ -21,13 +21,8 @@ qt6_add_resources(QT_RESOURCES resources.qrc)
 
 qt6_standard_project_setup()
 
-set(pixeleditor_CPP
+set(SOURCES_CPP
 	src/main.cpp
-	src/EditorTools.cpp
-	src/Project.cpp
-	src/Application.cpp
-	src/ProjectManager.cpp
-	src/Icons.cpp
 
 
 	src/model/AppModel.cpp
@@ -38,17 +33,6 @@ set(pixeleditor_CPP
 	src/model/tools/PencilTool.cpp
 	src/model/tools/BucketTool.cpp
 	src/model/tools/HandTool.cpp
-
-
-	src/ui/Window.cpp
-	src/ui/UI.cpp
-	src/ui/Canvas.cpp
-	src/ui/FlowLayout2.cpp
-	src/ui/ProjectScene.cpp
-	src/ui/CanvasView.cpp
-	src/ui/TabbedProjectView.cpp
-
-	src/ui/widgets/ToolButton.cpp
 
 
 	src/ui/layouts/FlowLayout.cpp
@@ -72,33 +56,12 @@ set(pixeleditor_CPP
 	src/ui/components/floating/modal/FloatingModalView.cpp
 
 
-	src/tools/ToolOptionWidget.cpp
-	src/tools/Tool.cpp
-	src/tools/Pencil.cpp
-	src/tools/Eraser.cpp
-	src/tools/Fill.cpp
-	src/tools/Line.cpp
-	src/tools/ScrollHand.cpp
-	src/tools/RectangularSelect.cpp
-
-
-	src/utils/Painter.cpp
 	src/utils/Utils.cpp
-	src/utils/Colour.cpp
-	src/utils/Brush.cpp
-	src/utils/BrushMatrix.cpp
 	src/utils/PaintUtils.cpp
 )
 
-set(SOURCES
-	${pixeleditor_CPP}
-
-	src/EditorTools.h
-	src/Project.h
-	src/Application.h
-	src/ProjectManager.h
-	src/Icons.h
-
+set(SOURCES_H
+	${SOURCES_CPP}
 
 	src/model/AppModel.h
 	src/model/ProjectModel.h
@@ -108,17 +71,6 @@ set(SOURCES
 	src/model/tools/PencilTool.h
 	src/model/tools/BucketTool.h
 	src/model/tools/HandTool.h
-
-
-	src/ui/Window.h
-	src/ui/UI.h
-	src/ui/Canvas.h
-	src/ui/FlowLayout2.h
-	src/ui/ProjectScene.h
-	src/ui/CanvasView.h
-	src/ui/TabbedProjectView.h
-
-	src/ui/widgets/ToolButton.h
 
 
 	src/ui/layouts/FlowLayout.h
@@ -142,23 +94,14 @@ set(SOURCES
 	src/ui/components/floating/modal/FloatingModalView.h
 
 
-	src/tools/ToolOptionWidget.h
-	src/tools/Tool.h
-	src/tools/Pencil.h
-	src/tools/Eraser.h
-	src/tools/Fill.h
-	src/tools/Line.h
-	src/tools/ScrollHand.h
-	src/tools/RectangularSelect.h
-
-
-	src/utils/Painter.h
 	src/utils/Utils.h
-	src/utils/Colour.h
-	src/utils/Brush.h
-	src/utils/BrushMatrix.h
 	src/utils/Nullable.h
 	src/utils/PaintUtils.h
+)
+
+set(SOURCES
+	${SOURCES_CPP}
+	${SOURCES_H}
 )
 
 # Tell CMake to create the executable qpix
