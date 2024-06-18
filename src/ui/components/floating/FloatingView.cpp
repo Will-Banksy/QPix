@@ -1,6 +1,5 @@
 #include "FloatingView.h"
 #include "model/AppModel.h"
-#include <QStackedLayout>
 #include "tooltip/FloatingTooltipView.h"
 #include <iostream>
 #include <QVBoxLayout>
@@ -10,7 +9,7 @@ FloatingView::FloatingView(QWidget* parent, AppModel* model) : QWidget(parent), 
 	this->setVisible(true);
 	this->setAttribute(Qt::WA_TransparentForMouseEvents);
 
-	connect(model, &AppModel::floatingInfoRequested, this, &FloatingView::showFloatingInfo); // NOTE: Could I simply instead connect this directly to the FloatingTooltipView::showFloatingInfo?
+	connect(model, &AppModel::floatingInfoRequested, this, &FloatingView::showFloatingInfo);
 	connect(model, &AppModel::hideFloating, this, &FloatingView::hideTooltips);
 }
 

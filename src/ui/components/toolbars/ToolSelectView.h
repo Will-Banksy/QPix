@@ -1,11 +1,11 @@
 #ifndef TOOLSELECTVIEW_H
 #define TOOLSELECTVIEW_H
 
-#include <QToolBar>
+#include <QWidget>
 
 class AppModel;
 
-class ToolSelectView : public QToolBar {
+class ToolSelectView : public QWidget {
 	Q_OBJECT
 
 public:

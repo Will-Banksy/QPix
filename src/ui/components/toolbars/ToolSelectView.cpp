@@ -5,9 +5,14 @@
 #include <QActionGroup>
 #include <iostream>
 #include "../floating/tooltip/HoverInfoEventFilter.h"
+#include "../../layouts/FlowLayout.h"
 
-ToolSelectView::ToolSelectView(AppModel* model) : QToolBar(), m_ActionGroup(new QActionGroup(this)) {
-	this->setFloatable(false);
+ToolSelectView::ToolSelectView(AppModel* model) : QWidget(), m_ActionGroup(new QActionGroup(this)) {
+	// The action group means that the toolbuttons are exclusive, since I set an action for each that is added to the action group
+	m_ActionGroup->setEnabled(true);
+	m_ActionGroup->setExclusive(true);
+
+	FlowLayout* layout = new FlowLayout();
 
 	for(AbstractTool* tool : model->availableTools()) {
 		QAction* selectToolAction = new QAction(QIcon(tool->iconPath()), tool->name());
@@ -30,27 +35,21 @@ ToolSelectView::ToolSelectView(AppModel* model) : QToolBar(), m_ActionGroup(new 
 		}
 
 		m_ActionGroup->addAction(selectToolAction);
-	}
 
-	m_ActionGroup->setEnabled(true); // NOTE: Perhaps only enable when a canvas is available
-	m_ActionGroup->setExclusive(true);
-	this->addActions(m_ActionGroup->actions());
-
-	// Now loop over all the actions and get the related widgets
-
-	QList<QAction*> actions = m_ActionGroup->actions();
-	for(int i = 0; i < model->availableTools().size(); i++) {
-		QAction* action = actions.at(i);
-		AbstractTool* tool = model->availableTools().at(i);
-
-		QWidget* widget = this->widgetForAction(action);
-		widget->installEventFilter(new HoverInfoEventFilter(
+		QToolButton* btn = new QToolButton();
+		btn->setDefaultAction(selectToolAction);
+		btn->setIconSize(QSize(24, 24)); // TODO: How do we determine this?
+		btn->installEventFilter(new HoverInfoEventFilter(
 			model,
-			widget,
+			btn,
 			tool->name(),
 			tool->description()
 		));
+
+		layout->addWidget(btn);
 	}
+
+	this->setLayout(layout);
 }
 
 ToolSelectView::~ToolSelectView() {

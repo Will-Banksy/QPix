@@ -70,28 +70,13 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 	central->setLayout(layout);
 	this->setCentralWidget(central);
 
-	// Toolbars
+	// Toolbars (in the form of DockWidgets)
 
 	QDockWidget* toolToolDock = new QDockWidget("Tools");
 	toolToolDock->setFeatures(QDockWidget::DockWidgetFeature::DockWidgetMovable);
 
 	ToolSelectView* toolToolbar = new ToolSelectView(m_Model);
 	toolToolDock->setWidget(toolToolbar);
-
-	connect(toolToolDock, &QDockWidget::dockLocationChanged, toolToolbar, [toolToolbar](Qt::DockWidgetArea dockArea) {
-		switch(dockArea) {
-			case Qt::DockWidgetArea::LeftDockWidgetArea:
-			case Qt::DockWidgetArea::RightDockWidgetArea: {
-				toolToolbar->setOrientation(Qt::Orientation::Vertical);
-				break;
-			}
-			case Qt::DockWidgetArea::TopDockWidgetArea:
-			case Qt::DockWidgetArea::BottomDockWidgetArea: {
-				toolToolbar->setOrientation(Qt::Orientation::Horizontal);
-				break;
-			}
-		}
-	});
 
 	this->addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, toolToolDock);
 

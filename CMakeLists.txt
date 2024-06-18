@@ -51,6 +51,9 @@ set(pixeleditor_CPP
 	src/ui/widgets/ToolButton.cpp
 
 
+	src/ui/layouts/FlowLayout.cpp
+
+
 	src/ui/components/AppView.cpp
 	src/ui/components/ProjectView.cpp
 
@@ -116,6 +119,9 @@ set(SOURCES
 	src/ui/TabbedProjectView.h
 
 	src/ui/widgets/ToolButton.h
+
+
+	src/ui/layouts/FlowLayout.h
 
 
 	src/ui/components/AppView.h
