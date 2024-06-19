@@ -8,6 +8,7 @@
 #include <QStatusBar>
 #include "status/StatusZoomView.h"
 #include "toolbars/ToolSelectView.h"
+#include "toolbars/ColourSelectView.h"
 #include "floating/FloatingView.h"
 #include "floating/tooltip/HoverInfoEventFilter.h"
 #include <QResizeEvent>
@@ -17,6 +18,7 @@
 
 AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 	this->setWindowTitle("QPix");
+	this->setDockOptions(QMainWindow::DockOption::AllowNestedDocks | QMainWindow::DockOption::AllowTabbedDocks | QMainWindow::DockOption::AnimatedDocks | QMainWindow::DockOption::VerticalTabs);
 
 	// Tab widget
 
@@ -75,13 +77,16 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 	QDockWidget* toolToolDock = new QDockWidget("Tools");
 	toolToolDock->setFeatures(QDockWidget::DockWidgetFeature::DockWidgetMovable);
 
-	ToolSelectView* toolToolbar = new ToolSelectView(m_Model);
+	ToolSelectView* toolToolbar = new ToolSelectView(model);
 	toolToolDock->setWidget(toolToolbar);
 
 	this->addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, toolToolDock);
 
 	QDockWidget* colourToolDock = new QDockWidget("Colour");
 	colourToolDock->setFeatures(QDockWidget::DockWidgetFeature::DockWidgetMovable);
+
+	ColourSelectView* colourToolbar = new ColourSelectView(model);
+	colourToolDock->setWidget(colourToolbar);
 
 	this->addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, colourToolDock);
 

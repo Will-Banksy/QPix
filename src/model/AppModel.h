@@ -52,6 +52,12 @@ signals:
 	/// Emitted when a project (supplied) is updated or set as the current project. Emitted by updateCurrProject
 	void currProjectUpdated(Nullable<ProjectModel> project);
 
+	/// Emitted when the primary colour is changed
+	void primaryColourChanged(const QColor& newColour);
+
+	/// Emitted when the secondary colour is changed
+	void secondaryColourChanged(const QColor& newColour);
+
 	/// Emitted when the current tool is changed
 	void toolChanged(AbstractTool* newTool);
 

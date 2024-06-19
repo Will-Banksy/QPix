@@ -67,6 +67,10 @@ ProjectModel* ProjectView::model() {
 }
 
 void ProjectView::setZoom(float oldZoom, float newZoom, QPointF* zoomOrigin) {
+	if(oldZoom == newZoom) { // If not changed don't care
+		return;
+	}
+
 	float factor = newZoom / m_Model->zoom();
 
 	assert(newZoom != 0);

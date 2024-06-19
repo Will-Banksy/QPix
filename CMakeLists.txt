@@ -38,6 +38,9 @@ set(SOURCES_CPP
 	src/ui/layouts/FlowLayout.cpp
 
 
+	src/ui/widgets/ColourButton.cpp
+
+
 	src/ui/components/AppView.cpp
 	src/ui/components/ProjectView.cpp
 
@@ -46,6 +49,7 @@ set(SOURCES_CPP
 	src/ui/components/status/StatusZoomView.cpp
 
 	src/ui/components/toolbars/ToolSelectView.cpp
+	src/ui/components/toolbars/ColourSelectView.cpp
 
 	src/ui/components/floating/FloatingView.cpp
 
@@ -76,6 +80,9 @@ set(SOURCES_H
 	src/ui/layouts/FlowLayout.h
 
 
+	src/ui/widgets/ColourButton.h
+
+
 	src/ui/components/AppView.h
 	src/ui/components/ProjectView.h
 
@@ -84,6 +91,7 @@ set(SOURCES_H
 	src/ui/components/status/StatusZoomView.h
 
 	src/ui/components/toolbars/ToolSelectView.h
+	src/ui/components/toolbars/ColourSelectView.h
 
 	src/ui/components/floating/FloatingView.h
 
