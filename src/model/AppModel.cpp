@@ -38,8 +38,18 @@ QColor AppModel::primaryColour() const {
 	return m_PrimaryColour;
 }
 
+void AppModel::setPrimaryColour(QColor colour) {
+	m_PrimaryColour = colour;
+	emit primaryColourChanged(colour);
+}
+
 QColor AppModel::secondaryColour() const {
 	return m_SecondaryColour;
+}
+
+void AppModel::setSecondaryColour(QColor colour) {
+	m_SecondaryColour = colour;
+	emit secondaryColourChanged(colour);
 }
 
 void AppModel::newProject(int width, int height) {

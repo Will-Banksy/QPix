@@ -11,6 +11,9 @@ class ColourSelectView : public QWidget {
 public:
 	explicit ColourSelectView(AppModel* model);
 	~ColourSelectView() override;
+
+private:
+	AppModel* m_Model;
 };
 
 #endif // COLOURSELECTVIEW_H

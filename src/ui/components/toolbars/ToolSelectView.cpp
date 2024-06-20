@@ -39,6 +39,8 @@ ToolSelectView::ToolSelectView(AppModel* model) : QWidget(), m_ActionGroup(new Q
 		QToolButton* btn = new QToolButton();
 		btn->setDefaultAction(selectToolAction);
 		btn->setIconSize(QSize(24, 24)); // TODO: How do we determine this?
+		btn->setMinimumSize(32, 32);
+		btn->setMaximumSize(32, 32);
 		btn->installEventFilter(new HoverInfoEventFilter(
 			model,
 			btn,

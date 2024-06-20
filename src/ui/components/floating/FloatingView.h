@@ -12,10 +12,12 @@ enum class FloatingPosition {
 	Unspecified
 };
 
+typedef std::function<void(const QColor&)> ColourChangeCallback;
+
 class AppModel;
 class FloatingTooltipView;
 
-class FloatingView : public QWidget {
+class FloatingView : public QWidget { // TODO: Sort out terminology and make it consistent
 	Q_OBJECT
 
 public:
@@ -24,13 +26,13 @@ public:
 
 public slots:
 	/// Shows a tooltip near the src widget, displaying the title in bold above the body text
-	void showFloatingInfo(QWidget* src, const QString& title, const QString& body, FloatingPosition position); // TODO: Rename "Floating Info" to tooltip and generally sort out my terminology
+	void showFloatingInfo(QWidget* src, const QString& title, const QString& body, FloatingPosition position);
 
 	/// Hides the tooltip
 	void hideTooltips();
 
 	/// Shows a popup
-	void showColourSelectPopup(QWidget* src); // TODO: Take reaction function?
+	void showColourSelectPopup(QWidget* src, const QColor& colour, ColourChangeCallback callback);
 
 	/// Dismisses the popup
 	void dismissPopup();

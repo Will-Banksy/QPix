@@ -7,6 +7,7 @@
 #include "model/tools/AbstractTool.h"
 #include <QColor>
 #include "ui/components/floating/FloatingView.h"
+#include <functional>
 
 class AppModel : public QObject {
 	Q_OBJECT
@@ -22,10 +23,13 @@ public:
     Nullable<ProjectModel> currProject() const;
 
     QColor primaryColour() const;
+	void setPrimaryColour(QColor colour);
     QColor secondaryColour() const;
+	void setSecondaryColour(QColor colour);
 
     const QList<AbstractTool*>& availableTools() const;
     AbstractTool *currentTool() const;
+
 
 public slots: // TODO: How many of these are actually used as slots? Can change some to just functions for sure
 	/// Creates a new project with the supplied settings. Emits projectAdded
@@ -65,6 +69,9 @@ signals:
 
 	/// Emitted when a widget wants to display some floating information to the user
 	void floatingInfoRequested(QWidget* src, const QString& title, const QString& body, FloatingPosition position);
+
+	/// Emitted when a widget wants to display a modal colour selector, with the specified callback function
+	void modalColourSelectRequested(QWidget* src, const QColor& colour, ColourChangeCallback callback);
 
 	/// Emitted when a widget wants to no longer display any floating windows
 	void hideFloating();

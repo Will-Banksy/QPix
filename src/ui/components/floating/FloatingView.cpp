@@ -11,6 +11,8 @@ FloatingView::FloatingView(QWidget* parent, AppModel* model) : QWidget(parent), 
 
 	connect(model, &AppModel::floatingInfoRequested, this, &FloatingView::showFloatingInfo);
 	connect(model, &AppModel::hideFloating, this, &FloatingView::hideTooltips);
+
+	connect(model, &AppModel::modalColourSelectRequested, this, &FloatingView::showColourSelectPopup);
 }
 
 FloatingView::~FloatingView() {
@@ -26,9 +28,11 @@ void FloatingView::hideTooltips() {
 	m_TooltipView->hide();
 }
 
-void FloatingView::showColourSelectPopup(QWidget* src) {
+void FloatingView::showColourSelectPopup(QWidget* src, const QColor& colour, std::function<void(const QColor&)> callback) {
 	// We want to capture click events outside of the modal widget now, so we can dismiss the modal widget
 	this->setAttribute(Qt::WA_TransparentForMouseEvents, false);
+
+	std::cerr << "Showing colour select popup!" << std::endl;
 }
 
 void FloatingView::dismissPopup() {
@@ -37,4 +41,6 @@ void FloatingView::dismissPopup() {
 
 void FloatingView::mousePressEvent(QMouseEvent* event) {
 	std::cout << "Detected mouse click (for dismissal purposes)" << std::endl;
+
+	this->dismissPopup();
 }
