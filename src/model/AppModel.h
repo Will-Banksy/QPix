@@ -71,10 +71,13 @@ signals:
 	void floatingInfoRequested(QWidget* src, const QString& title, const QString& body, FloatingPosition position);
 
 	/// Emitted when a widget wants to display a modal colour selector, with the specified callback function
-	void modalColourSelectRequested(QWidget* src, const QColor& colour, ColourChangeCallback callback);
+	void modalColourSelectRequested(QWidget* src, const QColor& colour, ColourChangeCallback callback, FloatingPosition position);
 
 	/// Emitted when a widget wants to no longer display any floating windows
 	void hideFloating();
+
+	/// Emitted when a widget wants to hide popups
+	void hidePopups();
 
 	/// Emitted when the drag mode of project views should be changed (usually by the selection/deselection of the hand tool)
 	void canvasDragModeRequested(bool scrollDrag);

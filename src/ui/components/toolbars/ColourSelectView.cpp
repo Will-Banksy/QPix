@@ -22,14 +22,14 @@ ColourSelectView::ColourSelectView(AppModel* model) : QWidget(), m_Model(model) 
 	connect(model, &AppModel::secondaryColourChanged, secondaryBtn, &ColourButton::updateColour);
 
 	connect(primaryBtn, &ColourButton::triggered, this, [this, primaryBtn](QAction* action) {
-		this->m_Model->modalColourSelectRequested(primaryBtn, this->m_Model->primaryColour(), [this](const QColor& colour) {
+		emit this->m_Model->modalColourSelectRequested(primaryBtn, this->m_Model->primaryColour(), [this](const QColor& colour) {
 			this->m_Model->setPrimaryColour(colour);
-		});
+		}, FloatingPosition::Unspecified);
 	});
 	connect(secondaryBtn, &ColourButton::triggered, this, [this, secondaryBtn](QAction* action) {
-		this->m_Model->modalColourSelectRequested(secondaryBtn, this->m_Model->secondaryColour(), [this](const QColor& colour) {
+		emit this->m_Model->modalColourSelectRequested(secondaryBtn, this->m_Model->secondaryColour(), [this](const QColor& colour) {
 			this->m_Model->setSecondaryColour(colour);
-		});
+		}, FloatingPosition::Unspecified);
 	});
 
 	layout->addWidget(primaryBtn);

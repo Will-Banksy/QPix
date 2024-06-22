@@ -16,6 +16,7 @@ typedef std::function<void(const QColor&)> ColourChangeCallback;
 
 class AppModel;
 class FloatingTooltipView;
+class FloatingModalView;
 
 class FloatingView : public QWidget { // TODO: Sort out terminology and make it consistent
 	Q_OBJECT
@@ -32,7 +33,7 @@ public slots:
 	void hideTooltips();
 
 	/// Shows a popup
-	void showColourSelectPopup(QWidget* src, const QColor& colour, ColourChangeCallback callback);
+	void showColourSelectPopup(QWidget* src, const QColor& colour, ColourChangeCallback callback, FloatingPosition position);
 
 	/// Dismisses the popup
 	void dismissPopup();
@@ -42,6 +43,7 @@ protected:
 
 private:
 	FloatingTooltipView* m_TooltipView;
+	FloatingModalView* m_ModalView;
 };
 
 #endif // FLOATINGVIEW_H
