@@ -5,6 +5,7 @@
 #include "../FloatingView.h"
 
 class AppModel;
+class ColourSelector;
 
 class FloatingModalView : public QWidget {
 	Q_OBJECT
@@ -24,6 +25,8 @@ protected:
 
 private:
 	AppModel* m_Model;
+	ColourSelector* m_ColourSelector;
+	QMetaObject::Connection* m_ColourSelectConnection;
 };
 
 #endif // FLOATINGMODALVIEW_H

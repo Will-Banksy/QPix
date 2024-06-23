@@ -17,6 +17,8 @@ protected:
 	void paintEvent(QPaintEvent* event) override;
 
 private:
+	static QPixmap* s_TransparentBackground;
+
 	QColor m_Colour;
 };
 

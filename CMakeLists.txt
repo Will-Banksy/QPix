@@ -39,6 +39,8 @@ set(SOURCES_CPP
 
 
 	src/ui/widgets/ColourButton.cpp
+	src/ui/widgets/ColourSelector.cpp
+	src/ui/widgets/ColourSlider.cpp
 
 
 	src/ui/components/AppView.cpp
@@ -81,6 +83,8 @@ set(SOURCES_H
 
 
 	src/ui/widgets/ColourButton.h
+	src/ui/widgets/ColourSelector.h
+	src/ui/widgets/ColourSlider.h
 
 
 	src/ui/components/AppView.h
