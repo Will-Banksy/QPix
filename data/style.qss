@@ -135,6 +135,12 @@ QToolBar QToolButton {
 	padding: 4px;
 }
 
+QToolTip {
+	border: 1px solid palette(base);
+	background: palette(window);
+	padding: 0px 2px 0px 2px;
+}
+
 #floating {
 	background: palette(window);
 	border-radius: 8px;

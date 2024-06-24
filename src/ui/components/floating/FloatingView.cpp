@@ -36,6 +36,8 @@ void FloatingView::showColourSelectPopup(QWidget* src, const QColor& colour, Col
 	this->setAttribute(Qt::WA_TransparentForMouseEvents, false);
 	m_ModalView->showColourSelectPopup(src, colour, callback, position);
 	m_ModalView->setFocus();
+
+	this->raise();
 }
 
 void FloatingView::dismissPopup() {

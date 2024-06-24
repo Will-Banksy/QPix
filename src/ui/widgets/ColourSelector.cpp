@@ -13,7 +13,12 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	m_HueSliderImg(new QImage(SLIDER_WIDTH, 360, QImage::Format_ARGB32)),
 	m_AlphaSliderImg(new QImage(255, SLIDER_WIDTH, QImage::Format_ARGB32)),
 	m_HexEntry(new QLineEdit()) {
+
 	// TODO: Need 2D slider-like widget for Square
+
+	// NOTE: Do I just copy (with adjustments of course) the colour selector from my Java Pixel Editor?
+	//       I do want to support other colour models of course, but specifically the vague styling (I will need it to fit in with QPix's theme however) and interactivity of it
+	//           Look at Java swing's powerful colour picker dialog (button in my Java Pixel Editor's colour picker) - If I can approach that level of power, I'll be doing good
 
 	genSquareImg();
 	genHueSliderImg();
