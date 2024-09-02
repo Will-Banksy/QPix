@@ -50,5 +50,4 @@ void FloatingView::mousePressEvent(QMouseEvent* event) {
 	if(!m_ModalView->geometry().contains(event->position().toPoint())) {
 		this->dismissPopup();
 	}
-
 }

@@ -8,7 +8,7 @@ enum class ColourSelectionModel {
 };
 
 class QLineEdit;
-class QSlider;
+class ColourSlider;
 
 class ColourSelector : public QWidget {
 	Q_OBJECT
@@ -23,6 +23,9 @@ public slots:
 signals:
 	void colourChanged(const QColor& colour);
 
+protected:
+	QSize sizeHint() const override;
+
 private:
 	QColor m_Colour;
 
@@ -30,8 +33,8 @@ private:
 	QImage* m_HueSliderImg;
 	QImage* m_AlphaSliderImg;
 
-	QSlider* m_HueSlider;
-	QSlider* m_AlphaSlider;
+	ColourSlider* m_HueSlider;
+	ColourSlider* m_AlphaSlider;
 	QLineEdit* m_HexEntry;
 
 	void genSquareImg();

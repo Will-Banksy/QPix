@@ -34,6 +34,11 @@ void FloatingModalView::showColourSelectPopup(QWidget* src, const QColor& colour
 		})
 	);
 
+	((QStackedLayout*)this->layout())->setCurrentWidget(m_ColourSelector);
+
+	m_ColourSelector->updateGeometry();
+
+	this->updateGeometry();
 	this->move(utils::repositionFloating(this, src, position));
 	this->update();
 }

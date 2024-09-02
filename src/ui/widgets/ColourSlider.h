@@ -1,9 +1,9 @@
 #ifndef COLOURSLIDER_H
 #define COLOURSLIDER_H
 
-#include <QSlider>
+#include <QAbstractSlider>
 
-class ColourSlider : public QSlider {
+class ColourSlider : public QAbstractSlider {
 	Q_OBJECT
 
 public:
@@ -12,11 +12,15 @@ public:
 
 protected:
 	void paintEvent(QPaintEvent* event) override;
+	void mousePressEvent(QMouseEvent* event) override;
+	void mouseMoveEvent(QMouseEvent* event) override;
 
 private:
 	static QPixmap* s_TransparentBackground;
 
 	QImage* m_BgImg; // does not own
+
+	void setFromClick(const QPoint& mousePos);
 };
 
 #endif // COLOURSLIDER_H

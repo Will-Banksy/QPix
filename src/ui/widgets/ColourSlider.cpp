@@ -2,16 +2,17 @@
 #include <QPainter>
 #include <iostream>
 #include <QPainterPath>
+#include <QMouseEvent>
 #include "utils/Utils.h"
 
 QPixmap* ColourSlider::s_TransparentBackground = nullptr;
 
-ColourSlider::ColourSlider(QImage* bgImg, Qt::Orientation orientation, QWidget* parent) : QSlider(orientation, parent), m_BgImg(bgImg) {
+ColourSlider::ColourSlider(QImage* bgImg, Qt::Orientation orientation, QWidget* parent) : QAbstractSlider(parent), m_BgImg(bgImg) {
 	if(!s_TransparentBackground) {
 		s_TransparentBackground = new QPixmap(":/data/canvas_bg_dark.png");
 	}
 
-	// TODO: Why are the colour sliders not being obeyed when they set their minimum sizes?
+	this->setOrientation(orientation);
 }
 
 ColourSlider::~ColourSlider() {
@@ -30,18 +31,44 @@ void ColourSlider::paintEvent(QPaintEvent* event) {
 
 	switch(this->orientation()) {
 		case Qt::Orientation::Horizontal: {
-			int x = utils::map(this->value(), this->minimum(), this->maximum(), 0, this->width());
-			painter.setPen(QColorConstants::White);
-			painter.drawLine(x, 0, x, this->height());
+			int x = utils::map(this->value(), this->minimum(), this->maximum(), 0, this->width() - 1);
+			painter.setPen(QPen(QColorConstants::Black, 2));
+			painter.setBrush(QColorConstants::White);
+			painter.drawRoundedRect(x - 1, 0, 3, this->height(), 2, 2);
 			break;
 		}
 		case Qt::Orientation::Vertical: {
-			int y = utils::map(this->value(), this->minimum(), this->maximum(), 0, this->height());
-			painter.setPen(QColorConstants::White);
-			painter.drawLine(0, y, this->width(), y);
+			int y = utils::map(this->value(), this->minimum(), this->maximum(), 0, this->height() - 1);
+			painter.setPen(QPen(QColorConstants::Black, 2));
+			painter.setBrush(QColorConstants::White);
+			painter.drawRoundedRect(0, y - 1, this->width(), 3, 2, 2);
 			break;
 		}
 	}
+}
 
-	QSlider::paintEvent(event); // TODO: Ideally we don't want to overlay the QSlider appearance just to have something usable - Need to make a better, styled handle where the actual value is at the centre of that handle
+void ColourSlider::mousePressEvent(QMouseEvent* event) {
+	this->setFromClick(event->pos());
+}
+
+void ColourSlider::mouseMoveEvent(QMouseEvent* event) {
+	this->setFromClick(event->pos());
+}
+
+void ColourSlider::setFromClick(const QPoint& mousePos) {
+	int value = 0;
+	bool value_set = false;
+	if(this->orientation() == Qt::Orientation::Horizontal) {
+		value = utils::map(mousePos.x(), 0, this->width(), this->minimum(), this->maximum());
+		value_set = true;
+	} else if(this->orientation() == Qt::Orientation::Vertical) {
+		value = utils::map(mousePos.y(), 0, this->height(), this->minimum(), this->maximum());
+		value_set = true;
+	}
+
+	assert(value_set);
+
+	value = utils::constrain(value, this->minimum(), this->maximum());
+
+	this->setValue(value);
 }
