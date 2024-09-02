@@ -34,7 +34,6 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	m_HueSlider->setMinimum(0);
 	m_HueSlider->setMaximum(360);
 	m_HueSlider->setValue(colour.hue());
-	// m_HueSlider->setInvertedAppearance(true);
 
 	m_AlphaSlider = new ColourSlider(m_AlphaSliderImg, Qt::Orientation::Horizontal);
 	m_AlphaSlider->setMinimum(0);
@@ -43,7 +42,7 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 
 	connect(m_SquareSlider, &ColourBoxSlider::valueChanged, this, [this](QVariant value) {
 		QPoint pt = value.toPoint();
-		this->m_Colour.setHsv(this->m_Colour.hsvHue(), pt.x(), 255 - pt.y(), this->m_Colour.alpha());
+		this->m_Colour.setHsv(qMax(this->m_Colour.hue(), 0), pt.x(), 255 - pt.y(), this->m_Colour.alpha());
 		emit colourChanged(this->m_Colour);
 		this->genAlphaSliderImg();
 		this->update();
@@ -74,6 +73,7 @@ ColourSelector::~ColourSelector() {
 }
 
 void ColourSelector::setColour(const QColor& colour) {
+	m_SquareSlider->setValue(QVariant(QPoint(colour.hsvSaturation(), 255 - colour.value())));
 	m_HueSlider->setValue(colour.hue());
 	m_AlphaSlider->setValue(colour.alpha());
 }
@@ -89,7 +89,8 @@ void ColourSelector::genSquareImg() {
 
 	for(int i = 0; i < m_SquareImg->width(); i++) {
 		for(int j = 0; j < m_SquareImg->height(); j++) {
-			int hue = m_Colour.hue();
+			// Qt returns -1 for achromatic colours, such as black - Not usually an issue but can be an issue on startup. This stops the square image from displaying only achromatic colours
+			int hue = qMax(m_Colour.hue(), 0);
 			int sat = i;
 			int bri = 255 - j;
 			QColor col = QColor::fromHsv(hue, sat, bri, 255);
