@@ -41,6 +41,9 @@ set(SOURCES_CPP
 	src/ui/widgets/ColourButton.cpp
 	src/ui/widgets/ColourSelector.cpp
 	src/ui/widgets/ColourSlider.cpp
+	src/ui/widgets/ColourBoxSlider.cpp
+
+	src/ui/widgets/abstract/AbstractVariantSlider.cpp
 
 
 	src/ui/components/AppView.cpp
@@ -67,8 +70,6 @@ set(SOURCES_CPP
 )
 
 set(SOURCES_H
-	${SOURCES_CPP}
-
 	src/model/AppModel.h
 	src/model/ProjectModel.h
 
@@ -85,6 +86,9 @@ set(SOURCES_H
 	src/ui/widgets/ColourButton.h
 	src/ui/widgets/ColourSelector.h
 	src/ui/widgets/ColourSlider.h
+	src/ui/widgets/ColourBoxSlider.h
+
+	src/ui/widgets/abstract/AbstractVariantSlider.h
 
 
 	src/ui/components/AppView.h

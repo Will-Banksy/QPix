@@ -2,9 +2,9 @@
 
 --- WIP, very incomplete ---
 
-A simple little pixel art editor, using Qt Widgets.
+A simple little pixel art editor, using Qt Widgets. Focusing on performance and UI/UX.
 
-![Screenshot](screenshots/Smiley.png)
+![Screenshot](screenshots/screenshot_latest.png)
 
 ## Compile And Run
 
