@@ -10,6 +10,7 @@ enum class ColourSelectionModel {
 class QLineEdit;
 class ColourSlider;
 class ColourBoxSlider;
+class QValidator;
 
 class ColourSelector : public QWidget {
 	Q_OBJECT
@@ -38,7 +39,10 @@ private:
 	ColourSlider* m_HueSlider;
 	ColourSlider* m_AlphaSlider;
 	QLineEdit* m_HexEntry;
+	QValidator* m_HexEntryValidator;
 
+	void updateImages(bool regenSquareSliderImg, bool regenPrimarySliderImg, bool regenAlphaSliderImg);
+	void updateUi(bool updateSquareSlider, bool updatePrimarySlider, bool updateAlphaSlider, bool updateHex);
 	void genSquareImg();
 	void genHueSliderImg();
 	void genAlphaSliderImg();

@@ -5,7 +5,7 @@
 	"AlternateBase": "green",
 	"ToolTipBase": "blue",
 	"ToolTipText": "white",
-	"PlaceholderText": "blue",
+	"PlaceholderText": "#505050",
 	"Text": "white",
 	"Button": "#303030",
 	"ButtonText": "white",
@@ -17,7 +17,7 @@
 	"Mid": "",
 	"Shadow": "",
 
-	"Highlight": "white",
+	"Highlight": "#505050",
 	"Accent": "white",
 	"HighlightedText": "white"
 }

@@ -5,6 +5,9 @@
 #include "ColourSlider.h"
 #include <QSlider>
 #include "ColourBoxSlider.h"
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
+#include <QLabel>
 
 const int SLIDER_WIDTH = 32;
 
@@ -21,9 +24,7 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	//           Now with supporting different colour models, do I want to support perception-based models such as CIELAB/CIELCH, etc?
 	//               Probably do some research as to what that would require - would I need to take into account display colour calibration, etc?
 
-	genSquareImg();
-	genHueSliderImg();
-	genAlphaSliderImg();
+	this->updateImages(true, true, true);
 
 	m_SquareSlider = new ColourBoxSlider(m_SquareImg);
 	m_SquareSlider->setMinimum(QVariant(QPoint(0, 0)));
@@ -32,7 +33,7 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 
 	m_HueSlider = new ColourSlider(m_HueSliderImg, Qt::Orientation::Vertical);
 	m_HueSlider->setMinimum(0);
-	m_HueSlider->setMaximum(360);
+	m_HueSlider->setMaximum(359); // NOTE: Since this is maxing out at 359, not 360, does this affect anything else?
 	m_HueSlider->setValue(colour.hue());
 
 	m_AlphaSlider = new ColourSlider(m_AlphaSliderImg, Qt::Orientation::Horizontal);
@@ -40,23 +41,32 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	m_AlphaSlider->setMaximum(255);
 	m_AlphaSlider->setValue(colour.alpha());
 
+	QLabel* hash = new QLabel("#");
+	hash->setFixedWidth(8);
+
+	m_HexEntry->setSizePolicy(QSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Fixed));
+	m_HexEntry->setFont(QFont("Monospace"));
+	m_HexEntry->setPlaceholderText("aarrggbb");
+	m_HexEntry->setFrame(false);
+	QRegularExpression re = QRegularExpression("[a-fA-F0-9]{8}");
+	m_HexEntryValidator = new QRegularExpressionValidator(re);
+	m_HexEntry->setValidator(m_HexEntryValidator);
+	m_HexEntry->setText(colour.name(QColor::NameFormat::HexArgb).sliced(1).toLower());
+
 	connect(m_SquareSlider, &ColourBoxSlider::valueChanged, this, [this](QVariant value) {
 		QPoint pt = value.toPoint();
-		this->m_Colour.setHsv(qMax(this->m_Colour.hue(), 0), pt.x(), 255 - pt.y(), this->m_Colour.alpha());
-		emit colourChanged(this->m_Colour);
-		this->genAlphaSliderImg();
-		this->update();
+		this->setColour(QColor::fromHsv(qMax(this->m_Colour.hue(), 0), pt.x(), 255 - pt.y(), this->m_Colour.alpha()));
 	});
 	connect(m_HueSlider, &ColourSlider::valueChanged, this, [this](int value) {
-		this->m_Colour.setHsv(value, this->m_Colour.hsvSaturation(), this->m_Colour.value(), this->m_Colour.alpha());
-		emit colourChanged(this->m_Colour);
-		this->genAlphaSliderImg();
-		this->genSquareImg();
-		this->update();
+		this->setColour(QColor::fromHsv(value, this->m_Colour.hsvSaturation(), this->m_Colour.value(), this->m_Colour.alpha()));
 	});
 	connect(m_AlphaSlider, &ColourSlider::valueChanged, this, [this](int value) {
-		this->m_Colour.setAlpha(value);
-		emit colourChanged(this->m_Colour);
+		QColor newCol = QColor(m_Colour);
+		newCol.setAlpha(value);
+		this->setColour(newCol);
+	});
+	connect(m_HexEntry, &QLineEdit::editingFinished, this, [this]() {
+		this->setColour(QColor::fromString(QString("#").append(m_HexEntry->text())));
 	});
 
 	QGridLayout* layout = new QGridLayout();
@@ -66,20 +76,65 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	layout->addWidget(m_HueSlider, 0, 1);
 	layout->addWidget(m_AlphaSlider, 1, 0);
 
+	QHBoxLayout* horBox = new QHBoxLayout();
+	horBox->addWidget(hash);
+	horBox->addWidget(m_HexEntry);
+
+	layout->addLayout(horBox, 2, 0);
+
 	this->setLayout(layout);
 }
 
 ColourSelector::~ColourSelector() {
+	m_HexEntryValidator->deleteLater();
+	delete m_SquareImg;
+	delete m_AlphaSliderImg;
+	delete m_HueSliderImg;
 }
 
 void ColourSelector::setColour(const QColor& colour) {
-	m_SquareSlider->setValue(QVariant(QPoint(colour.hsvSaturation(), 255 - colour.value())));
-	m_HueSlider->setValue(colour.hue());
-	m_AlphaSlider->setValue(colour.alpha());
+	bool hueDiff = colour.hue() != m_Colour.hue();
+	bool rgbDiff = colour.rgb() != m_Colour.rgb();
+	bool alphaDiff = colour.alpha() != m_Colour.alpha();
+	bool satDiff = colour.hsvSaturation() != m_Colour.hsvSaturation();
+	bool valDiff = colour.value() != m_Colour.value();
+	emit colourChanged(colour);
+	this->m_Colour = colour;
+
+	updateImages(hueDiff, false, rgbDiff);
+	this->updateUi(satDiff || valDiff, hueDiff, alphaDiff, rgbDiff || alphaDiff);
+	this->update();
 }
 
 QSize ColourSelector::sizeHint() const {
-	return QSize(240, 240);
+	return QSize(280, 280);
+}
+
+void ColourSelector::updateImages(bool regenSquareSliderImg, bool regenPrimarySliderImg, bool regenAlphaSliderImg) {
+	if(regenSquareSliderImg) {
+		this->genSquareImg();
+	}
+	if(regenPrimarySliderImg) {
+		this->genHueSliderImg();
+	}
+	if(regenAlphaSliderImg) {
+		this->genAlphaSliderImg();
+	}
+}
+
+void ColourSelector::updateUi(bool updateSquareSlider, bool updatePrimarySlider, bool updateAlphaSlider, bool updateHex) {
+	if(updateSquareSlider) {
+		m_SquareSlider->setValue(QVariant(QPoint(m_Colour.hsvSaturation(), 255 - m_Colour.value())));
+	}
+	if(updatePrimarySlider) {
+		m_HueSlider->setValue(m_Colour.hue());
+	}
+	if(updateAlphaSlider) {
+		m_AlphaSlider->setValue(m_Colour.alpha());
+	}
+	if(updateHex) {
+		m_HexEntry->setText(m_Colour.name(QColor::NameFormat::HexArgb).sliced(1).toLower());
+	}
 }
 
 // TODO: These image gen functions are very specific and not very optimised (mainly the hue slider image since it will not be making good use of prefetching/cache)

@@ -141,6 +141,11 @@ QToolTip {
 	padding: 0px 2px 0px 2px;
 }
 
+QLineEdit {
+	padding: 2px 4px 2px 4px;
+	border-radius: 2px;
+}
+
 #floating {
 	background: palette(window);
 	border-radius: 8px;
