@@ -146,6 +146,12 @@ QLineEdit {
 	border-radius: 2px;
 }
 
+QDockWidget::title {
+	background-color: palette(base);
+}
+
+/* TODO: Fix the styling of the tab bar for stacked QDockWidgets */
+
 #floating {
 	background: palette(window);
 	border-radius: 8px;
