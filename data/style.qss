@@ -8,11 +8,35 @@ QToolButton:checked {
 	background: palette(light);
 }
 
+/* TODO: Fix styling of QTabBar - there is a 2px black & grey line that appears at the bottom of :top tab bars */
+
+/* QTabBar {
+	border: 3px solid red;
+} */
+
 QTabBar::tab {
 	background: palette(button);
+	padding: 4px;
+}
+
+QTabBar::tab:top {
 	border-top-left-radius: 2px;
 	border-top-right-radius: 2px;
-	padding: 4px;
+}
+
+QTabBar::tab:left {
+	border-top-left-radius: 2px;
+	border-bottom-left-radius: 2px;
+}
+
+QTabBar::tab:bottom {
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+}
+
+QTabBar::tab:right {
+	border-top-right-radius: 2px;
+	border-bottom-right-radius: 2px;
 }
 
 QTabBar::tab:selected {
@@ -149,8 +173,6 @@ QLineEdit {
 QDockWidget::title {
 	background-color: palette(base);
 }
-
-/* TODO: Fix the styling of the tab bar for stacked QDockWidgets */
 
 #floating {
 	background: palette(window);
