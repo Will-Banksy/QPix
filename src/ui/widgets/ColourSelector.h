@@ -3,6 +3,14 @@
 
 #include <QWidget>
 
+// NOTE: A little about using CIELCh and colour management in general - It'd be quite ideal I think, to be able to pick colours in LCh and have proper colour management
+//
+//       So my current understanding is that I would have a working colour space that would correspond to the image's colour space,
+//       and I'd pick colours in CIELCh/CIELAB and those would immediately be translated using an ICC colour profile to the working
+//       colour space - that is, I'd store the currently selected colour as RGB, in the working colour space - the same as the image.
+//       Now where does the display's colour space come in to it? I'm not sure - I think that Qt might render taking this into account,
+//       as long as we supply the right colour space information, but I'm not sure
+
 enum class ColourSelectionModel {
 	Hsv,
 };
@@ -32,11 +40,11 @@ private:
 	QColor m_Colour;
 
 	QImage* m_SquareImg;
-	QImage* m_HueSliderImg;
+	QImage* m_PrimarySliderImg;
 	QImage* m_AlphaSliderImg;
 
 	ColourBoxSlider* m_SquareSlider;
-	ColourSlider* m_HueSlider;
+	ColourSlider* m_PrimarySlider;
 	ColourSlider* m_AlphaSlider;
 	QLineEdit* m_HexEntry;
 	QValidator* m_HexEntryValidator;
@@ -44,7 +52,7 @@ private:
 	void updateImages(bool regenSquareSliderImg, bool regenPrimarySliderImg, bool regenAlphaSliderImg);
 	void updateUi(bool updateSquareSlider, bool updatePrimarySlider, bool updateAlphaSlider, bool updateHex);
 	void genSquareImg();
-	void genHueSliderImg();
+	void genPrimarySliderImg();
 	void genAlphaSliderImg();
 };
 

@@ -6,10 +6,11 @@
 const int DEFAULT_CANVAS_WIDTH = 32;
 const int DEFAULT_CANVAS_HEIGHT = 32;
 
+// TODO: Maybe these should be changeable at runtime, in a config with other settings that can be reloaded...? Some people might not like the power of 2 based zoom factors, I need to consider... or is that likely to be the case?
 const int NUM_ZOOM_FACTORS = 23;
 const int DEFAULT_ZOOM_FACTOR_IDX = 8;
 const float ZOOM_FACTORS[NUM_ZOOM_FACTORS] = {
-	0.01, 0.02, 0.04, 0.08, 0.16, 0.32, 0.5, 0.75,
+	0.01, 0.015625, 0.03125, 0.0625, 0.125, 0.25, 0.5, 0.75,
 	1.0,
 	1.5, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 12.0, 16.0, 24.0, 32.0, 48.0, 64.0
 };
@@ -78,7 +79,7 @@ private:
 	/// The current drawable surface (// TODO: Decide what exactly to do for multi-layer support
 	/// - Current thinking is to simply have a list of surfaces and this stays as the "current drawable surface")
 	QImage* m_Surface;
-	/// For displaying action previews
+	/// For displaying action previews (currently unused I think)
 	QImage* m_Overlay;
 	/// Buffer on top of surface - the actual stored content
 	QImage* m_Buffer;

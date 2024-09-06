@@ -37,7 +37,7 @@ void PencilTool::onDrag(QImage& surface, QPoint pt, Qt::MouseButton button, Tool
 					bytes[linePt.x() + linePt.y() * surface.width()] = colour;
 				}
 			}
-			if(state == ToolDragState::Drag) {
+			if(state == ToolDragState::Drag) { // This block is run when state is Release as well, so need this check
 				m_CurrentStroke.append(line);
 			} else {
 				m_CurrentStroke.clear();

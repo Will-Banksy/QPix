@@ -14,7 +14,7 @@ const int SLIDER_WIDTH = 32;
 ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent),
 	m_Colour(colour),
 	m_SquareImg(new QImage(255, 255, QImage::Format_ARGB32)),
-	m_HueSliderImg(new QImage(SLIDER_WIDTH, 360, QImage::Format_ARGB32)),
+	m_PrimarySliderImg(new QImage(SLIDER_WIDTH, 360, QImage::Format_ARGB32)),
 	m_AlphaSliderImg(new QImage(255, SLIDER_WIDTH, QImage::Format_ARGB32)),
 	m_HexEntry(new QLineEdit()) {
 
@@ -31,10 +31,10 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	m_SquareSlider->setMaximum(QVariant(QPoint(255, 255)));
 	m_SquareSlider->setValue(QVariant(QPoint(m_Colour.hsvSaturation(), m_Colour.value())));
 
-	m_HueSlider = new ColourSlider(m_HueSliderImg, Qt::Orientation::Vertical);
-	m_HueSlider->setMinimum(0);
-	m_HueSlider->setMaximum(359); // NOTE: Since this is maxing out at 359, not 360, does this affect anything else?
-	m_HueSlider->setValue(colour.hue());
+	m_PrimarySlider = new ColourSlider(m_PrimarySliderImg, Qt::Orientation::Vertical);
+	m_PrimarySlider->setMinimum(0);
+	m_PrimarySlider->setMaximum(359); // NOTE: Since this is maxing out at 359, not 360, does this affect anything else? Also with different colour models, this may have different ranges
+	m_PrimarySlider->setValue(colour.hue());
 
 	m_AlphaSlider = new ColourSlider(m_AlphaSliderImg, Qt::Orientation::Horizontal);
 	m_AlphaSlider->setMinimum(0);
@@ -57,7 +57,7 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 		QPoint pt = value.toPoint();
 		this->setColour(QColor::fromHsv(qMax(this->m_Colour.hue(), 0), pt.x(), 255 - pt.y(), this->m_Colour.alpha()));
 	});
-	connect(m_HueSlider, &ColourSlider::valueChanged, this, [this](int value) {
+	connect(m_PrimarySlider, &ColourSlider::valueChanged, this, [this](int value) {
 		this->setColour(QColor::fromHsv(value, this->m_Colour.hsvSaturation(), this->m_Colour.value(), this->m_Colour.alpha()));
 	});
 	connect(m_AlphaSlider, &ColourSlider::valueChanged, this, [this](int value) {
@@ -73,7 +73,7 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	layout->setSpacing(8);
 
 	layout->addWidget(m_SquareSlider, 0, 0);
-	layout->addWidget(m_HueSlider, 0, 1);
+	layout->addWidget(m_PrimarySlider, 0, 1);
 	layout->addWidget(m_AlphaSlider, 1, 0);
 
 	QHBoxLayout* horBox = new QHBoxLayout();
@@ -89,7 +89,7 @@ ColourSelector::~ColourSelector() {
 	m_HexEntryValidator->deleteLater();
 	delete m_SquareImg;
 	delete m_AlphaSliderImg;
-	delete m_HueSliderImg;
+	delete m_PrimarySliderImg;
 }
 
 void ColourSelector::setColour(const QColor& colour) {
@@ -115,7 +115,7 @@ void ColourSelector::updateImages(bool regenSquareSliderImg, bool regenPrimarySl
 		this->genSquareImg();
 	}
 	if(regenPrimarySliderImg) {
-		this->genHueSliderImg();
+		this->genPrimarySliderImg();
 	}
 	if(regenAlphaSliderImg) {
 		this->genAlphaSliderImg();
@@ -127,7 +127,7 @@ void ColourSelector::updateUi(bool updateSquareSlider, bool updatePrimarySlider,
 		m_SquareSlider->setValue(QVariant(QPoint(m_Colour.hsvSaturation(), 255 - m_Colour.value())));
 	}
 	if(updatePrimarySlider) {
-		m_HueSlider->setValue(m_Colour.hue());
+		m_PrimarySlider->setValue(m_Colour.hue());
 	}
 	if(updateAlphaSlider) {
 		m_AlphaSlider->setValue(m_Colour.alpha());
@@ -154,13 +154,13 @@ void ColourSelector::genSquareImg() {
 	}
 }
 
-void ColourSelector::genHueSliderImg() {
-	QRgb* pixels = (QRgb*)m_HueSliderImg->scanLine(0);
+void ColourSelector::genPrimarySliderImg() {
+	QRgb* pixels = (QRgb*)m_PrimarySliderImg->scanLine(0);
 
-	for(int j = 0; j < m_HueSliderImg->height(); j++) {
+	for(int j = 0; j < m_PrimarySliderImg->height(); j++) {
 		QColor col = QColor::fromHsv(j, 255, 255, 255);
-		for(int i = 0; i < m_HueSliderImg->width(); i++) {
-			pixels[i + j * m_HueSliderImg->width()] = col.rgba();
+		for(int i = 0; i < m_PrimarySliderImg->width(); i++) {
+			pixels[i + j * m_PrimarySliderImg->width()] = col.rgba();
 		}
 	}
 }
