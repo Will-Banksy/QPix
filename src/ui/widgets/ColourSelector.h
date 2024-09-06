@@ -10,9 +10,22 @@
 //       colour space - that is, I'd store the currently selected colour as RGB, in the working colour space - the same as the image.
 //       Now where does the display's colour space come in to it? I'm not sure - I think that Qt might render taking this into account,
 //       as long as we supply the right colour space information, but I'm not sure
+//
+// Some links:
+//     - Accurate (?) colour conversion: https://colorizer.org/
+//     - Wikipedia article of CIELAB, including colour conversion: https://en.wikipedia.org/wiki/CIELAB_color_space
+//     - Wikipedia article of sRGB, including colour conversion: https://en.wikipedia.org/wiki/SRGB
 
-enum class ColourSelectionModel {
+enum class ColourSelectionModel { // These are all the colour models I'd like to support picking colours from - But first of course I need to figure out colour management
 	Hsv,
+	Rgb,
+	Cmyk,
+	// specific versions of these?
+	CieLch,
+	CieLab,
+	CieXyz,
+	// Maybe other colour models like OkLch too
+	// Or maybe I should be calling these colour spaces, and colour models are just Hsv, Rgb, Cmyk, Lch, Lab, Xyz, etc. and specifics are left to the colour space
 };
 
 class QLineEdit;
