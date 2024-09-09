@@ -11,6 +11,10 @@ ColourBoxSlider::ColourBoxSlider(QImage* bgImg, QWidget* parent) : AbstractVaria
 ColourBoxSlider::~ColourBoxSlider() {
 }
 
+// QSize ColourBoxSlider::sizeHintPublic() const {
+// 	return sizeHint();
+// }
+
 bool ColourBoxSlider::validateValue(QVariant& value) {
 	// At the point of this function being called, I *think* that we should be good to just call .toPoint()
 
@@ -62,6 +66,12 @@ void ColourBoxSlider::mousePressEvent(QMouseEvent* event) {
 
 void ColourBoxSlider::mouseMoveEvent(QMouseEvent* event) {
 	setFromClick(event->pos());
+}
+
+QSize ColourBoxSlider::sizeHint() const {
+	QPoint min = this->minimum().toPoint();
+	QPoint max = this->maximum().toPoint();
+	return QSize((max.x() - min.x()) + 4, (max.y() - min.y()) + 4);
 }
 
 void ColourBoxSlider::setFromClick(const QPoint& mousePos) {

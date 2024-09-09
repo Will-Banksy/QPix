@@ -16,10 +16,17 @@
 //     - Wikipedia article of CIELAB, including colour conversion: https://en.wikipedia.org/wiki/CIELAB_color_space
 //     - Wikipedia article of sRGB, including colour conversion: https://en.wikipedia.org/wiki/SRGB
 
-enum class ColourSelectionModel { // These are all the colour models I'd like to support picking colours from - But first of course I need to figure out colour management
+class QLineEdit;
+class ColourSlider;
+class ColourBoxSlider;
+class QValidator;
+struct SliderInfo;
+
+enum class ColourSelectionModel { // These are all the colour models I'd like to support picking colours from
 	Hsv,
+	Hsl,
 	Rgb,
-	Cmyk,
+	Cmy,
 	// specific versions of these?
 	CieLch,
 	CieLab,
@@ -27,11 +34,6 @@ enum class ColourSelectionModel { // These are all the colour models I'd like to
 	// Maybe other colour models like OkLch too
 	// Or maybe I should be calling these colour spaces, and colour models are just Hsv, Rgb, Cmyk, Lch, Lab, Xyz, etc. and specifics are left to the colour space
 };
-
-class QLineEdit;
-class ColourSlider;
-class ColourBoxSlider;
-class QValidator;
 
 class ColourSelector : public QWidget {
 	Q_OBJECT
@@ -42,15 +44,19 @@ public:
 
 public slots:
 	void setColour(const QColor& colour);
+	void setColourSelectionModel(ColourSelectionModel model);
 
 signals:
 	void colourChanged(const QColor& colour);
+	void colourSelectionModelChanged(ColourSelectionModel model);
 
 protected:
-	QSize sizeHint() const override;
+	// QSize sizeHint() const override;
 
 private:
 	QColor m_Colour;
+
+	ColourSelectionModel m_SelectionModel;
 
 	QImage* m_SquareImg;
 	QImage* m_PrimarySliderImg;
@@ -67,6 +73,9 @@ private:
 	void genSquareImg();
 	void genPrimarySliderImg();
 	void genAlphaSliderImg();
+
+	QColor colourFromSliders(const QVariant& squareVal, int primaryVal, int alphaVal) const;
+	SliderInfo slidersFromColour(const QColor& col) const;
 };
 
 #endif // COLOURSELECTOR_H

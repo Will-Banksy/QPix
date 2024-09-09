@@ -72,6 +72,17 @@ void ColourSlider::mouseMoveEvent(QMouseEvent* event) {
 	this->setFromClick(event->pos());
 }
 
+QSize ColourSlider::sizeHint() const {
+	switch(this->orientation()) {
+		case Qt::Orientation::Horizontal: {
+			return QSize(this->maximum() - this->minimum(), 20);
+		}
+		case Qt::Orientation::Vertical: {
+			return QSize(20, this->maximum() - this->minimum());
+		}
+	}
+}
+
 void ColourSlider::setFromClick(const QPoint& mousePos) {
 	int value = 0;
 	bool value_set = false;
