@@ -46,14 +46,8 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	//               Probably do some research as to what that would require - would I need to take into account display colour calibration, etc?
 
 	m_SquareSlider = new ColourBoxSlider(m_SquareImg);
-	// m_SquareSlider->setMinimum(QVariant(QPoint(0, 0)));
-	// m_SquareSlider->setMaximum(QVariant(QPoint(255, 255)));
-	// m_SquareSlider->setValue(QVariant(QPoint(m_Colour.hsvSaturation(), 255 - m_Colour.value())));
 
 	m_PrimarySlider = new ColourSlider(m_PrimarySliderImg, Qt::Orientation::Vertical);
-	// m_PrimarySlider->setMinimum(0);
-	// m_PrimarySlider->setMaximum(359); // NOTE: Since this is maxing out at 359, not 360, does this affect anything else? Also with different colour models, this may have different ranges
-	// m_PrimarySlider->setValue(colour.hue());
 
 	m_AlphaSlider = new ColourSlider(m_AlphaSliderImg, Qt::Orientation::Horizontal);
 	m_AlphaSlider->setMinimum(0);
@@ -156,9 +150,9 @@ void ColourSelector::setColour(const QColor& colour) {
 
 	// updateImages(hueDiff, false, rgbDiff);
 	// this->updateUi(satDiff || valDiff, hueDiff, alphaDiff, rgbDiff || alphaDiff);
-	updateImages(rgbaDiff, rgbaDiff, rgbaDiff);
 	if(rgbaDiff) {
-		this->updateUi(rgbaDiff, rgbaDiff, alphaDiff, true);
+		updateImages(true, true, true);
+		this->updateUi(true, true, true, true);
 	}
 	this->update();
 }
@@ -296,23 +290,23 @@ QColor ColourSelector::colourFromSliders(const QVariant& squareVal, int primaryV
 	assert(false);
 }
 
-SliderInfo ColourSelector::slidersFromColour(const QColor& col) const {
+SliderInfo ColourSelector::slidersFromColour(const QColor& col) const {  // TODO: Refactor this when we allow changing the primary slider
 	SliderInfo info;
 
 	switch(m_SelectionModel) {
 		case ColourSelectionModel::Hsv: {
 			info = {
-				QVariant(QPoint(m_Colour.hsvSaturation(), m_Colour.value())), // m_SquareVal
-				qMax(m_Colour.hue(), 0), // m_PrimaryVal
-				m_Colour.alpha() // m_AlphaVal
+				.m_SquareVal = QVariant(QPoint(m_Colour.hsvSaturation(), m_Colour.value())),
+				.m_PrimaryVal = qMax(m_Colour.hue(), 0),
+				.m_AlphaVal = m_Colour.alpha()
 			};
 			break;
 		}
 		case ColourSelectionModel::Hsl: {
 			info = {
-				QVariant(QPoint(m_Colour.hslSaturation(), m_Colour.lightness())), // m_SquareVal
-				qMax(m_Colour.hslHue(), 0), // m_PrimaryVal
-				m_Colour.alpha() // m_AlphaVal
+				.m_SquareVal = QVariant(QPoint(m_Colour.hslSaturation(), m_Colour.lightness())),
+				.m_PrimaryVal = qMax(m_Colour.hslHue(), 0),
+				.m_AlphaVal = m_Colour.alpha()
 			};
 			break;
 		}

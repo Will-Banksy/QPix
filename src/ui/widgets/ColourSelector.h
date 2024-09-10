@@ -11,6 +11,8 @@
 //       Now where does the display's colour space come in to it? I'm not sure - I think that Qt might render taking this into account,
 //       as long as we supply the right colour space information, but I'm not sure
 //
+//       For now, I'm going to stick with sRGB, which is what Qt uses by default
+//
 // Some links:
 //     - Accurate (?) colour conversion: https://colorizer.org/
 //     - Wikipedia article of CIELAB, including colour conversion: https://en.wikipedia.org/wiki/CIELAB_color_space
@@ -33,6 +35,17 @@ enum class ColourSelectionModel { // These are all the colour models I'd like to
 	CieXyz,
 	// Maybe other colour models like OkLch too
 	// Or maybe I should be calling these colour spaces, and colour models are just Hsv, Rgb, Cmyk, Lch, Lab, Xyz, etc. and specifics are left to the colour space
+};
+
+/// The arrangement of values across the sliders, where A, B and C represent generic "values" that match the order as defined in
+/// the ColourSelectionModel - i.e. for Hsv, A is hue, B is saturation, and C is value.
+/// The order of A, B and C in this enum corresponds to their associated slider value, in order PXY, where P is the primary slider
+/// value, and X and Y are the coordinates in the square slider.
+/// Arrangements are chosen to work best for HSV/HSL, using the same arrangements as Java Swing's colour selection dialog
+enum class SliderArrangement {
+	Abc,
+	Bac,
+	Cab
 };
 
 class ColourSelector : public QWidget {
