@@ -46,13 +46,16 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	//               Probably do some research as to what that would require - would I need to take into account display colour calibration, etc?
 
 	m_SquareSlider = new ColourBoxSlider(m_SquareImg);
+	m_SquareSlider->setPreferredSize(QSize(255, 255));
 
 	m_PrimarySlider = new ColourSlider(m_PrimarySliderImg, Qt::Orientation::Vertical);
+	m_PrimarySlider->setPreferredLength(255);
 
 	m_AlphaSlider = new ColourSlider(m_AlphaSliderImg, Qt::Orientation::Horizontal);
 	m_AlphaSlider->setMinimum(0);
 	m_AlphaSlider->setMaximum(255);
 	m_AlphaSlider->setValue(colour.alpha());
+	m_AlphaSlider->setPreferredLength(255);
 
 	QLabel* hash = new QLabel("#");
 	hash->setFixedWidth(8);
@@ -67,10 +70,10 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	m_HexEntry->setText(colour.name(QColor::NameFormat::HexArgb).sliced(1).toLower());
 
 	QPushButton* hsvButton = new QPushButton("HSV");
-	hsvButton->setSizePolicy(QSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Fixed));
 
 	QPushButton* hslButton = new QPushButton("HSL");
-	hslButton->setSizePolicy(QSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Fixed));
+
+	QPushButton* rgbButton = new QPushButton("RGB");
 
 	connect(m_SquareSlider, &ColourBoxSlider::valueChanged, this, [this](QVariant value) {
 		// QPoint pt = value.toPoint();
@@ -100,9 +103,12 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	connect(hslButton, &QPushButton::clicked, this, [this](bool checked) {
 		this->setColourSelectionModel(ColourSelectionModel::Hsl);
 	});
+	connect(rgbButton, &QPushButton::clicked, this, [this](bool checked) {
+		this->setColourSelectionModel(ColourSelectionModel::Rgb);
+	});
 
 	this->updateImages(true, true, true);
-	this->setColourSelectionModel(ColourSelectionModel::Hsv);
+	this->setColourSelectionModel(ColourSelectionModel::Rgb);
 
 	QGridLayout* layout = new QGridLayout();
 	layout->setSpacing(8);
@@ -110,6 +116,7 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	QHBoxLayout* modelSelBox = new QHBoxLayout();
 	modelSelBox->addWidget(hsvButton);
 	modelSelBox->addWidget(hslButton);
+	modelSelBox->addWidget(rgbButton);
 
 	layout->addLayout(modelSelBox, 0, 0, 1, 0);
 	layout->addWidget(m_SquareSlider, 1, 0);
@@ -168,13 +175,20 @@ void ColourSelector::setColourSelectionModel(ColourSelectionModel model) {
 			m_PrimarySlider->setMaximum(359); // NOTE: Since this is maxing out at 359, not 360, does this affect anything else?
 
 			m_SquareSlider->setMinimum(QVariant(QPoint(0, 0)));
-			// NOTE: For HSL, some colours cannot be properly represented (such as pure red) due to the limited granularity of the lightness scale, so this might require custom calculations - I'll need colour conversion functions anyway
 			m_SquareSlider->setMaximum(QVariant(QPoint(255, 255)));
 			break;
+		}
+		case ColourSelectionModel::Rgb: {
+			m_PrimarySlider->setMinimum(0);
+			m_PrimarySlider->setMaximum(255);
+
+			m_SquareSlider->setMinimum(QVariant(QPoint(0, 0)));
+			m_SquareSlider->setMaximum(QVariant(QPoint(255, 255)));
 		}
 	}
 	this->updateImages(true, true, false);
 	this->updateUi(true, true, false, false);
+
 	this->update();
 }
 
@@ -278,11 +292,22 @@ QColor ColourSelector::colourFromSliders(const QVariant& squareVal, int primaryV
 
 			QColor col = QColor::fromHsl(hue, sat, lig, alphaVal);
 
-			// std::cout << std::dec << "hue: " << col.hue() << ", hslHue: " << col.hslHue() << std::endl;
-
 			assert(hue == qMax(col.hslHue(), 0));
 			assert(sat == col.hslSaturation());
 			assert(lig == col.lightness());
+
+			return col;
+		}
+		case ColourSelectionModel::Rgb: {
+			int red = primaryVal;
+			int green = squarePt.x();
+			int blue = squarePt.y();
+
+			QColor col = QColor(red, green, blue, alphaVal);
+
+			assert(red == col.red());
+			assert(green == col.green());
+			assert(blue == col.blue());
 
 			return col;
 		}
@@ -306,6 +331,14 @@ SliderInfo ColourSelector::slidersFromColour(const QColor& col) const {  // TODO
 			info = {
 				.m_SquareVal = QVariant(QPoint(m_Colour.hslSaturation(), m_Colour.lightness())),
 				.m_PrimaryVal = qMax(m_Colour.hslHue(), 0),
+				.m_AlphaVal = m_Colour.alpha()
+			};
+			break;
+		}
+		case ColourSelectionModel::Rgb: {
+			info = {
+				.m_SquareVal = QVariant(QPoint(m_Colour.green(), m_Colour.blue())),
+				.m_PrimaryVal = qMax(m_Colour.red(), 0),
 				.m_AlphaVal = m_Colour.alpha()
 			};
 			break;

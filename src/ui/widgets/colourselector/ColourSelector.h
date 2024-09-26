@@ -24,6 +24,7 @@ class ColourBoxSlider;
 class QValidator;
 struct SliderInfo;
 
+/// The colour model used for selecting a colour - E.g. HSV, HSL, RGB
 enum class ColourSelectionModel { // These are all the colour models I'd like to support picking colours from
 	Hsv,
 	Hsl,

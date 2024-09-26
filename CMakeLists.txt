@@ -39,9 +39,10 @@ set(SOURCES_CPP
 
 
 	src/ui/widgets/ColourButton.cpp
-	src/ui/widgets/ColourSelector.cpp
-	src/ui/widgets/ColourSlider.cpp
-	src/ui/widgets/ColourBoxSlider.cpp
+
+	src/ui/widgets/colourselector/ColourSelector.cpp
+	src/ui/widgets/colourselector/ColourSlider.cpp
+	src/ui/widgets/colourselector/ColourBoxSlider.cpp
 
 	src/ui/widgets/abstract/AbstractVariantSlider.cpp
 
@@ -84,9 +85,10 @@ set(SOURCES_H
 
 
 	src/ui/widgets/ColourButton.h
-	src/ui/widgets/ColourSelector.h
-	src/ui/widgets/ColourSlider.h
-	src/ui/widgets/ColourBoxSlider.h
+
+	src/ui/widgets/colourselector/ColourSelector.h
+	src/ui/widgets/colourselector/ColourSlider.h
+	src/ui/widgets/colourselector/ColourBoxSlider.h
 
 	src/ui/widgets/abstract/AbstractVariantSlider.h
 

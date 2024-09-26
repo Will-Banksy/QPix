@@ -3,7 +3,7 @@
 #include "utils/Utils.h"
 #include "model/AppModel.h"
 #include <QKeyEvent>
-#include "ui/widgets/ColourSelector.h"
+#include "ui/widgets/colourselector/ColourSelector.h"
 
 FloatingModalView::FloatingModalView(QWidget* parent, AppModel* model) : QWidget(parent), m_Model(model), m_ColourSelector(new ColourSelector(QColorConstants::Black)), m_ColourSelectConnection(nullptr) {
 	this->setVisible(false);

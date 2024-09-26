@@ -7,7 +7,7 @@
 
 QPixmap* ColourSlider::s_TransparentBackground = nullptr;
 
-ColourSlider::ColourSlider(QImage* bgImg, Qt::Orientation orientation, QWidget* parent) : QAbstractSlider(parent), m_BgImg(bgImg) {
+ColourSlider::ColourSlider(QImage* bgImg, Qt::Orientation orientation, QWidget* parent) : QAbstractSlider(parent), m_BgImg(bgImg), m_PrefLength(COLSLIDER_DEFAULT_LENGTH) {
 	if(!s_TransparentBackground) {
 		s_TransparentBackground = new QPixmap(":/data/canvas_bg_dark.png");
 	}
@@ -27,6 +27,10 @@ ColourSlider::ColourSlider(QImage* bgImg, Qt::Orientation orientation, QWidget* 
 }
 
 ColourSlider::~ColourSlider() {
+}
+
+void ColourSlider::setPreferredLength(int length) {
+	m_PrefLength = length;
 }
 
 void ColourSlider::paintEvent(QPaintEvent* event) {
@@ -75,12 +79,13 @@ void ColourSlider::mouseMoveEvent(QMouseEvent* event) {
 QSize ColourSlider::sizeHint() const {
 	switch(this->orientation()) {
 		case Qt::Orientation::Horizontal: {
-			return QSize(this->maximum() - this->minimum(), 20);
+			return QSize(m_PrefLength + 4, 20);
 		}
 		case Qt::Orientation::Vertical: {
-			return QSize(20, this->maximum() - this->minimum());
+			return QSize(20, m_PrefLength + 4);
 		}
 	}
+	assert(false);
 }
 
 void ColourSlider::setFromClick(const QPoint& mousePos) {
