@@ -41,10 +41,6 @@ public:
 //
 // TODO: Investigate how my code rounds colours
 
-// ==================================================================================================================================================
-// FIXME: The colour changes sometimes when switching between colour models!! Most noticeably with HSL->RGB cause like it changes quite significantly
-// ==================================================================================================================================================
-
 ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent),
 	m_Colour(colour),
 	m_SelectionModel(ColourSelectionModel::Hsv),
@@ -292,15 +288,7 @@ ColourSelector::~ColourSelector() {
 	m_SelectionModelActions->deleteLater();
 }
 
-// TODO: Update to work with different models - there may always be a risk of infinite recursion here, as it relies on colours being 1:1 between different colour models
-//       Although... Is what I have currently sufficient maybe?
 void ColourSelector::setColour(const QColor& colour) {
-	// bool hueDiff = colour.hue() != m_Colour.hue();
-	// bool rgbDiff = colour.rgb() != m_Colour.rgb();
-	// bool alphaDiff = colour.alpha() != m_Colour.alpha();
-	// bool satDiff = colour.hsvSaturation() != m_Colour.hsvSaturation();
-	// bool valDiff = colour.value() != m_Colour.value();
-
 	bool alphaDiff = colour.alpha() != m_Colour.alpha();
 	bool rgbaDiff = (colour.rgba() != m_Colour.rgba()) || (colour.hue() != m_Colour.hue());
 
@@ -312,12 +300,10 @@ void ColourSelector::setColour(const QColor& colour) {
 	emit colourChanged(colour);
 	this->m_Colour = colour;
 
-	// updateImages(hueDiff, false, rgbDiff);
-	// this->updateUi(satDiff || valDiff, hueDiff, alphaDiff, rgbDiff || alphaDiff);
-	// if(rgbaDiff) {
-		updateImages(primaryDiff, squareDiff, true);
-		this->updateUi(squareDiff, primaryDiff, alphaDiff, rgbaDiff);
-	// }
+	updateImages(primaryDiff, squareDiff, true);
+	this->enableEventLock();
+	this->updateUi(squareDiff, primaryDiff, alphaDiff, rgbaDiff);
+	this->disableEventLock();
 	this->update();
 }
 
@@ -368,9 +354,9 @@ void ColourSelector::setColourSelectionModel(ColourSelectionModel model) {
 		}
 	}
 
+	this->enableEventLock(); // Need to capture the updateUiBounds in this event lock as this *can* issue a setValue if the current value is outwith the new bounds
 	this->updateUiBounds();
 	this->updateImages(true, true, false);
-	this->enableEventLock();
 	this->updateUi(true, true, false, false);
 	this->disableEventLock();
 	this->update();
@@ -395,9 +381,9 @@ void ColourSelector::setSliderArrangement(SliderArrangement arrangement) {
 		}
 	}
 
+	this->enableEventLock(); // Need to capture the updateUiBounds in this event lock as this *can* issue a setValue if the current value is outwith the new bounds
 	this->updateUiBounds();
 	this->updateImages(true, true, false);
-	this->enableEventLock();
 	this->updateUi(true, true, false, false);
 	this->disableEventLock();
 	this->update();
