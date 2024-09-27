@@ -12,6 +12,9 @@
 #include "utils/Utils.h"
 #include <iostream>
 #include <QSpinBox>
+#include <QAction>
+#include <QActionGroup>
+#include <QToolButton>
 
 const int SLIDER_WIDTH = 32;
 
@@ -97,53 +100,96 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	});
 	connect(m_HexEntry, &QLineEdit::editingFinished, this, [this]() {
 		this->enableEventLock();
-		// // Set the colour selection model temporarily to RGB so that calculations are done in RGB space rather than
-		// // the space of the colour model, which may not be able to represent the entered colour, leading to errors
-		// ColourSelectionModel selModel = this->m_SelectionModel;
-		// this->m_SelectionModel = ColourSelectionModel::Rgb;
 		this->setColour(QColor::fromString(QString("#").append(m_HexEntry->text())));
-		// this->m_SelectionModel = selModel;
-		// // But, then, we have to update the UI again
 		this->disableEventLock();
 	});
 
 	// Colour model switch buttons
-	QPushButton* hsvButton = new QPushButton("HSV");
-	QPushButton* hslButton = new QPushButton("HSL");
-	QPushButton* rgbButton = new QPushButton("RGB");
-	QPushButton* cmyButton = new QPushButton("CMY");
+	m_SelectionModelActions = new QActionGroup(nullptr);
+	m_SelectionModelActions->setExclusive(true);
 
-	connect(hsvButton, &QPushButton::clicked, this, [this](bool checked) {
-		this->setColourSelectionModel(ColourSelectionModel::Hsv);
+	m_HsvAction = new QAction("HSV", m_SelectionModelActions);
+	m_HsvAction->setCheckable(true);
+	QToolButton* hsvButton = new QToolButton();
+	hsvButton->setDefaultAction(m_HsvAction);
+	hsvButton->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+
+	m_HslAction = new QAction("HSL", m_SelectionModelActions);
+	m_HslAction->setCheckable(true);
+	QToolButton* hslButton = new QToolButton();
+	hslButton->setDefaultAction(m_HslAction);
+	hslButton->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+
+	m_RgbAction = new QAction("RGB", m_SelectionModelActions);
+	m_RgbAction->setCheckable(true);
+	QToolButton* rgbButton = new QToolButton();
+	rgbButton->setDefaultAction(m_RgbAction);
+	rgbButton->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+
+	m_CmyAction = new QAction("CMY", m_SelectionModelActions);
+	m_CmyAction->setCheckable(true);
+	QToolButton* cmyButton = new QToolButton();
+	cmyButton->setDefaultAction(m_CmyAction);
+	cmyButton->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+
+
+	connect(m_HsvAction, &QAction::toggled, this, [this](bool checked) {
+		if(checked) {
+			this->setColourSelectionModel(ColourSelectionModel::Hsv);
+		}
 	});
-	connect(hslButton, &QPushButton::clicked, this, [this](bool checked) {
-		this->setColourSelectionModel(ColourSelectionModel::Hsl);
+	connect(m_HslAction, &QAction::toggled, this, [this](bool checked) {
+		if(checked) {
+			this->setColourSelectionModel(ColourSelectionModel::Hsl);
+		}
 	});
-	connect(rgbButton, &QPushButton::clicked, this, [this](bool checked) {
-		this->setColourSelectionModel(ColourSelectionModel::Rgb);
+	connect(m_RgbAction, &QAction::toggled, this, [this](bool checked) {
+		if(checked) {
+			this->setColourSelectionModel(ColourSelectionModel::Rgb);
+		}
 	});
-	connect(cmyButton, &QPushButton::clicked, this, [this](bool checked) {
-		this->setColourSelectionModel(ColourSelectionModel::Cmy);
+	connect(m_CmyAction, &QAction::toggled, this, [this](bool checked) {
+		if(checked) {
+			this->setColourSelectionModel(ColourSelectionModel::Cmy);
+		}
 	});
 
-	// Slider arrangement switch buttons (the text will not stay)
-	m_AbcButton = new QPushButton("ABC");
-	m_AbcButton->setFixedWidth(80);
+	// Slider arrangement switch actions/buttons (the text will not stay)
+	m_ArrangementActions = new QActionGroup(nullptr);
+	m_ArrangementActions->setExclusive(true);
 
-	m_BacButton = new QPushButton("BAC");
-	m_BacButton->setFixedWidth(80);
+	m_AbcAction = new QAction("ABC", m_ArrangementActions);
+	m_AbcAction->setCheckable(true);
+	QToolButton* abcButton = new QToolButton();
+	abcButton->setDefaultAction(m_AbcAction);
+	abcButton->setFixedWidth(80);
 
-	m_CabButton = new QPushButton("CAB");
-	m_CabButton->setFixedWidth(80);
+	m_BacAction = new QAction("BAC", m_ArrangementActions);
+	m_BacAction->setCheckable(true);
+	QToolButton* bacButton = new QToolButton();
+	bacButton->setDefaultAction(m_BacAction);
+	bacButton->setFixedWidth(80);
 
-	connect(m_AbcButton, &QPushButton::clicked, this, [this](bool checked) {
-		this->setSliderArrangement(SliderArrangement::Abc);
+	m_CabAction = new QAction("CAB", m_ArrangementActions);
+	m_CabAction->setCheckable(true);
+	QToolButton* cabButton = new QToolButton();
+	cabButton->setDefaultAction(m_CabAction);
+	cabButton->setFixedWidth(80);
+
+	connect(m_AbcAction, &QAction::toggled, this, [this](bool checked) {
+		if(checked) {
+			this->setSliderArrangement(SliderArrangement::Abc);
+		}
 	});
-	connect(m_BacButton, &QPushButton::clicked, this, [this](bool checked) {
-		this->setSliderArrangement(SliderArrangement::Bac);
+	connect(m_BacAction, &QAction::toggled, this, [this](bool checked) {
+		if(checked) {
+			this->setSliderArrangement(SliderArrangement::Bac);
+		}
 	});
-	connect(m_CabButton, &QPushButton::clicked, this, [this](bool checked) {
-		this->setSliderArrangement(SliderArrangement::Cab);
+	connect(m_CabAction, &QAction::toggled, this, [this](bool checked) {
+		if(checked) {
+			this->setSliderArrangement(SliderArrangement::Cab);
+		}
 	});
 
 	m_SpinA = new QSpinBox();
@@ -185,6 +231,7 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 
 	this->updateImages(true, true, true);
 	this->setColourSelectionModel(ColourSelectionModel::Rgb);
+	this->setSliderArrangement(SliderArrangement::Abc);
 
 	QGridLayout* layout = new QGridLayout();
 	layout->setSpacing(8);
@@ -196,23 +243,19 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	modelSelBox->addWidget(cmyButton);
 
 	QHBoxLayout* rowA = new QHBoxLayout();
-	rowA->addWidget(m_AbcButton);
-	rowA->addSpacing(4);
+	rowA->addWidget(abcButton);
 	rowA->addWidget(m_SpinA);
 
 	QHBoxLayout* rowB = new QHBoxLayout();
-	rowB->addWidget(m_BacButton);
-	rowB->addSpacing(4);
+	rowB->addWidget(bacButton);
 	rowB->addWidget(m_SpinB);
 
 	QHBoxLayout* rowC = new QHBoxLayout();
-	rowC->addWidget(m_CabButton);
-	rowC->addSpacing(4);
+	rowC->addWidget(cabButton);
 	rowC->addWidget(m_SpinC);
 
 	QHBoxLayout* rowAlpha = new QHBoxLayout();
 	rowAlpha->addWidget(new QLabel("Alpha"));
-	rowAlpha->addSpacing(4);
 	rowAlpha->addWidget(m_SpinAlpha);
 
 	QVBoxLayout* modelEditorBox = new QVBoxLayout();
@@ -241,6 +284,8 @@ ColourSelector::~ColourSelector() {
 	delete m_SquareImg;
 	delete m_AlphaSliderImg;
 	delete m_PrimarySliderImg;
+	m_ArrangementActions->deleteLater();
+	m_SelectionModelActions->deleteLater();
 }
 
 // TODO: Update to work with different models - there may always be a risk of infinite recursion here, as it relies on colours being 1:1 between different colour models
@@ -286,27 +331,35 @@ void ColourSelector::setColourSelectionModel(ColourSelectionModel model) {
 	// TODO: Probably put in dedicated function
 	switch(m_SelectionModel) {
 		case ColourSelectionModel::Hsv: {
-			m_AbcButton->setText("Hue");
-			m_BacButton->setText("Saturation");
-			m_CabButton->setText("Value");
+			m_AbcAction->setText("Hue");
+			m_BacAction->setText("Saturation");
+			m_CabAction->setText("Value");
+
+			m_HsvAction->setChecked(true);
 			break;
 		}
 		case ColourSelectionModel::Hsl: {
-			m_AbcButton->setText("Hue");
-			m_BacButton->setText("Saturation");
-			m_CabButton->setText("Lightness");
+			m_AbcAction->setText("Hue");
+			m_BacAction->setText("Saturation");
+			m_CabAction->setText("Lightness");
+
+			m_HslAction->setChecked(true);
 			break;
 		}
 		case ColourSelectionModel::Rgb: {
-			m_AbcButton->setText("Red");
-			m_BacButton->setText("Green");
-			m_CabButton->setText("Blue");
+			m_AbcAction->setText("Red");
+			m_BacAction->setText("Green");
+			m_CabAction->setText("Blue");
+
+			m_RgbAction->setChecked(true);
 			break;
 		}
 		case ColourSelectionModel::Cmy: {
-			m_AbcButton->setText("Cyan");
-			m_BacButton->setText("Magenta");
-			m_CabButton->setText("Yellow");
+			m_AbcAction->setText("Cyan");
+			m_BacAction->setText("Magenta");
+			m_CabAction->setText("Yellow");
+
+			m_CmyAction->setChecked(true);
 			break;
 		}
 	}
@@ -322,6 +375,21 @@ void ColourSelector::setColourSelectionModel(ColourSelectionModel model) {
 void ColourSelector::setSliderArrangement(SliderArrangement arrangement) {
 	emit sliderArrangementChanged(arrangement);
 	m_Arrangement = arrangement;
+
+	switch(m_Arrangement) {
+		case SliderArrangement::Abc: {
+			m_AbcAction->setChecked(true);
+			break;
+		}
+		case SliderArrangement::Bac: {
+			m_BacAction->setChecked(true);
+			break;
+		}
+		case SliderArrangement::Cab: {
+			m_CabAction->setChecked(true);
+			break;
+		}
+	}
 
 	this->updateUiBounds();
 	this->updateImages(true, true, false);

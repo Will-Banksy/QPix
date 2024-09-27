@@ -26,7 +26,8 @@ class ColourSlider;
 class ColourBoxSlider;
 class QValidator;
 class QSpinBox;
-class QPushButton;
+class QAction;
+class QActionGroup;
 
 struct SliderInfo;
 struct AbcaQuad;
@@ -90,9 +91,18 @@ private:
 	ColourSlider* m_AlphaSlider;
 	QLineEdit* m_HexEntry;
 	QValidator* m_HexEntryValidator;
-	QPushButton* m_AbcButton;
-	QPushButton* m_BacButton;
-	QPushButton* m_CabButton;
+
+	QActionGroup* m_SelectionModelActions;
+	QAction* m_HsvAction;
+	QAction* m_HslAction;
+	QAction* m_RgbAction;
+	QAction* m_CmyAction;
+
+	QActionGroup* m_ArrangementActions;
+	QAction* m_AbcAction;
+	QAction* m_BacAction;
+	QAction* m_CabAction;
+
 	QSpinBox* m_SpinA;
 	QSpinBox* m_SpinB;
 	QSpinBox* m_SpinC;
