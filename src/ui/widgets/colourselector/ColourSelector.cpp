@@ -41,6 +41,10 @@ public:
 //
 // TODO: Investigate how my code rounds colours
 
+// ==================================================================================================================================================
+// FIXME: The colour changes sometimes when switching between colour models!! Most noticeably with HSL->RGB cause like it changes quite significantly
+// ==================================================================================================================================================
+
 ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent),
 	m_Colour(colour),
 	m_SelectionModel(ColourSelectionModel::Hsv),
