@@ -56,7 +56,19 @@ void ColourBoxSlider::paintEvent(QPaintEvent* event) {
 	int x = utils::map(pt.x(), this->minimum().toPoint().x(), this->maximum().toPoint().x(), 2, this->width() - 4);
 	int y = utils::map(pt.y(), this->minimum().toPoint().y(), this->maximum().toPoint().y(), 2, this->height() - 4);
 
-	painter.setPen(QPen(QColorConstants::White, 2));
+	// Dynamically change the colour of the indicator depending on the surrounding colour lightness
+	// Perceptual lightness would be better here but HSL lightness works alright, if not amazingly (i.e. white is hard to see against green or yellow)
+	// Implemented a quick fix for making the marker easier to see against bright hues by just comapring the hue against a hardcoded "bright hues" range
+	// and reducing the threshold for a black marker if it's a bright hue
+	QColor colHere = m_BgImg->pixelColor(QPoint(qMin(pt.x(), m_BgImg->width() - 1), qMin(pt.y(), m_BgImg->height() - 1)));
+	bool brightHue = colHere.hslHue() > 45 && colHere.hslHue() < 200; // BUG: Slight issue where the hue is returned as -1 on a monochromatic colour
+	if(brightHue && colHere.lightness() > 90 || colHere.lightness() > 128) {
+		painter.setPen(QPen(QColorConstants::Black, 2));
+	} else {
+		painter.setPen(QPen(QColorConstants::White, 2));
+	}
+
+	painter.setBrush(colHere);
 	painter.drawEllipse(QPoint(x + 1, y + 1), 2, 2);
 }
 
