@@ -18,11 +18,18 @@
 //     - Wikipedia article of CIELAB, including colour conversion: https://en.wikipedia.org/wiki/CIELAB_color_space
 //     - Wikipedia article of sRGB, including colour conversion: https://en.wikipedia.org/wiki/SRGB
 
+// TODO: The way that we work with colour is maybe a little messy... Each colour model is defined by various values and calculations spread haphazardly throughout
+//       ColourSelector.cpp... Maybe we wrap a colour model neatly into a class instead?
+
 class QLineEdit;
 class ColourSlider;
 class ColourBoxSlider;
 class QValidator;
+class QSpinBox;
+class QPushButton;
+
 struct SliderInfo;
+struct AbcaQuad;
 
 /// The colour model used for selecting a colour - E.g. HSV, HSL, RGB
 enum class ColourSelectionModel { // These are all the colour models I'd like to support picking colours from
@@ -59,18 +66,20 @@ public:
 public slots:
 	void setColour(const QColor& colour);
 	void setColourSelectionModel(ColourSelectionModel model);
+	void setSliderArrangement(SliderArrangement arrangement);
 
 signals:
 	void colourChanged(const QColor& colour);
 	void colourSelectionModelChanged(ColourSelectionModel model);
+	void sliderArrangementChanged(SliderArrangement arrangement);
 
 protected:
-	// QSize sizeHint() const override;
 
 private:
 	QColor m_Colour;
 
 	ColourSelectionModel m_SelectionModel;
+	SliderArrangement m_Arrangement;
 
 	QImage* m_SquareImg;
 	QImage* m_PrimarySliderImg;
@@ -81,15 +90,43 @@ private:
 	ColourSlider* m_AlphaSlider;
 	QLineEdit* m_HexEntry;
 	QValidator* m_HexEntryValidator;
+	QPushButton* m_AbcButton;
+	QPushButton* m_BacButton;
+	QPushButton* m_CabButton;
+	QSpinBox* m_SpinA;
+	QSpinBox* m_SpinB;
+	QSpinBox* m_SpinC;
+	QSpinBox* m_SpinAlpha;
 
+	/// If true, then slider value change events will fire silently
+	bool m_EventLock;
+
+	void enableEventLock();
+	void disableEventLock();
+
+	/// Sets the minimum/maximum for all sliders, dependent on the current colour selection model and slider arrangement
+	void updateUiBounds();
 	void updateImages(bool regenSquareSliderImg, bool regenPrimarySliderImg, bool regenAlphaSliderImg);
 	void updateUi(bool updateSquareSlider, bool updatePrimarySlider, bool updateAlphaSlider, bool updateHex);
+
 	void genSquareImg();
 	void genPrimarySliderImg();
 	void genAlphaSliderImg();
 
+	/// Calculates the colour represented by the sliders, dependent on the current selection model and slider arrangement
 	QColor colourFromSliders(const QVariant& squareVal, int primaryVal, int alphaVal) const;
+	/// Calculates the slider values represented by the colour, dependent on the current selection model and slider arrangement
 	SliderInfo slidersFromColour(const QColor& col) const;
+
+	/// Uses the current colour model to calculate the colour from the normalised (ABC-arranged) input
+	QColor colourFromAbca(const AbcaQuad& abca) const;
+	/// Uses the current colour model to calculate a normalised (ABC-arranged) AbcaQuad from the input colour
+	AbcaQuad abcaFromColour(const QColor& col) const;
+
+	/// Normalises the provided SliderInfo to use the ABC slider arrangement, from the current slider arrangement
+	AbcaQuad abcaFromSliders(const SliderInfo& info) const;
+	/// Rearranges the values from the normalised (ABC-arranged) input into a new SliderInfo, dependent on the current slider arrangement
+	SliderInfo slidersFromAbca(const AbcaQuad& abca) const;
 };
 
 #endif // COLOURSELECTOR_H

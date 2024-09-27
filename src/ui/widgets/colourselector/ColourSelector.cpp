@@ -11,29 +11,37 @@
 #include <QPushButton>
 #include "utils/Utils.h"
 #include <iostream>
+#include <QSpinBox>
 
 const int SLIDER_WIDTH = 32;
 
 struct SliderInfo {
 public:
-	QVariant m_SquareVal;
-	int m_PrimaryVal;
-	int m_AlphaVal;
+	QVariant SquareVal;
+	int PrimaryVal;
+	int AlphaVal;
 };
 
-// FIXME: When editing the hexcode of a colour, some colours are rounded to a different but nearby colour -
-//        e.g. #ff000eff rounds to #ff0011ff when input. This should absolutely not happen. Might be to do with
-//        HSV/HSL not being able to encode the colour - Which is another issue, that working with floats could
-//        potentially solve - Except, QAbstractSlider operates on integers (which okay that can be worked around
-//        with sliding over values x10). Add asserts until the problem is diagnosed for real
-// NOTE: Okay noticed Aseprite also has this issue (except it's only visible when changing the slider values, and
-//       it rounds more sensibly like #ff000eff to #ff000dff instead of #ff0011ff) - I don't think 0-255 gives
-//       enough precision for a 1:1 mapping of RGB->HSV (let alone HSL) so this is always going to be an issue there.
+struct AbcaQuad {
+public:
+	int A;
+	int B;
+	int C;
+	int Alpha;
+};
+
+// NOTE: Some colour models, using 0-255, cannot represent some RGB colours - e.g. HSL cannot represent pure red.
+//       I noticed Aseprite also has this issue, but seemingly with better rounding - I don't think 0-255 gives
+//       enough precision for a 1:1 mapping of RGB->HSV (let alone HSL) so this is always going to be an issue
+//       most likely.
 //       But, since Aseprite has this issue, maybe it's fine...? Although, can we do better...
+//
+// TODO: Investigate how my code rounds colours
 
 ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent),
 	m_Colour(colour),
 	m_SelectionModel(ColourSelectionModel::Hsv),
+	m_Arrangement(SliderArrangement::Abc),
 	m_SquareImg(new QImage(255, 255, QImage::Format_ARGB32)),
 	m_PrimarySliderImg(new QImage(SLIDER_WIDTH, 360, QImage::Format_ARGB32)),
 	m_AlphaSliderImg(new QImage(255, SLIDER_WIDTH, QImage::Format_ARGB32)),
@@ -69,33 +77,41 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	m_HexEntry->setValidator(m_HexEntryValidator);
 	m_HexEntry->setText(colour.name(QColor::NameFormat::HexArgb).sliced(1).toLower());
 
-	QPushButton* hsvButton = new QPushButton("HSV");
-
-	QPushButton* hslButton = new QPushButton("HSL");
-
-	QPushButton* rgbButton = new QPushButton("RGB");
-
 	connect(m_SquareSlider, &ColourBoxSlider::valueChanged, this, [this](QVariant value) {
-		// QPoint pt = value.toPoint();
-		SliderInfo sliderInfo = this->slidersFromColour(m_Colour);
-		this->setColour(this->colourFromSliders(value, sliderInfo.m_PrimaryVal, sliderInfo.m_AlphaVal));
-		// this->setColour(QColor::fromHsv(qMax(this->m_Colour.hue(), 0), pt.x(), 255 - pt.y(), this->m_Colour.alpha()));
+		if(!this->m_EventLock) {
+			SliderInfo sliderInfo = this->slidersFromColour(m_Colour);
+			this->setColour(this->colourFromSliders(value, sliderInfo.PrimaryVal, sliderInfo.AlphaVal));
+		}
 	});
 	connect(m_PrimarySlider, &ColourSlider::valueChanged, this, [this](int value) {
-		SliderInfo sliderInfo = this->slidersFromColour(m_Colour);
-		this->setColour(this->colourFromSliders(sliderInfo.m_SquareVal, value, sliderInfo.m_AlphaVal));
-		// this->setColour(QColor::fromHsv(value, this->m_Colour.hsvSaturation(), this->m_Colour.value(), this->m_Colour.alpha()));
+		if(!this->m_EventLock) {
+			SliderInfo sliderInfo = this->slidersFromColour(m_Colour);
+			this->setColour(this->colourFromSliders(sliderInfo.SquareVal, value, sliderInfo.AlphaVal));
+		}
 	});
 	connect(m_AlphaSlider, &ColourSlider::valueChanged, this, [this](int value) {
-		// QColor newCol = QColor(m_Colour);
-		// newCol.setAlpha(value);
-		// this->setColour(newVal);
-		SliderInfo sliderInfo = this->slidersFromColour(m_Colour);
-		this->setColour(this->colourFromSliders(sliderInfo.m_SquareVal, sliderInfo.m_PrimaryVal, value));
+		if(!this->m_EventLock) {
+			SliderInfo sliderInfo = this->slidersFromColour(m_Colour);
+			this->setColour(this->colourFromSliders(sliderInfo.SquareVal, sliderInfo.PrimaryVal, value));
+		}
 	});
 	connect(m_HexEntry, &QLineEdit::editingFinished, this, [this]() {
+		this->enableEventLock();
+		// // Set the colour selection model temporarily to RGB so that calculations are done in RGB space rather than
+		// // the space of the colour model, which may not be able to represent the entered colour, leading to errors
+		// ColourSelectionModel selModel = this->m_SelectionModel;
+		// this->m_SelectionModel = ColourSelectionModel::Rgb;
 		this->setColour(QColor::fromString(QString("#").append(m_HexEntry->text())));
+		// this->m_SelectionModel = selModel;
+		// // But, then, we have to update the UI again
+		this->disableEventLock();
 	});
+
+	// Colour model switch buttons
+	QPushButton* hsvButton = new QPushButton("HSV");
+	QPushButton* hslButton = new QPushButton("HSL");
+	QPushButton* rgbButton = new QPushButton("RGB");
+	QPushButton* cmyButton = new QPushButton("CMY");
 
 	connect(hsvButton, &QPushButton::clicked, this, [this](bool checked) {
 		this->setColourSelectionModel(ColourSelectionModel::Hsv);
@@ -105,6 +121,66 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	});
 	connect(rgbButton, &QPushButton::clicked, this, [this](bool checked) {
 		this->setColourSelectionModel(ColourSelectionModel::Rgb);
+	});
+	connect(cmyButton, &QPushButton::clicked, this, [this](bool checked) {
+		this->setColourSelectionModel(ColourSelectionModel::Cmy);
+	});
+
+	// Slider arrangement switch buttons (the text will not stay)
+	m_AbcButton = new QPushButton("ABC");
+	m_AbcButton->setFixedWidth(80);
+
+	m_BacButton = new QPushButton("BAC");
+	m_BacButton->setFixedWidth(80);
+
+	m_CabButton = new QPushButton("CAB");
+	m_CabButton->setFixedWidth(80);
+
+	connect(m_AbcButton, &QPushButton::clicked, this, [this](bool checked) {
+		this->setSliderArrangement(SliderArrangement::Abc);
+	});
+	connect(m_BacButton, &QPushButton::clicked, this, [this](bool checked) {
+		this->setSliderArrangement(SliderArrangement::Bac);
+	});
+	connect(m_CabButton, &QPushButton::clicked, this, [this](bool checked) {
+		this->setSliderArrangement(SliderArrangement::Cab);
+	});
+
+	m_SpinA = new QSpinBox();
+	m_SpinB = new QSpinBox();
+	m_SpinC = new QSpinBox();
+	m_SpinAlpha = new QSpinBox();
+	m_SpinAlpha->setMinimum(0);
+	m_SpinAlpha->setMaximum(255);
+	m_SpinAlpha->setValue(m_Colour.alpha());
+
+	connect(m_SpinA, &QSpinBox::valueChanged, this, [this](int value) {
+		if(!this->m_EventLock) {
+			AbcaQuad abca = this->abcaFromColour(this->m_Colour);
+			abca.A = value;
+			this->setColour(this->colourFromAbca(abca));
+		}
+	});
+	connect(m_SpinB, &QSpinBox::valueChanged, this, [this](int value) {
+		if(!this->m_EventLock) {
+			AbcaQuad abca = this->abcaFromColour(this->m_Colour);
+			abca.B = value;
+			this->setColour(this->colourFromAbca(abca));
+		}
+	});
+	connect(m_SpinC, &QSpinBox::valueChanged, this, [this](int value) {
+		if(!this->m_EventLock) {
+			AbcaQuad abca = this->abcaFromColour(this->m_Colour);
+			abca.C = value;
+			this->setColour(this->colourFromAbca(abca));
+		}
+	});
+	connect(m_SpinAlpha, &QSpinBox::valueChanged, this, [this](int value) {
+		if(!this->m_EventLock) {
+			AbcaQuad abca = this->abcaFromColour(this->m_Colour);
+			abca.Alpha = value;
+			this->setColour(this->colourFromAbca(abca));
+		}
 	});
 
 	this->updateImages(true, true, true);
@@ -117,10 +193,38 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	modelSelBox->addWidget(hsvButton);
 	modelSelBox->addWidget(hslButton);
 	modelSelBox->addWidget(rgbButton);
+	modelSelBox->addWidget(cmyButton);
+
+	QHBoxLayout* rowA = new QHBoxLayout();
+	rowA->addWidget(m_AbcButton);
+	rowA->addSpacing(4);
+	rowA->addWidget(m_SpinA);
+
+	QHBoxLayout* rowB = new QHBoxLayout();
+	rowB->addWidget(m_BacButton);
+	rowB->addSpacing(4);
+	rowB->addWidget(m_SpinB);
+
+	QHBoxLayout* rowC = new QHBoxLayout();
+	rowC->addWidget(m_CabButton);
+	rowC->addSpacing(4);
+	rowC->addWidget(m_SpinC);
+
+	QHBoxLayout* rowAlpha = new QHBoxLayout();
+	rowAlpha->addWidget(new QLabel("Alpha"));
+	rowAlpha->addSpacing(4);
+	rowAlpha->addWidget(m_SpinAlpha);
+
+	QVBoxLayout* modelEditorBox = new QVBoxLayout();
+	modelEditorBox->addLayout(rowA);
+	modelEditorBox->addLayout(rowB);
+	modelEditorBox->addLayout(rowC);
+	modelEditorBox->addLayout(rowAlpha);
 
 	layout->addLayout(modelSelBox, 0, 0, 1, 0);
 	layout->addWidget(m_SquareSlider, 1, 0);
 	layout->addWidget(m_PrimarySlider, 1, 1);
+	layout->addLayout(modelEditorBox, 1, 2);
 	layout->addWidget(m_AlphaSlider, 2, 0);
 
 	QHBoxLayout* hexBox = new QHBoxLayout();
@@ -140,6 +244,7 @@ ColourSelector::~ColourSelector() {
 }
 
 // TODO: Update to work with different models - there may always be a risk of infinite recursion here, as it relies on colours being 1:1 between different colour models
+//       Although... Is what I have currently sufficient maybe?
 void ColourSelector::setColour(const QColor& colour) {
 	// bool hueDiff = colour.hue() != m_Colour.hue();
 	// bool rgbDiff = colour.rgb() != m_Colour.rgb();
@@ -150,51 +255,150 @@ void ColourSelector::setColour(const QColor& colour) {
 	bool alphaDiff = colour.alpha() != m_Colour.alpha();
 	bool rgbaDiff = (colour.rgba() != m_Colour.rgba()) || (colour.hue() != m_Colour.hue());
 
-	std::cout << "colour: " << std::hex << colour.rgba() << ", m_Colour: " << std::hex << m_Colour.rgba() << std::endl;
+	bool squareDiff = this->slidersFromColour(colour).SquareVal != this->slidersFromColour(m_Colour).SquareVal;
+	bool primaryDiff = this->slidersFromColour(colour).PrimaryVal != this->slidersFromColour(m_Colour).PrimaryVal;
+
+	// std::cout << "colour: " << std::hex << colour.rgba() << ", m_Colour: " << std::hex << m_Colour.rgba() << std::endl;
 
 	emit colourChanged(colour);
 	this->m_Colour = colour;
 
 	// updateImages(hueDiff, false, rgbDiff);
 	// this->updateUi(satDiff || valDiff, hueDiff, alphaDiff, rgbDiff || alphaDiff);
-	if(rgbaDiff) {
-		updateImages(true, true, true);
-		this->updateUi(true, true, true, true);
-	}
+	// if(rgbaDiff) {
+		updateImages(primaryDiff, squareDiff, true);
+		this->updateUi(squareDiff, primaryDiff, alphaDiff, rgbaDiff);
+	// }
 	this->update();
 }
 
 void ColourSelector::setColourSelectionModel(ColourSelectionModel model) {
 	emit colourSelectionModelChanged(model);
 	m_SelectionModel = model;
-	// TODO: Break the following into it's own function?
-	switch(model) {
-		case ColourSelectionModel::Hsv:
-		case ColourSelectionModel::Hsl: {
-			m_PrimarySlider->setMinimum(0);
-			m_PrimarySlider->setMaximum(359); // NOTE: Since this is maxing out at 359, not 360, does this affect anything else?
 
-			m_SquareSlider->setMinimum(QVariant(QPoint(0, 0)));
-			m_SquareSlider->setMaximum(QVariant(QPoint(255, 255)));
+	// QColor is a bit weird sometimes, and equivalent HSL (for example) colours aren't necessarily equivalent in their RGB values,
+	// as stored in the QColor, and so fail rgb equivalency asserts.
+	// This aims to work around that by updating m_Colour to be set in the way the colour model sets it
+	SliderInfo newSliderInfo = this->slidersFromColour(m_Colour);
+	QColor newColour = this->colourFromSliders(newSliderInfo.SquareVal, newSliderInfo.PrimaryVal, newSliderInfo.AlphaVal);
+	m_Colour = newColour;
+
+	// TODO: Probably put in dedicated function
+	switch(m_SelectionModel) {
+		case ColourSelectionModel::Hsv: {
+			m_AbcButton->setText("Hue");
+			m_BacButton->setText("Saturation");
+			m_CabButton->setText("Value");
+			break;
+		}
+		case ColourSelectionModel::Hsl: {
+			m_AbcButton->setText("Hue");
+			m_BacButton->setText("Saturation");
+			m_CabButton->setText("Lightness");
 			break;
 		}
 		case ColourSelectionModel::Rgb: {
-			m_PrimarySlider->setMinimum(0);
-			m_PrimarySlider->setMaximum(255);
-
-			m_SquareSlider->setMinimum(QVariant(QPoint(0, 0)));
-			m_SquareSlider->setMaximum(QVariant(QPoint(255, 255)));
+			m_AbcButton->setText("Red");
+			m_BacButton->setText("Green");
+			m_CabButton->setText("Blue");
+			break;
+		}
+		case ColourSelectionModel::Cmy: {
+			m_AbcButton->setText("Cyan");
+			m_BacButton->setText("Magenta");
+			m_CabButton->setText("Yellow");
+			break;
 		}
 	}
-	this->updateImages(true, true, false);
-	this->updateUi(true, true, false, false);
 
+	this->updateUiBounds();
+	this->updateImages(true, true, false);
+	this->enableEventLock();
+	this->updateUi(true, true, false, false);
+	this->disableEventLock();
 	this->update();
 }
 
-// QSize ColourSelector::sizeHint() const {
-// 	return QSize(400, 400);
-// }
+void ColourSelector::setSliderArrangement(SliderArrangement arrangement) {
+	emit sliderArrangementChanged(arrangement);
+	m_Arrangement = arrangement;
+
+	this->updateUiBounds();
+	this->updateImages(true, true, false);
+	this->enableEventLock();
+	this->updateUi(true, true, false, false);
+	this->disableEventLock();
+	this->update();
+}
+
+void ColourSelector::enableEventLock() {
+	m_EventLock = true;
+}
+
+void ColourSelector::disableEventLock() {
+	m_EventLock = false;
+}
+
+void ColourSelector::updateUiBounds() {
+	int amin = 0;
+	int amax = 0;
+	int bmin = 0;
+	int bmax = 0;
+	int cmin = 0;
+	int cmax = 0;
+
+	switch(m_SelectionModel) {
+		case ColourSelectionModel::Hsv:
+		case ColourSelectionModel::Hsl: {
+			amax = 359; // NOTE: Since this is maxing out at 359, not 360, does this affect anything else?
+			bmax = 255;
+			cmax = 255;
+			break;
+		}
+		case ColourSelectionModel::Rgb:
+		case ColourSelectionModel::Cmy: {
+			amax = 255;
+			bmax = 255;
+			cmax = 255;
+			break;
+		}
+		default:
+			assert(false);
+	}
+
+	m_SpinA->setMinimum(amin);
+	m_SpinA->setMaximum(amax);
+	m_SpinB->setMinimum(bmin);
+	m_SpinB->setMaximum(bmax);
+	m_SpinC->setMinimum(cmin);
+	m_SpinC->setMaximum(cmax);
+
+	switch(m_Arrangement) {
+		case SliderArrangement::Abc: {
+			m_PrimarySlider->setMinimum(amin);
+			m_PrimarySlider->setMaximum(amax);
+			m_SquareSlider->setMinimum(QVariant(QPoint(bmin, cmin)));
+			m_SquareSlider->setMaximum(QVariant(QPoint(bmax, cmax)));
+			break;
+		}
+		case SliderArrangement::Bac: {
+			m_PrimarySlider->setMinimum(bmin);
+			m_PrimarySlider->setMaximum(bmax);
+			m_SquareSlider->setMinimum(QVariant(QPoint(amin, cmin)));
+			m_SquareSlider->setMaximum(QVariant(QPoint(amax, cmax)));
+			break;
+		}
+		case SliderArrangement::Cab: {
+			m_PrimarySlider->setMinimum(cmin);
+			m_PrimarySlider->setMaximum(cmax);
+			m_SquareSlider->setMinimum(QVariant(QPoint(amin, bmin)));
+			m_SquareSlider->setMaximum(QVariant(QPoint(amax, bmax)));
+			break;
+		}
+		default:
+			assert(false);
+	}
+}
 
 void ColourSelector::updateImages(bool regenSquareSliderImg, bool regenPrimarySliderImg, bool regenAlphaSliderImg) {
 	if(regenSquareSliderImg) {
@@ -209,23 +413,31 @@ void ColourSelector::updateImages(bool regenSquareSliderImg, bool regenPrimarySl
 }
 
 void ColourSelector::updateUi(bool updateSquareSlider, bool updatePrimarySlider, bool updateAlphaSlider, bool updateHex) {
-	SliderInfo sliderInfo = slidersFromColour(m_Colour);
+	SliderInfo sliderInfo = this->slidersFromColour(m_Colour);
 
 	if(updateSquareSlider) {
-		m_SquareSlider->setValue(sliderInfo.m_SquareVal);
+		m_SquareSlider->setValue(sliderInfo.SquareVal);
 	}
 	if(updatePrimarySlider) {
-		m_PrimarySlider->setValue(sliderInfo.m_PrimaryVal);
+		m_PrimarySlider->setValue(sliderInfo.PrimaryVal);
 	}
 	if(updateAlphaSlider) {
-		m_AlphaSlider->setValue(sliderInfo.m_AlphaVal);
+		m_AlphaSlider->setValue(sliderInfo.AlphaVal);
 	}
 	if(updateHex) {
 		m_HexEntry->setText(m_Colour.name(QColor::NameFormat::HexArgb).sliced(1).toLower());
 	}
 
-	QColor fromSliders = this->colourFromSliders(m_SquareSlider->value(), m_PrimarySlider->value(), m_AlphaSlider->value());
-	assert(fromSliders.rgba() == m_Colour.rgba());
+	AbcaQuad abca = this->abcaFromColour(m_Colour);
+
+	m_SpinA->setValue(abca.A);
+	m_SpinB->setValue(abca.B);
+	m_SpinC->setValue(abca.C);
+	m_SpinAlpha->setValue(abca.Alpha);
+
+	// This is now causing more trouble than it's worth - E.g. when specifying a colour in hex, in HSL mode, this will crash if the colour doesn't fit into HSL
+	// QColor fromSliders = this->colourFromSliders(m_SquareSlider->value(), m_PrimarySlider->value(), m_AlphaSlider->value());
+	// assert(fromSliders.rgba() == m_Colour.rgba());
 }
 
 void ColourSelector::genSquareImg() {
@@ -237,7 +449,7 @@ void ColourSelector::genSquareImg() {
 			int b = utils::map(j, 0, m_SquareImg->height(), m_SquareSlider->minimum().toPoint().y(), m_SquareSlider->maximum().toPoint().y());
 
 			SliderInfo sliderInfo = this->slidersFromColour(m_Colour);
-			QColor col = this->colourFromSliders(QVariant(QPoint(a, b)), sliderInfo.m_PrimaryVal, 255);
+			QColor col = this->colourFromSliders(QVariant(QPoint(a, b)), sliderInfo.PrimaryVal, 255);
 			pixels[i + j * m_SquareImg->width()] = col.rgba();
 		}
 	}
@@ -249,7 +461,7 @@ void ColourSelector::genPrimarySliderImg() {
 	for(int j = 0; j < m_PrimarySliderImg->height(); j++) {
 		int p = utils::map(j, 0, m_PrimarySliderImg->height(), m_PrimarySlider->minimum(), m_PrimarySlider->maximum());
 		SliderInfo sliderInfo = this->slidersFromColour(m_Colour);
-		QColor col = this->colourFromSliders(sliderInfo.m_SquareVal, p, 255);
+		QColor col = this->colourFromSliders(sliderInfo.SquareVal, p, 255);
 		for(int i = 0; i < m_PrimarySliderImg->width(); i++) {
 			pixels[i + j * m_PrimarySliderImg->width()] = col.rgba();
 		}
@@ -268,16 +480,40 @@ void ColourSelector::genAlphaSliderImg() {
 	}
 }
 
-QColor ColourSelector::colourFromSliders(const QVariant& squareVal, int primaryVal, int alphaVal) const { // TODO: Refactor this when we allow changing the primary slider
-	QPoint squarePt = squareVal.toPoint();
+QColor ColourSelector::colourFromSliders(const QVariant& squareVal, int primaryVal, int alphaVal) const {
+	AbcaQuad abca = this->abcaFromSliders({
+		.SquareVal = squareVal,
+		.PrimaryVal = primaryVal,
+		.AlphaVal = alphaVal
+	});
+
+	return this->colourFromAbca(abca);
+}
+
+SliderInfo ColourSelector::slidersFromColour(const QColor& col) const {
+	AbcaQuad abca = abcaFromColour(col);
+
+	SliderInfo info = this->slidersFromAbca(abca);
+
+	// This is probably fine to disable... It is currently causing issues because at this point the min/max of the sliders may not have been set correctly
+	// for the current colour selection model
+	// assert(info.SquareVal.toPoint().x() >= m_SquareSlider->minimum().toPoint().x() && info.SquareVal.toPoint().y() >= m_SquareSlider->minimum().toPoint().y());
+	// assert(info.SquareVal.toPoint().x() <= m_SquareSlider->maximum().toPoint().x() && info.SquareVal.toPoint().y() <= m_SquareSlider->maximum().toPoint().y());
+	// assert(info.PrimaryVal >= m_PrimarySlider->minimum() && info.PrimaryVal <= m_PrimarySlider->maximum());
+	// assert(info.AlphaVal >= m_AlphaSlider->minimum() && info.AlphaVal <= m_AlphaSlider->maximum());
+
+	return info;
+}
+
+QColor ColourSelector::colourFromAbca(const AbcaQuad& abca) const {
 	switch(m_SelectionModel) {
 		case ColourSelectionModel::Hsv: {
 			// Qt returns -1 for achromatic colours, such as black - Not usually an issue but can be an issue on startup. This corrects that flaw
-			int hue = qMax(primaryVal, 0);
-			int sat = squarePt.x();
-			int val = squarePt.y();
+			int hue = qMax(abca.A, 0);
+			int sat = abca.B;
+			int val = abca.C;
 
-			QColor col = QColor::fromHsv(hue, sat, val, alphaVal);
+			QColor col = QColor::fromHsv(hue, sat, val, abca.Alpha);
 
 			assert(hue == col.hue());
 			assert(sat == col.hsvSaturation());
@@ -286,11 +522,11 @@ QColor ColourSelector::colourFromSliders(const QVariant& squareVal, int primaryV
 			return col;
 		}
 		case ColourSelectionModel::Hsl: {
-			int hue = qMax(primaryVal, 0);
-			int sat = squarePt.x();
-			int lig = squarePt.y();
+			int hue = qMax(abca.A, 0);
+			int sat = abca.B;
+			int lig = abca.C;
 
-			QColor col = QColor::fromHsl(hue, sat, lig, alphaVal);
+			QColor col = QColor::fromHsl(hue, sat, lig, abca.Alpha);
 
 			assert(hue == qMax(col.hslHue(), 0));
 			assert(sat == col.hslSaturation());
@@ -299,11 +535,24 @@ QColor ColourSelector::colourFromSliders(const QVariant& squareVal, int primaryV
 			return col;
 		}
 		case ColourSelectionModel::Rgb: {
-			int red = primaryVal;
-			int green = squarePt.x();
-			int blue = squarePt.y();
+			int red = abca.A;
+			int green = abca.B;
+			int blue = abca.C;
 
-			QColor col = QColor(red, green, blue, alphaVal);
+			QColor col = QColor(red, green, blue, abca.Alpha);
+
+			assert(red == col.red());
+			assert(green == col.green());
+			assert(blue == col.blue());
+
+			return col;
+		}
+		case ColourSelectionModel::Cmy: {
+			int red = 255 - abca.A;
+			int green = 255 - abca.B;
+			int blue = 255 - abca.C;
+
+			QColor col = QColor(red, green, blue, abca.Alpha);
 
 			assert(red == col.red());
 			assert(green == col.green());
@@ -315,31 +564,43 @@ QColor ColourSelector::colourFromSliders(const QVariant& squareVal, int primaryV
 	assert(false);
 }
 
-SliderInfo ColourSelector::slidersFromColour(const QColor& col) const {  // TODO: Refactor this when we allow changing the primary slider
-	SliderInfo info;
+AbcaQuad ColourSelector::abcaFromColour(const QColor& col) const {
+	AbcaQuad abca;
 
 	switch(m_SelectionModel) {
 		case ColourSelectionModel::Hsv: {
-			info = {
-				.m_SquareVal = QVariant(QPoint(m_Colour.hsvSaturation(), m_Colour.value())),
-				.m_PrimaryVal = qMax(m_Colour.hue(), 0),
-				.m_AlphaVal = m_Colour.alpha()
+			abca = {
+				.A = qMax(col.hue(), 0),
+				.B = col.hsvSaturation(),
+				.C = col.value(),
+				.Alpha = col.alpha()
 			};
 			break;
 		}
 		case ColourSelectionModel::Hsl: {
-			info = {
-				.m_SquareVal = QVariant(QPoint(m_Colour.hslSaturation(), m_Colour.lightness())),
-				.m_PrimaryVal = qMax(m_Colour.hslHue(), 0),
-				.m_AlphaVal = m_Colour.alpha()
+			abca = {
+				.A = qMax(col.hslHue(), 0),
+				.B = col.hslSaturation(),
+				.C = col.lightness(),
+				.Alpha = col.alpha()
 			};
 			break;
 		}
 		case ColourSelectionModel::Rgb: {
-			info = {
-				.m_SquareVal = QVariant(QPoint(m_Colour.green(), m_Colour.blue())),
-				.m_PrimaryVal = qMax(m_Colour.red(), 0),
-				.m_AlphaVal = m_Colour.alpha()
+			abca = {
+				.A = qMax(col.red(), 0),
+				.B = col.green(),
+				.C = col.blue(),
+				.Alpha = col.alpha()
+			};
+			break;
+		}
+		case ColourSelectionModel::Cmy: {
+			abca = {
+				.A = 255 - qMax(col.red(), 0),
+				.B = 255 - col.green(),
+				.C = 255 - col.blue(),
+				.Alpha = col.alpha()
 			};
 			break;
 		}
@@ -347,10 +608,83 @@ SliderInfo ColourSelector::slidersFromColour(const QColor& col) const {  // TODO
 			assert(false);
 	}
 
-	assert(info.m_SquareVal.toPoint().x() >= m_SquareSlider->minimum().toPoint().x() && info.m_SquareVal.toPoint().y() >= m_SquareSlider->minimum().toPoint().y());
-	assert(info.m_SquareVal.toPoint().x() <= m_SquareSlider->maximum().toPoint().x() && info.m_SquareVal.toPoint().y() <= m_SquareSlider->maximum().toPoint().y());
-	assert(info.m_PrimaryVal >= m_PrimarySlider->minimum() && info.m_PrimaryVal <= m_PrimarySlider->maximum());
-	assert(info.m_AlphaVal >= m_AlphaSlider->minimum() && info.m_AlphaVal <= m_AlphaSlider->maximum());
+	return abca;
+}
 
-	return info;
+AbcaQuad ColourSelector::abcaFromSliders(const SliderInfo& info) const {
+	int a = 0;
+	int b = 0;
+	int c = 0;
+
+	switch(m_Arrangement) {
+		case SliderArrangement::Abc: {
+			a = info.PrimaryVal;
+			b = info.SquareVal.toPoint().x();
+			c = info.SquareVal.toPoint().y();
+			break;
+		}
+		case SliderArrangement::Bac: {
+			a = info.SquareVal.toPoint().x();
+			b = info.PrimaryVal;
+			c = info.SquareVal.toPoint().y();
+			break;
+		}
+		case SliderArrangement::Cab: {
+			a = info.SquareVal.toPoint().x();
+			b = info.SquareVal.toPoint().y();
+			c = info.PrimaryVal;
+			break;
+		}
+		default:
+			assert(false);
+	}
+
+	AbcaQuad abca = {
+		.A = a,
+		.B = b,
+		.C = c,
+		.Alpha = info.AlphaVal
+	};
+
+	SliderInfo verifyInfo = this->slidersFromAbca(abca);
+	assert(info.SquareVal.toPoint() == verifyInfo.SquareVal.toPoint());
+	assert(info.PrimaryVal == verifyInfo.PrimaryVal);
+	assert(info.AlphaVal == verifyInfo.AlphaVal);
+
+	return abca;
+}
+
+SliderInfo ColourSelector::slidersFromAbca(const AbcaQuad& abca) const {
+	int p = 0;
+	int x = 0;
+	int y = 0;
+
+	switch(m_Arrangement) {
+		case SliderArrangement::Abc: {
+			p = abca.A;
+			x = abca.B;
+			y = abca.C;
+			break;
+		}
+		case SliderArrangement::Bac: {
+			p = abca.B;
+			x = abca.A;
+			y = abca.C;
+			break;
+		}
+		case SliderArrangement::Cab: {
+			p = abca.C;
+			x = abca.A;
+			y = abca.B;
+			break;
+		}
+		default:
+			assert(false);
+	}
+
+	return {
+		.SquareVal = QVariant(QPoint(x, y)),
+		.PrimaryVal = p,
+		.AlphaVal = abca.Alpha
+	};
 }
