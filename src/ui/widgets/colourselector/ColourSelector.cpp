@@ -39,7 +39,9 @@ public:
 //       most likely.
 //       But, since Aseprite has this issue, maybe it's fine...? Although, can we do better...
 //
-// TODO: Investigate how my code rounds colours
+// TODO: Investigate how my code rounds colours maybe
+
+// TODO: Do we need different layouts to cater for using this widget in different contexts? I.e. in a dock widget
 
 ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent),
 	m_Colour(colour),
@@ -230,7 +232,7 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	});
 
 	this->updateImages(true, true, true);
-	this->setColourSelectionModel(ColourSelectionModel::Rgb);
+	this->setColourSelectionModel(ColourSelectionModel::Hsv);
 	this->setSliderArrangement(SliderArrangement::Abc);
 
 	QGridLayout* layout = new QGridLayout();
@@ -314,9 +316,10 @@ void ColourSelector::setColourSelectionModel(ColourSelectionModel model) {
 	// QColor is a bit weird sometimes, and equivalent HSL (for example) colours aren't necessarily equivalent in their RGB values,
 	// as stored in the QColor, and so fail rgb equivalency asserts.
 	// This aims to work around that by updating m_Colour to be set in the way the colour model sets it
-	SliderInfo newSliderInfo = this->slidersFromColour(m_Colour);
-	QColor newColour = this->colourFromSliders(newSliderInfo.SquareVal, newSliderInfo.PrimaryVal, newSliderInfo.AlphaVal);
-	m_Colour = newColour;
+	// NOTE: Although now I am actually not sure I need it
+	// SliderInfo newSliderInfo = this->slidersFromColour(m_Colour);
+	// QColor newColour = this->colourFromSliders(newSliderInfo.SquareVal, newSliderInfo.PrimaryVal, newSliderInfo.AlphaVal);
+	// m_Colour = newColour;
 
 	// TODO: Probably put in dedicated function
 	switch(m_SelectionModel) {
