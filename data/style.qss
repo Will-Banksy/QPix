@@ -8,7 +8,7 @@ QToolButton:checked {
 	background: palette(light);
 }
 
-/* TODO: Fix styling of QTabBar - there is a 2px black & grey line that appears at the bottom of :top tab bars */
+/* TODO: Fix styling of QTabBar - there is a 2px black & grey line that appears at the bottom of :top tab bars (at least, the dock widget tab bar) */
 
 /* QTabBar {
 	border: 3px solid red;

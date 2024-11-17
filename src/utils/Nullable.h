@@ -9,7 +9,7 @@ public:
 	explicit Nullable(T* value = nullptr) : m_Value(value) {}
 	~Nullable() {}
 
-	T* unwrap() {
+	T* unwrap() const {
 		if(m_Value == nullptr) {
 			std::terminate();
 		} else {
@@ -17,19 +17,19 @@ public:
 		}
 	}
 
-	T* unwrapOr(T* defaultVal) {
+	T* unwrapOr(T* defaultVal) const {
 		return m_Value == nullptr ? defaultVal : m_Value;
 	}
 
-	T* unwrapUnsafe() {
+	T* unwrapUnsafe() const {
 		return m_Value;
 	}
 
-	bool isNotNull() {
+	bool isNotNull() const {
 		return m_Value != nullptr;
 	}
 
-	bool isNull() {
+	bool isNull() const {
 		return m_Value == nullptr;
 	}
 

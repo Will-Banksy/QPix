@@ -26,18 +26,22 @@ QList<AbstractTool*> AbstractTool::initialiseTools() {
 	};
 }
 
-QString AbstractTool::name() {
+const QString& AbstractTool::name() const {
 	return m_Name;
 }
 
-QString AbstractTool::description() {
+const QString& AbstractTool::description() const {
 	return m_Description;
 }
 
-QString AbstractTool::iconPath() {
+const QString& AbstractTool::iconPath() const {
 	return m_IconPath;
 }
 
-ToolUsageType AbstractTool::usageType() {
+const ToolUsageType& AbstractTool::usageType() const {
 	return m_UsageType;
+}
+
+ToolSettings* AbstractTool::settings() const {
+	return m_Settings;
 }

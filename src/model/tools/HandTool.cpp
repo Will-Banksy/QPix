@@ -6,6 +6,8 @@ HandTool::HandTool() {
 	m_Description = "Allows you to drag the canvas to scroll it";
 	m_IconPath = ":/data/tools/move.png";
 	m_UsageType = ToolUsageType::None;
+	m_Settings = new ToolSettings({
+	});
 }
 
 HandTool::~HandTool() {

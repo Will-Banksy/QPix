@@ -11,12 +11,15 @@
 //       Now where does the display's colour space come in to it? I'm not sure - I think that Qt might render taking this into account,
 //       as long as we supply the right colour space information, but I'm not sure
 //
-//       For now, I'm going to stick with sRGB, which is what Qt uses by default
+//       For now, I'm going to stick with sRGB, which is what Qt uses by default I think
 //
 // Some links:
 //     - Accurate (?) colour conversion: https://colorizer.org/
 //     - Wikipedia article of CIELAB, including colour conversion: https://en.wikipedia.org/wiki/CIELAB_color_space
 //     - Wikipedia article of sRGB, including colour conversion: https://en.wikipedia.org/wiki/SRGB
+
+// NOTE: Oooh see this: https://littlecms.com/blog/2020/12/09/using-lcms2-on-qt/
+//       Apparently LittleCMS is used by software such as the Affinity suite, Krita, GIMP, ImageMagick, etc. so this is almost certainly a really good idea to use!
 
 // TODO: The way that we work with colour is maybe a little messy... Each colour model is defined by various values and calculations spread haphazardly throughout
 //       ColourSelector.cpp... Maybe we wrap a colour model neatly into a class instead?

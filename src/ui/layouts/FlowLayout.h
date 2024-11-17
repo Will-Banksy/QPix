@@ -11,6 +11,8 @@ public:
 	FlowLayout(int spacingX, int spacingY, QWidget* parent = nullptr);
 	~FlowLayout();
 
+	void clear();
+
 protected:
 	int count() const override;
 	QLayoutItem* takeAt(int index) override;

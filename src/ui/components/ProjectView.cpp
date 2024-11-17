@@ -108,7 +108,7 @@ void ProjectView::setZoom(float oldZoom, float newZoom, QPointF* zoomOrigin) {
 		this->updateScrollMargins(newZoom);
 	}
 
-	// TODO: Investigate other downscaling algorithms - Aseprite's downscaling algorithm seemingly preserves more pixel information than the QPainter::SmoothPixmapTransform
+	// TODO: Investigate other downscaling algorithms - Aseprite's downscaling algorithm (bicubic?) seemingly preserves more pixel information than the QPainter::SmoothPixmapTransform
 	//       I don't know if it's possible to implement and use other scaling algorithms in Qt, but if I can a start might be the Lanczos filter
 	//       Look at QGraphicsEffect, this seems like it might work
 	//       Could always blur the canvas when it's scaled down, and still use QPainter::SmoothPixmapTransform - that might give better detail? Might be expensive though

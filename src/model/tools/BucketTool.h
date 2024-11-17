@@ -3,6 +3,8 @@
 
 #include "AbstractTool.h"
 
+const static QString TS_BUCKET_DIAGONAL_FILL = QString("Fill Diagonally");
+
 class BucketTool : public AbstractTool {
 	Q_OBJECT
 

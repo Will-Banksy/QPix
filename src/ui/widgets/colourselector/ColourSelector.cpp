@@ -52,12 +52,6 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	m_AlphaSliderImg(new QImage(255, SLIDER_WIDTH, QImage::Format_ARGB32)),
 	m_HexEntry(new QLineEdit()) {
 
-	// NOTE: Do I just copy (with adjustments of course) the colour selector from my Java Pixel Editor?
-	//       I do want to support other colour models of course, but specifically the vague styling (I will need it to fit in with QPix's theme however) and interactivity of it
-	//           Look at Java swing's powerful colour picker dialog (button in my Java Pixel Editor's colour picker) - If I can approach that level of power, I'll be doing good
-	//           Now with supporting different colour models, do I want to support perception-based models such as CIELAB/CIELCH, etc?
-	//               Probably do some research as to what that would require - would I need to take into account display colour calibration, etc?
-
 	m_SquareSlider = new ColourBoxSlider(m_SquareImg);
 	m_SquareSlider->setPreferredSize(QSize(255, 255));
 

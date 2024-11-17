@@ -1,8 +1,9 @@
-#ifndef TOOL_H
-#define TOOL_H
+#ifndef ABSTRACTTOOL_H
+#define ABSTRACTTOOL_H
 
 #include <QObject>
 #include <QPoint>
+#include "ToolSettings.h"
 
 class AppModel;
 
@@ -45,16 +46,19 @@ public:
 
     static QList<AbstractTool*> initialiseTools();
 
-	QString name();
-	QString description();
-	QString iconPath();
-	ToolUsageType usageType();
+	const QString& name() const;
+	const QString& description() const;
+	const QString& iconPath() const;
+	const ToolUsageType& usageType() const;
+	ToolSettings* settings() const;
 
 protected:
-	ToolUsageType m_UsageType = ToolUsageType::Click;
 	QString m_Name = "Unnamed Tool";
 	QString m_Description = "This tool has not been given a description";
 	QString m_IconPath = ":/data/tools/pencil.png";
+	ToolUsageType m_UsageType = ToolUsageType::Click;
+	ToolSettings* m_Settings = nullptr;
+
 };
 
-#endif // TOOL_H
+#endif // ABSTRACTTOOL_H

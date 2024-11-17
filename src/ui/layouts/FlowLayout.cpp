@@ -1,4 +1,7 @@
 #include "FlowLayout.h"
+#include <QObject>
+#include <QWidget>
+#include <QLayout>
 
 FlowLayout::FlowLayout(QWidget* parent) : FlowLayout(s_DefaultSpacing, parent) {
 }
@@ -10,10 +13,22 @@ FlowLayout::FlowLayout(int spacingX, int spacingY, QWidget* parent) : QLayout(pa
 }
 
 FlowLayout::~FlowLayout() {
-	// So I think anything that inherits from QObject gets automatically deleted?
-	// But anyway, QLayoutItem doesn't inherit from QObject so we need to manually delete it
+	this->clear();
+}
+
+void FlowLayout::clear() {
 	QLayoutItem* item;
-	while((item = takeAt(0))) { // It's not happy unless you use double parenthesis
+	while((item = this->takeAt(0))) { // It's not happy unless you use double parenthesis
+		// Delete inner items
+		if(item->widget() != nullptr) {
+			item->widget()->deleteLater();
+		}
+		if(item->layout() != nullptr) {
+			item->layout()->deleteLater();
+		}
+		if(item->spacerItem() != nullptr) {
+			delete item->spacerItem();
+		}
 		delete item;
 	}
 }
@@ -44,7 +59,7 @@ void FlowLayout::setGeometry(const QRect& rect) { // I believe 'rect' is the rec
 	QLayout::setGeometry(rect);
 	// Here is where the actual layouting is done
 
-	layoutItems(rect, false);
+	this->layoutItems(rect, false);
 }
 
 bool FlowLayout::hasHeightForWidth() const {
@@ -56,6 +71,10 @@ int FlowLayout::heightForWidth(int width) const {
 }
 
 int FlowLayout::layoutItems(const QRect& rect, bool dryRun) const {
+	if(m_Items.size() == 0) {
+		return 0;
+	}
+
 	QVector<QRect> itemBounds;
 
 	QPoint corner = rect.topLeft() + QPoint(contentsMargins().left(), contentsMargins().top()); // Last item's top right-hand corner, or the layout's (0, 0)/top left corner if it's the first one

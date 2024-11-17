@@ -1,6 +1,3 @@
 # Don't want the build directory
 build/*
-
-# Ignore KDevelop project files
-.kdev4/*
-*.kdev4
+target/*

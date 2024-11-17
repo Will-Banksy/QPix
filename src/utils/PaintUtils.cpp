@@ -37,8 +37,8 @@ void PaintUtils::drawLine(QImage& target, int x0, int y0, int x1, int y1, QRgb c
 	}
 }
 
-void PaintUtils::fillArea(QImage& target, int x, int y, QRgb colour, int tolerance) {
-	// How best to implement a flood fill algorithm? My approach with a queue performs decently enough
+void PaintUtils::fillArea(QImage& target, int x, int y, QRgb colour, int tolerance, bool fillDiagonally) {
+	// How best to implement a flood fill algorithm? My approach with a stack performs decently enough
 	//
 	// Sources:
 	// - https://www.youtube.com/watch?v=LvacRISl99Y
@@ -48,7 +48,7 @@ void PaintUtils::fillArea(QImage& target, int x, int y, QRgb colour, int toleran
 		return;
 	}
 
-	QRgb* bytes = (uint32_t*)target.scanLine(0); // Assumes a 32-bit format
+	QRgb* bytes = (QRgb*)target.scanLine(0); // Assumes a 32-bit format
 
 	QRgb origCol = bytes[x + y * target.width()];
 
@@ -77,7 +77,12 @@ void PaintUtils::fillArea(QImage& target, int x, int y, QRgb colour, int toleran
 		PaintUtils::fillPixel(target, bytes, x - 1, y, s_CachedFillArray, stack, origCol, colour, tolerance);
 		PaintUtils::fillPixel(target, bytes, x + 1, y, s_CachedFillArray, stack, origCol, colour, tolerance);
 
-		// TODO: Support 8-way fill
+		if(fillDiagonally) {
+			PaintUtils::fillPixel(target, bytes, x - 1, y - 1, s_CachedFillArray, stack, origCol, colour, tolerance);
+			PaintUtils::fillPixel(target, bytes, x + 1, y + 1, s_CachedFillArray, stack, origCol, colour, tolerance);
+			PaintUtils::fillPixel(target, bytes, x - 1, y + 1, s_CachedFillArray, stack, origCol, colour, tolerance);
+			PaintUtils::fillPixel(target, bytes, x + 1, y - 1, s_CachedFillArray, stack, origCol, colour, tolerance);
+		}
 	}
 }
 

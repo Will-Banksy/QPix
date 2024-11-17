@@ -13,6 +13,7 @@
 #include "floating/tooltip/HoverInfoEventFilter.h"
 #include <QResizeEvent>
 #include <QDockWidget>
+#include "toolbars/ToolSettingsView.h"
 
 // BUG: Moving between tabs and resizing can centre other canvases sometimes, or otherwise unexpectedly change the scroll position of other projects
 
@@ -89,6 +90,14 @@ AppView::AppView(AppModel* model) : m_Model(model), QMainWindow() {
 	colourToolDock->setWidget(colourToolbar);
 
 	this->addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, colourToolDock);
+
+	QDockWidget* toolSettingsToolDock = new QDockWidget("Tool Settings");
+	toolSettingsToolDock->setFeatures(QDockWidget::DockWidgetFeature::DockWidgetMovable);
+
+	ToolSettingsView* toolSettingsToolbar = new ToolSettingsView(model);
+	toolSettingsToolDock->setWidget(toolSettingsToolbar);
+
+	this->addDockWidget(Qt::DockWidgetArea::TopDockWidgetArea, toolSettingsToolDock);
 
 	// Status bar
 
