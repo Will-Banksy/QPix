@@ -7,6 +7,7 @@
 
 class AppModel;
 class AbstractTool;
+class QStackedLayout;
 
 class ToolSettingsView : public QWidget {
 	Q_OBJECT
@@ -17,9 +18,10 @@ public:
 
 private:
 	AppModel* m_Model;
-	QList<QMetaObject::Connection> m_Connections;
+	QStackedLayout* m_Layout;
+	QHash<AbstractTool*, int> m_IndexMap;
 
-	void regenUi(AbstractTool* tool);
+	void switchUi(AbstractTool* tool);
 };
 
 #endif // TOOLSETTINGSVIEW_H
