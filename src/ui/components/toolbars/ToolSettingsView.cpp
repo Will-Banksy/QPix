@@ -25,8 +25,8 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 			const QString& key = entry.key();
 			const QVariant& value = entry.value();
 
-			switch(value.type()) {
-				case QVariant::Type::Bool: {
+			switch(value.typeId()) {
+				case QMetaType::Bool: {
 					QCheckBox* checkbox = new QCheckBox(key);
 					this->connect(checkbox, &QCheckBox::checkStateChanged, settings, [checkbox, settings, key](Qt::CheckState state) {
 						assert(!checkbox->isTristate());
@@ -38,7 +38,7 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 						}
 					});
 					this->connect(settings, &ToolSettings::valueChanged, checkbox, [checkbox, settings, key](const QVariant& changedKey, const QVariant& value) {
-						assert(value.type() == QVariant::Type::Bool);
+						assert(value.typeId() == QMetaType::Bool);
 
 						if(changedKey == key) {
 							qDebug() << "checkbox setChecked " << value;

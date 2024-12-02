@@ -1,10 +1,19 @@
-build-dbg: configure-dbg
-	mkdir -p target/debug
-	cd target/debug && make
+configure-rls:
+	mkdir -p target/release
+	cd target/release && cmake -DCMAKE_BUILD_TYPE=Release ../..
+
+build-rls: configure-rls
+	cd target/release && make
+
+run-rls: build-rls
+	./target/release/qpix
 
 configure-dbg:
 	mkdir -p target/debug
 	cd target/debug && cmake -DCMAKE_BUILD_TYPE=Debug ../..
+
+build-dbg: configure-dbg
+	cd target/debug && make
 
 run-dbg: build-dbg
 	QT_QPA_PLATFORM=xcb ./target/debug/qpix
