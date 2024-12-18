@@ -1,5 +1,5 @@
 # Minimum required version of cmake to build this project
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.20)
 
 # Set project name and version, and languages used
 project(QPix VERSION 1.0 LANGUAGES CXX)

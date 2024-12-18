@@ -3,6 +3,8 @@
 
 #include "AbstractTool.h"
 
+const static QString TS_PENCIL_PIXELPERFECT = QString("Pixel Perfect");
+
 class PencilTool : public AbstractTool {
 	Q_OBJECT
 
@@ -10,7 +12,7 @@ public:
 	explicit PencilTool();
 	~PencilTool() override;
 
-    void onDrag(QImage& surface, QPoint pt, Qt::MouseButton button, ToolDragState state, AppModel* model) override;
+    void onDrag(const QImage& surface, QImage& buffer, QPoint pt, Qt::MouseButton button, ToolDragState state, AppModel* model) override;
 
 private:
 	/// List of points comprising each line in the current stroke, for pixel perfect strokes

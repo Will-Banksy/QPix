@@ -2,6 +2,7 @@
 #include <QImage>
 #include "model/AppModel.h"
 #include "utils/Utils.h"
+#include "utils/PaintUtils.h"
 
 PencilTool::PencilTool() : AbstractTool(), m_CurrentStroke(QList<QPoint>()) {
 	m_Name = "Pencil";
@@ -9,39 +10,37 @@ PencilTool::PencilTool() : AbstractTool(), m_CurrentStroke(QList<QPoint>()) {
 	m_IconPath = ":/data/tools/pencil.png";
 	m_UsageType = ToolUsageType::Drag;
 	m_Settings = new ToolSettings({
+		{ TS_PENCIL_PIXELPERFECT, QVariant(false) }
 	});
 }
 
 PencilTool::~PencilTool() {
 }
 
-void PencilTool::onDrag(QImage& surface, QPoint pt, Qt::MouseButton button, ToolDragState state, AppModel* model) {
+void PencilTool::onDrag(const QImage& surface, QImage& buffer, QPoint pt, Qt::MouseButton button, ToolDragState state, AppModel* model) {
 	QRgb colour = button == Qt::MouseButton::RightButton ? model->secondaryColour().rgba() : model->primaryColour().rgba();
 
 	switch(state) {
 		case ToolDragState::Press: {
-			if(utils::contains(surface, pt)) {
-				surface.setPixel(pt, colour);
+			if(utils::contains(buffer, pt)) {
+				buffer.setPixel(pt, colour);
 			}
 			m_CurrentStroke.push_back(pt);
+			PaintUtils::reset(surface.size());
 			break;
 		}
 		case ToolDragState::Release:
 		case ToolDragState::Drag: {
+			// Draw line from last point to new point
 			QPoint prev = m_CurrentStroke.last();
-			QList<QPoint> line = utils::plotLine(prev.x(), prev.y(), pt.x(), pt.y());
-			line.removeFirst(); // Remove the start point that's the same as the end of the previous line
+			PaintUtils::drawLine(buffer, prev.x(), prev.y(), pt.x(), pt.y(), colour, &m_CurrentStroke, false);
 
-			QRgb* bytes = (QRgb*)surface.scanLine(0); // Assumes a 32-bit format
-
-			for(QPoint& linePt : line) {
-				if(utils::contains(surface, linePt)) {
-					bytes[linePt.x() + linePt.y() * surface.width()] = colour;
-				}
+			// If pixel perfect corrections are selected to be applied, then do so
+			if(m_Settings->get(TS_PENCIL_PIXELPERFECT).unwrap()->toBool()) {
+				PaintUtils::pixelPerfectCorrect(surface, buffer, m_CurrentStroke);
 			}
-			if(state == ToolDragState::Drag) { // This block is run when state is Release as well, so need this check
-				m_CurrentStroke.append(line);
-			} else {
+
+			if(state == ToolDragState::Release) {
 				m_CurrentStroke.clear();
 			}
 			break;

@@ -12,7 +12,7 @@ public:
 	explicit BucketTool();
 	~BucketTool() override;
 
-	void onClick(QImage& surface, QPoint pt, Qt::MouseButton button, AppModel* model) override;
+	void onClick(const QImage& surface, QImage& buffer, QPoint pt, Qt::MouseButton button, AppModel* model) override;
 };
 
 #endif // BUCKETTOOL_H

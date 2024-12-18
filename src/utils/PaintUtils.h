@@ -28,8 +28,20 @@ class PaintUtils {
 public:
 	// TODO: Add brushes
 
-	/// Utilises the Bresenham line algorithm to draw a line from (x0, y0) to (x1, y1) in the supplied colour
-	static void drawLine(QImage& target, int x0, int y0, int x1, int y1, QRgb colour);
+	/// Resets internal state used by some drawing functions (e.g. drawLine, pixelPerfectCorrect). Should be called
+	/// before a new "operation" (however that may be decided) in order to ensure correct behaviour
+	/// Requires a size that must correspond to the size of the image of the current surface image
+	static void reset(const QSize& surfaceSize);
+
+	/// Utilises the Bresenham line algorithm to draw a line from (x0, y0) to (x1, y1) in the supplied colour.
+	/// If stroke is provided, then this function will record points drawn into stroke. If recordFirst is false, then
+	/// the first point will not be recorded
+	static void drawLine(QImage& target, int x0, int y0, int x1, int y1, QRgb colour, QList<QPoint>* stroke = nullptr, bool recordFirst = true);
+
+	/// Applies pixel perfect corrections to a queue of points that make up a stroke, assuming that the stroke is already painted
+	/// on to buffer but not on to surface (i.e. surface holds the state just before the stroke). Removes points that are no longer
+	/// needed for pixel perfect corrections from stroke
+	static void pixelPerfectCorrect(const QImage& surface, QImage& buffer, QList<QPoint>& stroke);
 
 	/// Flood-fills an area of pixels starting from (x, y), flooding to adjacent pixels if the difference between
 	/// the adjacent pixel is within the tolerance of the starting pixel colour
@@ -42,9 +54,8 @@ private:
 	static inline void fillPixel(const QImage& target, QRgb* bytes, int x, int y, bool* filled, QStack<QPoint>& stack, QRgb origCol, QRgb colour, int tolerance);
 	static bool canFill(QRgb targetColour, QRgb origColour, int tolerance);
 
-	// TODO: Is this necessary? It's the memset that's the actual performance issue rather than the allocation
-	static bool* s_CachedFillArray;
-	static QSize s_CachedFillArraySize;
+	static bool* s_ExtraDrawData;
+	static QSize s_ExtraDrawDataSize;
 };
 
 #endif // PAINTUTILS_H

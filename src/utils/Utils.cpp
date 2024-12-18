@@ -258,7 +258,7 @@ namespace utils { // TODO: Relocate contents to Utils class
 		return points;
 	}
 
-	bool contains(QImage& image, QPoint& point) {
+	bool contains(const QImage& image, const QPoint& point) {
 		return (point.x() >= 0 && point.x() < image.width() && point.y() >= 0 && point.y() < image.height());
 	}
 }

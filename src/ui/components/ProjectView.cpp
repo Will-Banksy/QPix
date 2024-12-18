@@ -148,7 +148,7 @@ void ProjectView::mousePressEvent(QMouseEvent *event) { // TODO: Move all this l
 	if(m_MouseDown) {
 		// if(currentTool->usageType() == ToolUsageType::Drag) {
 		std::cerr << "Tool cancel" << std::endl;
-		currentTool->onDrag(m_Model->buffer(), pos, event->button(), ToolDragState::Cancel, m_AppModel);
+		currentTool->onDrag(m_Model->surface(), m_Model->buffer(), pos, event->button(), ToolDragState::Cancel, m_AppModel);
 		m_Model->revertBuffer();
 		m_CanvasView->update();
 		// }
@@ -157,11 +157,11 @@ void ProjectView::mousePressEvent(QMouseEvent *event) { // TODO: Move all this l
 	} else {
 		if(currentTool->usageType() == ToolUsageType::Drag) {
 			std::cerr << "Tool drag press" << std::endl;
-			currentTool->onDrag(m_Model->buffer(), pos, event->button(), ToolDragState::Press, m_AppModel);
+			currentTool->onDrag(m_Model->surface(), m_Model->buffer(), pos, event->button(), ToolDragState::Press, m_AppModel);
 		}
 		if(currentTool->usageType() == ToolUsageType::Click) {
 			std::cerr << "Tool click" << std::endl;
-			currentTool->onClick(m_Model->buffer(), pos, event->button(), m_AppModel);
+			currentTool->onClick(m_Model->surface(), m_Model->buffer(), pos, event->button(), m_AppModel);
 		}
 		m_MouseDown = true;
 		m_MouseButton = event->button();
@@ -190,7 +190,7 @@ void ProjectView::mouseReleaseEvent(QMouseEvent *event) {
 	if(!m_IgnoreRelease) {
 		if(currentTool->usageType() == ToolUsageType::Drag) {
 			std::cerr << "Tool drag release" << std::endl;
-			currentTool->onDrag(m_Model->buffer(), pos, m_MouseButton, ToolDragState::Release, m_AppModel);
+			currentTool->onDrag(m_Model->surface(), m_Model->buffer(), pos, m_MouseButton, ToolDragState::Release, m_AppModel);
 			m_Model->commitBuffer();
 			m_CanvasView->update();
 		} else if(currentTool->usageType() == ToolUsageType::Click) {
@@ -222,7 +222,7 @@ void ProjectView::mouseMoveEvent(QMouseEvent *event) {
 	if(m_PrevCanvasCoord != pos) {
 		if(m_MouseDown && !m_IgnoreRelease && currentTool->usageType() == ToolUsageType::Drag) {
 			std::cerr << "Tool drag" << std::endl;
-			currentTool->onDrag(m_Model->buffer(), pos, m_MouseButton, ToolDragState::Drag, m_AppModel);
+			currentTool->onDrag(m_Model->surface(), m_Model->buffer(), pos, m_MouseButton, ToolDragState::Drag, m_AppModel);
 			m_CanvasView->update();
 		}
 

@@ -59,7 +59,7 @@ namespace utils {
 	QList<QPoint> plotLine(int startX, int startY, int endX, int endY);
 
 	/// Returns true if the image bounds contains the point
-	bool contains(QImage& image, QPoint& point);
+	bool contains(const QImage& image, const QPoint& point);
 
 	// Can't split templates across header and source files: https://stackoverflow.com/questions/5612791/c-template-and-header-files#5612847
 	// Reason is that the WHOLE function/class/thing that is templated needs to be known at compile time, so it can actually generate the function/class/thing according to it's usage

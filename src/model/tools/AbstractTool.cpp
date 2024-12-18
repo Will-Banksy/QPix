@@ -9,10 +9,10 @@ AbstractTool::AbstractTool() : QObject() {
 AbstractTool::~AbstractTool() {
 }
 
-void AbstractTool::onDrag(QImage& surface, QPoint pt, Qt::MouseButton button, ToolDragState state, AppModel* model) {
+void AbstractTool::onDrag(const QImage& surface, QImage& buffer, QPoint pt, Qt::MouseButton button, ToolDragState state, AppModel* model) {
 }
 
-void AbstractTool::onClick(QImage& surface, QPoint pt, Qt::MouseButton button, AppModel* model) {
+void AbstractTool::onClick(const QImage& surface, QImage& buffer, QPoint pt, Qt::MouseButton button, AppModel* model) {
 }
 
 void AbstractTool::onSelectedChanged(bool selected, AppModel* model) {

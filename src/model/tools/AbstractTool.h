@@ -36,10 +36,10 @@ public:
 	/// Drag cancel occurs when a drag was started with one button and another button was pressed
 	/// without releasing the first button. The image state will be automatically reset in most
 	/// situations, meaning that tools should not edit the image when drag cancel occurs
-	virtual void onDrag(QImage& surface, QPoint pt, Qt::MouseButton button, ToolDragState state, AppModel* model);
+	virtual void onDrag(const QImage& surface, QImage& buffer, QPoint pt, Qt::MouseButton button, ToolDragState state, AppModel* model);
 
 	/// Called for tools that have usage type Click, when the user clicks on a pixel
-	virtual void onClick(QImage& surface, QPoint pt, Qt::MouseButton button, AppModel* model);
+	virtual void onClick(const QImage& surface, QImage& buffer, QPoint pt, Qt::MouseButton button, AppModel* model);
 
 	/// Called when a tool is selected (true) or deselected (false). Most tools will not use this
 	virtual void onSelectedChanged(bool selected, AppModel* model);
