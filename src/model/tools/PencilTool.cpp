@@ -22,11 +22,9 @@ void PencilTool::onDrag(const QImage& surface, QImage& buffer, QPoint pt, Qt::Mo
 
 	switch(state) {
 		case ToolDragState::Press: {
-			if(utils::contains(buffer, pt)) {
-				buffer.setPixel(pt, colour);
-			}
-			m_CurrentStroke.push_back(pt);
 			PaintUtils::reset(surface.size());
+			PaintUtils::drawLine(buffer, pt.x(), pt.y(), pt.x(), pt.y(), colour, &m_CurrentStroke, true);
+			m_CurrentStroke.push_back(pt);
 			break;
 		}
 		case ToolDragState::Release:
@@ -47,6 +45,7 @@ void PencilTool::onDrag(const QImage& surface, QImage& buffer, QPoint pt, Qt::Mo
 		}
 		case ToolDragState::Cancel: {
 			m_CurrentStroke.clear();
+			break;
 		}
 	}
 }

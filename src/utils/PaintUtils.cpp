@@ -5,12 +5,12 @@
 #include <iostream>
 #include <QQueue>
 
-bool* PaintUtils::s_ExtraDrawData = nullptr;
+uint8_t* PaintUtils::s_ExtraDrawData = nullptr;
 QSize PaintUtils::s_ExtraDrawDataSize = QSize();
 
 void PaintUtils::reset(const QSize& surfaceSize) {
 	if(surfaceSize != s_ExtraDrawDataSize) {
-		s_ExtraDrawData = new bool[surfaceSize.width() * surfaceSize.height()];
+		s_ExtraDrawData = new uint8_t[surfaceSize.width() * surfaceSize.height()];
 		s_ExtraDrawDataSize = surfaceSize;
 	}
 	memset(s_ExtraDrawData, 0, s_ExtraDrawDataSize.width() * s_ExtraDrawDataSize.height());
@@ -48,6 +48,7 @@ void PaintUtils::drawLine(QImage& target, int x0, int y0, int x1, int y1, QRgb c
 			if(inDrawableSpace) {
 				// Record a point being put here
 				s_ExtraDrawData[x0 + y0 * target.width()] += 1;
+				qDebug() << "Recording point in s_ExtraDrawData at (" << x0 << ", " << y0 << ") - New value: " << s_ExtraDrawData[x0 + y0 * target.width()];
 			}
 		}
 
@@ -66,11 +67,6 @@ void PaintUtils::drawLine(QImage& target, int x0, int y0, int x1, int y1, QRgb c
 	}
 }
 
-// FIXME: // BUG when drawing stroke:
-//   2
-// 1 0
-// in order: 0, 1, 0, 2
-// - s_ExtraDrawData does not seem to get filled in correctly (related to it being a bool array perhaps?)
 void PaintUtils::pixelPerfectCorrect(const QImage& surface, QImage& buffer, QList<QPoint>& stroke) {
 	if(stroke.length() < 3) {
 		return;
@@ -160,16 +156,16 @@ void PaintUtils::fillArea(QImage& target, int x, int y, QRgb colour, int toleran
 
 		bytes[x + y * target.width()] = colour;
 
-		PaintUtils::fillPixel(target, bytes, x, y - 1, s_ExtraDrawData, stack, origCol, colour, tolerance);
-		PaintUtils::fillPixel(target, bytes, x, y + 1, s_ExtraDrawData, stack, origCol, colour, tolerance);
-		PaintUtils::fillPixel(target, bytes, x - 1, y, s_ExtraDrawData, stack, origCol, colour, tolerance);
-		PaintUtils::fillPixel(target, bytes, x + 1, y, s_ExtraDrawData, stack, origCol, colour, tolerance);
+		PaintUtils::fillPixel(target, bytes, x, y - 1, (bool*)s_ExtraDrawData, stack, origCol, colour, tolerance);
+		PaintUtils::fillPixel(target, bytes, x, y + 1, (bool*)s_ExtraDrawData, stack, origCol, colour, tolerance);
+		PaintUtils::fillPixel(target, bytes, x - 1, y, (bool*)s_ExtraDrawData, stack, origCol, colour, tolerance);
+		PaintUtils::fillPixel(target, bytes, x + 1, y, (bool*)s_ExtraDrawData, stack, origCol, colour, tolerance);
 
 		if(fillDiagonally) {
-			PaintUtils::fillPixel(target, bytes, x - 1, y - 1, s_ExtraDrawData, stack, origCol, colour, tolerance);
-			PaintUtils::fillPixel(target, bytes, x + 1, y + 1, s_ExtraDrawData, stack, origCol, colour, tolerance);
-			PaintUtils::fillPixel(target, bytes, x - 1, y + 1, s_ExtraDrawData, stack, origCol, colour, tolerance);
-			PaintUtils::fillPixel(target, bytes, x + 1, y - 1, s_ExtraDrawData, stack, origCol, colour, tolerance);
+			PaintUtils::fillPixel(target, bytes, x - 1, y - 1, (bool*)s_ExtraDrawData, stack, origCol, colour, tolerance);
+			PaintUtils::fillPixel(target, bytes, x + 1, y + 1, (bool*)s_ExtraDrawData, stack, origCol, colour, tolerance);
+			PaintUtils::fillPixel(target, bytes, x - 1, y + 1, (bool*)s_ExtraDrawData, stack, origCol, colour, tolerance);
+			PaintUtils::fillPixel(target, bytes, x + 1, y - 1, (bool*)s_ExtraDrawData, stack, origCol, colour, tolerance);
 		}
 	}
 }

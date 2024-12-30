@@ -38,13 +38,13 @@ public:
 	/// the first point will not be recorded
 	static void drawLine(QImage& target, int x0, int y0, int x1, int y1, QRgb colour, QList<QPoint>* stroke = nullptr, bool recordFirst = true);
 
-	/// Applies pixel perfect corrections to a queue of points that make up a stroke, assuming that the stroke is already painted
+	/// Applies pixel perfect corrections to a list of points that make up a stroke, assuming that the stroke is already painted
 	/// on to buffer but not on to surface (i.e. surface holds the state just before the stroke). Removes points that are no longer
 	/// needed for pixel perfect corrections from stroke
 	static void pixelPerfectCorrect(const QImage& surface, QImage& buffer, QList<QPoint>& stroke);
 
 	/// Flood-fills an area of pixels starting from (x, y), flooding to adjacent pixels if the difference between
-	/// the adjacent pixel is within the tolerance of the starting pixel colour
+	/// the adjacent pixel is within the tolerance of the starting pixel colour, according to `PaintUtils::canFill`
 	static void fillArea(QImage& target, int x, int y, QRgb colour, int tolerance, bool fillDiagonally);
 
 private:
@@ -54,7 +54,7 @@ private:
 	static inline void fillPixel(const QImage& target, QRgb* bytes, int x, int y, bool* filled, QStack<QPoint>& stack, QRgb origCol, QRgb colour, int tolerance);
 	static bool canFill(QRgb targetColour, QRgb origColour, int tolerance);
 
-	static bool* s_ExtraDrawData;
+	static uint8_t* s_ExtraDrawData;
 	static QSize s_ExtraDrawDataSize;
 };
 
