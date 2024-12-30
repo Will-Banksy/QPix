@@ -3,6 +3,8 @@
 
 #include <exception>
 
+// TODO: Deprecate in favour of Option?
+
 template <typename T>
 class Nullable {
 public:

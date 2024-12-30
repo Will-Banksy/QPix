@@ -12,6 +12,7 @@
 		<file>data/tools/fill.png</file>
 		<file>data/tools/line.png</file>
 		<file>data/tools/move.png</file>
+		<file>data/tools/pipette.png</file>
 
 		<file>data/palette.json</file>
 		<file>data/style.qss</file>

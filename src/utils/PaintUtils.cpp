@@ -48,7 +48,6 @@ void PaintUtils::drawLine(QImage& target, int x0, int y0, int x1, int y1, QRgb c
 			if(inDrawableSpace) {
 				// Record a point being put here
 				s_ExtraDrawData[x0 + y0 * target.width()] += 1;
-				qDebug() << "Recording point in s_ExtraDrawData at (" << x0 << ", " << y0 << ") - New value: " << s_ExtraDrawData[x0 + y0 * target.width()];
 			}
 		}
 

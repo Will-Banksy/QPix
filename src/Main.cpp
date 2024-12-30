@@ -10,6 +10,7 @@
 #include <QMap>
 #include <QPalette>
 #include "utils/Utils.h"
+#include "Main.h"
 
 // TODO: Add some kind of chunking system to optimise rendering/drawing?
 
