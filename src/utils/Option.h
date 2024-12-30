@@ -31,7 +31,7 @@ public:
 
 	bool some() {
 		assert(this->isSome());
-		return m_Variant[1];
+		return m_Variant[1]; // NOTE: Probably wrong
 	}
 
 private:

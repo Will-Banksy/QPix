@@ -50,6 +50,8 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 							}
 						}
 					});
+					// Emit settings changed to update UI
+					emit settings->valueChanged(key, *settings->get(key).unwrap());
 					settingsLayout->addWidget(checkbox);
 
 					break;
