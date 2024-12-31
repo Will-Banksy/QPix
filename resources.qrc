@@ -14,6 +14,13 @@
 		<file>data/tools/move.png</file>
 		<file>data/tools/pipette.png</file>
 
+		<file>data/tools/svg/pencil.svg</file>
+		<file>data/tools/svg/eraser.svg</file>
+		<file>data/tools/svg/fill.svg</file>
+		<file>data/tools/svg/line.svg</file>
+		<file>data/tools/svg/move.svg</file>
+		<file>data/tools/svg/pipette.svg</file>
+
 		<file>data/palette.json</file>
 		<file>data/style.qss</file>
 	</qresource>
