@@ -3,6 +3,7 @@
 #include "BucketTool.h"
 #include "HandTool.h"
 #include "PipetteTool.h"
+#include "EraserTool.h"
 
 AbstractTool::AbstractTool() : QObject() {
 }
@@ -22,6 +23,7 @@ void AbstractTool::onSelectedChanged(bool selected, AppModel* model) {
 QList<AbstractTool*> AbstractTool::initialiseTools() {
 	return {
         (AbstractTool*)new PencilTool(),
+        (AbstractTool*)new EraserTool(),
 		(AbstractTool*)new PipetteTool(),
 		(AbstractTool*)new BucketTool(),
 		(AbstractTool*)new HandTool(),

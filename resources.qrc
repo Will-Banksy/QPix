@@ -7,19 +7,12 @@
 		<file>data/controls/arrow_left.svg</file>
 		<file>data/controls/arrow_right.svg</file>
 
-		<file>data/tools/pencil.png</file>
-		<file>data/tools/eraser.png</file>
-		<file>data/tools/fill.png</file>
-		<file>data/tools/line.png</file>
-		<file>data/tools/move.png</file>
-		<file>data/tools/pipette.png</file>
-
-		<file>data/tools/svg/pencil.svg</file>
-		<file>data/tools/svg/eraser.svg</file>
-		<file>data/tools/svg/fill.svg</file>
-		<file>data/tools/svg/line.svg</file>
-		<file>data/tools/svg/move.svg</file>
-		<file>data/tools/svg/pipette.svg</file>
+		<file>data/tools/pencil.svg</file>
+		<file>data/tools/eraser.svg</file>
+		<file>data/tools/fill.svg</file>
+		<file>data/tools/line.svg</file>
+		<file>data/tools/move.svg</file>
+		<file>data/tools/pipette.svg</file>
 
 		<file>data/palette.json</file>
 		<file>data/style.qss</file>

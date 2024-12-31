@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   sodipodi:docname="Pencil.svg"
-   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="pencil.svg"
+   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
    id="svg8"
    version="1.1"
    viewBox="0 0 4.2333333 4.2333333"
    height="16"
-   width="16">
+   width="16"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
      id="defs2">
     <pattern
@@ -39,18 +39,18 @@
      inkscape:showpageshadow="false"
      inkscape:pagecheckerboard="true"
      inkscape:window-maximized="1"
-     inkscape:window-y="27"
+     inkscape:window-y="0"
      inkscape:window-x="0"
-     inkscape:window-height="1024"
-     inkscape:window-width="1920"
+     inkscape:window-height="1371"
+     inkscape:window-width="2560"
      units="px"
      showgrid="true"
      inkscape:document-rotation="0"
      inkscape:current-layer="layer1"
      inkscape:document-units="mm"
-     inkscape:cy="8.070697"
-     inkscape:cx="6.2791482"
-     inkscape:zoom="51.767129"
+     inkscape:cy="14.069159"
+     inkscape:cx="10.053302"
+     inkscape:zoom="36.604888"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0"
      borderopacity="1"
@@ -74,7 +74,8 @@
      gridtolerance="10"
      guidetolerance="9.9"
      inkscape:snap-perpendicular="true"
-     inkscape:snap-tangential="true">
+     inkscape:snap-tangential="true"
+     inkscape:deskcolor="#505050">
     <inkscape:grid
        opacity="0.34901961"
        color="#3f3fff"
@@ -82,7 +83,12 @@
        empcolor="#ff3f3f"
        type="xygrid"
        id="grid832"
-       empspacing="4" />
+       empspacing="4"
+       originx="0"
+       originy="0"
+       spacingy="0.26458332"
+       spacingx="0.26458332"
+       units="px" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -92,7 +98,6 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>

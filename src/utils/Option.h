@@ -18,7 +18,8 @@ public:
 	template<typename... Args>
 	static Option newSome(Args&&... args) {
 		Option opt = Option();
-		opt.m_Variant.emplace(std::forward<Args>(args)...);
+		opt.m_Variant.template emplace<1>(std::forward<Args>(args)...);
+		return opt;
 	}
 
 	bool isNone() const {
@@ -29,9 +30,9 @@ public:
 		return m_Variant.index() == 1;
 	}
 
-	bool some() {
+	T& some() {
 		assert(this->isSome());
-		return m_Variant[1]; // NOTE: Probably wrong
+		return std::get<1>(m_Variant);
 	}
 
 private:
