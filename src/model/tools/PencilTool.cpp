@@ -11,7 +11,7 @@ PencilTool::PencilTool() : AbstractTool(), m_CurrentStroke(QList<QPoint>()) {
 	m_UsageType = ToolUsageType::Drag;
 
 	m_Settings = new ToolSettings({
-		{ TS_PENCIL_PIXELPERFECT, QVariant(false) }
+		{ TS_PENCIL_PIXELPERFECT, TSVariant::newBool(false) }
 	});
 }
 
@@ -20,7 +20,7 @@ PencilTool::~PencilTool() {
 
 void PencilTool::onDrag(const QImage& surface, QImage& buffer, QPoint pt, Qt::MouseButton button, ToolDragState state, AppModel* model) {
 	QRgb colour = button == Qt::MouseButton::RightButton ? model->secondaryColour().rgba() : model->primaryColour().rgba();
-	bool pixelPerfect = m_Settings->get(TS_PENCIL_PIXELPERFECT).unwrap()->toBool();
+	bool pixelPerfect = m_Settings->get(TS_PENCIL_PIXELPERFECT).some().toBool();
 
 	// NOTE: Will be buggy in case of the pixelPerfect setting switching mid-stroke
 	//       Perhaps introduce a "locking" mechanism into ToolSettings, where certain settings can be "locked" which disables their hotkeys

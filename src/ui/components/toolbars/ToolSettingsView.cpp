@@ -15,34 +15,33 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 
 	for(AbstractTool* tool : tools) {
 		ToolSettings* settings = tool->settings();
-		const QVariantMap& settingsMap = settings->getMap();
+		const QMap<QString, TSVariant>& settingsMap = settings->getMap();
 
 		FlowLayout* settingsLayout = new FlowLayout();
 
-		QMapIterator<QString, QVariant> iter = QMapIterator(settingsMap);
+		QMapIterator<QString, TSVariant> iter = QMapIterator(settingsMap);
 		while(iter.hasNext()) {
 			auto entry = iter.next();
 			const QString& key = entry.key();
-			const QVariant& value = entry.value();
+			const TSVariant& value = entry.value();
 
-			switch(value.typeId()) {
-				case QMetaType::Bool: {
+			switch(value.type()) {
+				case TSVariant::InnerType::Bool: {
 					QCheckBox* checkbox = new QCheckBox(key);
+
 					this->connect(checkbox, &QCheckBox::checkStateChanged, settings, [checkbox, settings, key](Qt::CheckState state) {
 						assert(!checkbox->isTristate());
 
 						if(state == Qt::CheckState::Checked) {
-							settings->setValue(key, QVariant(true));
+							settings->setValue(key, TSVariant::newBool(true));
 						} else {
-							settings->setValue(key, QVariant(false));
+							settings->setValue(key, TSVariant::newBool(false));
 						}
 					});
-					this->connect(settings, &ToolSettings::valueChanged, checkbox, [checkbox, settings, key](const QVariant& changedKey, const QVariant& value) {
-						assert(value.typeId() == QMetaType::Bool);
+					this->connect(settings, &ToolSettings::valueChanged, checkbox, [checkbox, settings, key](const QString& changedKey, const TSVariant& value) {
+						assert(value.type() == TSVariant::InnerType::Bool);
 
 						if(changedKey == key) {
-							qDebug() << "checkbox setChecked " << value;
-
 							if(value.toBool() == true) {
 								checkbox->setCheckState(Qt::CheckState::Checked);
 							} else {
@@ -51,9 +50,14 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 						}
 					});
 					// Emit settings changed to update UI
-					emit settings->valueChanged(key, *settings->get(key).unwrap());
+					emit settings->valueChanged(key, settings->get(key).some());
 					settingsLayout->addWidget(checkbox);
 
+					break;
+				}
+				case TSVariant::InnerType::TSInRangeU32: {
+					// TODO
+					assert(false);
 					break;
 				}
 			}

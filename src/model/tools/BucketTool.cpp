@@ -9,7 +9,7 @@ BucketTool::BucketTool() : AbstractTool() {
 	m_UsageType = ToolUsageType::Click;
 
 	m_Settings = new ToolSettings({
-		{ TS_BUCKET_DIAGONAL_FILL, QVariant(false) }
+		{ TS_BUCKET_DIAGONAL_FILL, TSVariant::newBool(false) }
 	});
 }
 
@@ -20,7 +20,7 @@ BucketTool::~BucketTool() {
 void BucketTool::onClick(const QImage& surface, QImage& buffer, QPoint pt, Qt::MouseButton button, AppModel* model) {
 	QRgb colour = button == Qt::MouseButton::RightButton ? model->secondaryColour().rgba() : model->primaryColour().rgba();
 
-	bool fillDiagonally = m_Settings->get(TS_BUCKET_DIAGONAL_FILL).unwrap()->toBool();
+	bool fillDiagonally = m_Settings->get(TS_BUCKET_DIAGONAL_FILL).some().toBool();
 
 	PaintUtils::fillArea(buffer, pt.x(), pt.y(), colour, 0, fillDiagonally); // TODO: Tolerance
 }

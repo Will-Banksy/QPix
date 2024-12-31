@@ -3,8 +3,6 @@
 
 #include "Main.h"
 
-// TODO: Test this
-
 template<typename T>
 class Option {
 public:
@@ -30,7 +28,7 @@ public:
 		return m_Variant.index() == 1;
 	}
 
-	T& some() {
+	const T& some() const {
 		assert(this->isSome());
 		return std::get<1>(m_Variant);
 	}
