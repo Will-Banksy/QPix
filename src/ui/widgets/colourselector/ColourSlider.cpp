@@ -85,7 +85,9 @@ QSize ColourSlider::sizeHint() const {
 			return QSize(20, m_PrefLength + 4);
 		}
 	}
+
 	assert(false);
+	return *(QSize*)nullptr;
 }
 
 void ColourSlider::setFromClick(const QPoint& mousePos) {

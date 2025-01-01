@@ -169,6 +169,7 @@ namespace utils { // TODO: Relocate contents to Utils class
 		}
 
 		assert(false);
+		return *(QPoint*)nullptr;
 	}
 
 	float map(float val, float start1, float stop1, float start2, float stop2) {

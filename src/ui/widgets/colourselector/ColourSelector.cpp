@@ -616,7 +616,9 @@ QColor ColourSelector::colourFromAbca(const AbcaQuad& abca) const {
 			return col;
 		}
 	}
+
 	assert(false);
+	return *(QColor*)nullptr;
 }
 
 AbcaQuad ColourSelector::abcaFromColour(const QColor& col) const {
