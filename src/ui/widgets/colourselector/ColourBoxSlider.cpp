@@ -60,7 +60,7 @@ void ColourBoxSlider::paintEvent(QPaintEvent* event) {
 	// Perceptual lightness would be better here but HSL lightness works alright, if not amazingly (i.e. white is hard to see against green or yellow)
 	// Implemented a quick fix for making the marker easier to see against bright hues by just comapring the hue against a hardcoded "bright hues" range
 	// and reducing the threshold for a black marker if it's a bright hue
-	QColor colHere = m_BgImg->pixelColor(QPoint(qMin(pt.x(), m_BgImg->width() - 1), qMin(pt.y(), m_BgImg->height() - 1)));
+	QColor colHere = m_BgImg->pixelColor(QPoint(qMin(x, m_BgImg->width() - 1), qMin(y, m_BgImg->height() - 1)));
 	bool brightHue = colHere.hslHue() > 45 && colHere.hslHue() < 200; // BUG: Slight issue where the hue is returned as -1 on a monochromatic colour
 	if(brightHue && colHere.lightness() > 90 || colHere.lightness() > 128) {
 		painter.setPen(QPen(QColorConstants::Black, 2));
