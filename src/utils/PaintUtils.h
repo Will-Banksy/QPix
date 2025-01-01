@@ -38,6 +38,13 @@ public:
 	/// the first point will not be recorded
 	static void drawLine(QImage& target, int x0, int y0, int x1, int y1, QRgb colour, QList<QPoint>* stroke = nullptr, bool recordFirst = true);
 
+	/// Alias for a function taking and returning a QRgb
+	using LineAffector = std::function<QRgb(QRgb)>;
+
+	/// Runs `f` on every pixel of a line, using bresenham's line algorithm. Supply true for oncePerPixel to make the function only run once per pixel
+	/// between PaintUtils state resets
+	static void affectLine(QImage& target, int x0, int y0, int x1, int y1, LineAffector f, bool oncePerPixel = false);
+
 	/// Applies pixel perfect corrections to a list of points that make up a stroke, assuming that the stroke is already painted
 	/// on to buffer but not on to surface (i.e. surface holds the state just before the stroke). Removes points that are no longer
 	/// needed for pixel perfect corrections from stroke

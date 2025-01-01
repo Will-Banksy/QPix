@@ -17,7 +17,7 @@ void PaintUtils::reset(const QSize& surfaceSize) {
 }
 
 void PaintUtils::drawLine(QImage& target, int x0, int y0, int x1, int y1, QRgb colour, QList<QPoint>* stroke, bool recordFirst) {
-	QRgb* bytes = (uint32_t*)target.scanLine(0); // Assumes a 32-bit format
+	QRgb* bytes = (QRgb*)target.scanLine(0); // Assumes a 32-bit format
 
 	int startX = x0;
 	int startY = y0;
@@ -32,7 +32,7 @@ void PaintUtils::drawLine(QImage& target, int x0, int y0, int x1, int y1, QRgb c
 	int err2;
 
 	for(;;) {
-		// Check that the point is in drawable space first... which I may have forgotten to do
+		// Check that the point is in drawable space first
 		bool inDrawableSpace = utils::contains(target, QPoint(x0, y0));
 		if(inDrawableSpace) {
 			bytes[x0 + y0 * target.width()] = colour;
@@ -49,6 +49,44 @@ void PaintUtils::drawLine(QImage& target, int x0, int y0, int x1, int y1, QRgb c
 				// Record a point being put here
 				s_ExtraDrawData[x0 + y0 * target.width()] += 1;
 			}
+		}
+
+		if(x0 == x1 && y0 == y1) {
+			break;
+		}
+		err2 = err * 2;
+		if(err2 >= dy) {
+			err += dy;
+			x0 += unitX;
+		}
+		if(err2 <= dx) {
+			err += dx;
+			y0 += unitY;
+		}
+	}
+}
+
+void PaintUtils::affectLine(QImage& target, int x0, int y0, int x1, int y1, LineAffector f, bool oncePerPixel) {
+	QRgb* bytes = (QRgb*)target.scanLine(0); // Assumes a 32-bit format
+
+	int dx = abs(x1 - x0);
+	int dy = -abs(y1 - y0);
+
+	int unitX = x0 < x1 ? 1 : -1;
+	int unitY = y0 < y1 ? 1 : -1;
+
+	int err = dx + dy;
+	int err2;
+
+	for(;;) {
+		// Check that the point is in drawable space first
+		bool inDrawableSpace = utils::contains(target, QPoint(x0, y0));
+
+		int idx = x0 + y0 * target.width();
+		bool visited = s_ExtraDrawData[idx] > 0;
+		if(inDrawableSpace && (!visited || !oncePerPixel)) {
+			bytes[idx] = f(bytes[idx]);
+			s_ExtraDrawData[idx] += 1;
 		}
 
 		if(x0 == x1 && y0 == y1) {

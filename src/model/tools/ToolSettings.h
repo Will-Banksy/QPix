@@ -13,8 +13,6 @@ struct TSInRange {
 	T End;
 	T Value;
 
-	TSInRange(const TSInRange& other) = default;
-
 	TSInRange withValue(T newValue) const {
 		return TSInRange {
 			.Start = Start,

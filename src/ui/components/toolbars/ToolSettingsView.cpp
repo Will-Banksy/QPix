@@ -3,6 +3,8 @@
 #include "ui/layouts/FlowLayout.h"
 #include <QCheckBox>
 #include <QStackedLayout>
+#include <QSpinBox>
+#include <QLabel>
 
 ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 	const QList<AbstractTool*>& tools = model->availableTools();
@@ -56,8 +58,32 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 					break;
 				}
 				case TSVariant::InnerType::TSInRangeU32: {
-					// TODO
-					assert(false);
+					QSpinBox* spinbox = new QSpinBox();
+					spinbox->setFixedWidth(60);
+
+					this->connect(spinbox, &QSpinBox::valueChanged, settings, [spinbox, value, settings, key](int newValue) {
+						settings->setValue(key, TSVariant::newInRangeU32(value.toInRangeU32().withValue(newValue)));
+					});
+					this->connect(settings, &ToolSettings::valueChanged, spinbox, [spinbox, settings, key](const QString& changedKey, const TSVariant& newValue) {
+						assert(newValue.type() == TSVariant::InnerType::TSInRangeU32);
+
+						if(changedKey == key) {
+							auto val = newValue.toInRangeU32();
+							spinbox->setMinimum(val.Start);
+							spinbox->setMaximum(val.End);
+							spinbox->setValue(val.Value);
+						}
+					});
+					emit settings->valueChanged(key, settings->get(key).some());
+
+					QLabel* spinboxLabel = new QLabel(key + ":");
+					QHBoxLayout* layout = new QHBoxLayout();
+					layout->setSpacing(8);
+
+					layout->addWidget(spinboxLabel);
+					layout->addWidget(spinbox);
+					settingsLayout->addItem(layout);
+
 					break;
 				}
 			}

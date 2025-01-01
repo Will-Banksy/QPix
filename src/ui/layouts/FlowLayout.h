@@ -12,12 +12,12 @@ public:
 	~FlowLayout();
 
 	void clear();
+	void addItem(QLayoutItem* item) override;
 
 protected:
 	int count() const override;
 	QLayoutItem* takeAt(int index) override;
 	QLayoutItem* itemAt(int index) const override;
-	void addItem(QLayoutItem* item) override;
 	QSize sizeHint() const override;
 	void setGeometry(const QRect& rect) override;
 	QSize minimumSize() const override;
