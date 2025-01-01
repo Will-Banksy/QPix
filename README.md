@@ -16,23 +16,17 @@ Note that since this is very incomplete, these features will likely change.
 	- Inspired by Java Swing's colour picker dialog
 - Nice looking handcrafted UI (imo) with a lot of care taken to make it coherent
 
-## Compile And Run
+## Building
 
-You need Qt6 and CMake 3.5 or higher (I'm using Qt 6.6.2 but it should work on earlier versions)
+You need Qt6 and CMake 3.20 or higher (I'm using Qt 6.6.2 but it should work on earlier versions)
 
 You will also need a C++20 compliant compiler.
 
-### Compile
-
-Navigate to project directory:
+To build and run the release build, navigate to project directory and run:
 
 ```bash
-mkdir build && cd build
-cmake ..
-make
+make run-rls
 ```
-### Run
+You can also make the `run-dbg` rule to build and run the debug build.
 
-```bash
-./qpix
-```
+The executable will be output as target/debug/qpix(.exe) or target/release/qpix(.exe) depending on version built.
