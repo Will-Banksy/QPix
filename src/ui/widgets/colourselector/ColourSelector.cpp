@@ -15,8 +15,11 @@
 #include <QAction>
 #include <QActionGroup>
 #include <QToolButton>
+#include <QTimer>
 
 const int SLIDER_WIDTH = 32;
+
+const int IMAGE_REGEN_TIMEOUT_MS = 20;
 
 struct SliderInfo {
 public:
@@ -50,7 +53,11 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 	m_SquareImg(new QImage(255, 255, QImage::Format_ARGB32)),
 	m_PrimarySliderImg(new QImage(SLIDER_WIDTH, 360, QImage::Format_ARGB32)),
 	m_AlphaSliderImg(new QImage(255, SLIDER_WIDTH, QImage::Format_ARGB32)),
-	m_HexEntry(new QLineEdit()) {
+	m_HexEntry(new QLineEdit()),
+	m_ImageRegenTimer(new QTimer(this)),
+	m_RegenSquareSliderImg(false),
+	m_RegenPrimarySliderImg(false),
+	m_RegenAlphaSliderImg(false) {
 
 	m_SquareSlider = new ColourBoxSlider(m_SquareImg);
 	m_SquareSlider->setPreferredSize(QSize(255, 255));
@@ -225,7 +232,11 @@ ColourSelector::ColourSelector(QColor colour, QWidget* parent) : QWidget(parent)
 		}
 	});
 
-	this->updateImages(true, true, true);
+	connect(m_ImageRegenTimer, &QTimer::timeout, this, [this]() {
+		this->updateImages();
+	});
+
+	this->scheduleUpdateImages(true, true, true);
 	this->setColourSelectionModel(ColourSelectionModel::Hsv);
 	this->setSliderArrangement(SliderArrangement::Abc);
 
@@ -296,7 +307,7 @@ void ColourSelector::setColour(const QColor& colour) {
 	emit colourChanged(colour);
 	this->m_Colour = colour;
 
-	updateImages(primaryDiff, squareDiff, true);
+	this->scheduleUpdateImages(primaryDiff, squareDiff, true);
 	this->enableEventLock();
 	this->updateUi(squareDiff, primaryDiff, alphaDiff, rgbaDiff);
 	this->disableEventLock();
@@ -353,7 +364,7 @@ void ColourSelector::setColourSelectionModel(ColourSelectionModel model) {
 
 	this->enableEventLock(); // Need to capture the updateUiBounds in this event lock as this *can* issue a setValue if the current value is outwith the new bounds
 	this->updateUiBounds();
-	this->updateImages(true, true, false);
+	this->scheduleUpdateImages(true, true, false);
 	this->updateUi(true, true, false, false);
 	this->disableEventLock();
 	this->update();
@@ -380,10 +391,19 @@ void ColourSelector::setSliderArrangement(SliderArrangement arrangement) {
 
 	this->enableEventLock(); // Need to capture the updateUiBounds in this event lock as this *can* issue a setValue if the current value is outwith the new bounds
 	this->updateUiBounds();
-	this->updateImages(true, true, false);
+	this->scheduleUpdateImages(true, true, false);
 	this->updateUi(true, true, false, false);
 	this->disableEventLock();
 	this->update();
+}
+
+void ColourSelector::scheduleUpdateImages(bool regenSquareSliderImg, bool regenPrimarySliderImg, bool regenAlphaSliderImg) {
+	m_RegenSquareSliderImg = regenSquareSliderImg || m_RegenSquareSliderImg;
+	m_RegenPrimarySliderImg = regenPrimarySliderImg || m_PrimarySliderImg;
+	m_RegenAlphaSliderImg = regenAlphaSliderImg || m_RegenAlphaSliderImg;
+	if(!m_ImageRegenTimer->isActive()) {
+		m_ImageRegenTimer->start(IMAGE_REGEN_TIMEOUT_MS);
+	}
 }
 
 void ColourSelector::enableEventLock() {
@@ -455,16 +475,20 @@ void ColourSelector::updateUiBounds() {
 	}
 }
 
-void ColourSelector::updateImages(bool regenSquareSliderImg, bool regenPrimarySliderImg, bool regenAlphaSliderImg) {
-	if(regenSquareSliderImg) {
+void ColourSelector::updateImages() {
+	if(m_RegenSquareSliderImg) {
 		this->genSquareImg();
+		m_RegenSquareSliderImg = false;
 	}
-	if(regenPrimarySliderImg) {
+	if(m_RegenPrimarySliderImg) {
 		this->genPrimarySliderImg();
+		m_RegenPrimarySliderImg = false;
 	}
-	if(regenAlphaSliderImg) {
+	if(m_RegenAlphaSliderImg) {
 		this->genAlphaSliderImg();
+		m_RegenAlphaSliderImg = false;
 	}
+	this->update();
 }
 
 void ColourSelector::updateUi(bool updateSquareSlider, bool updatePrimarySlider, bool updateAlphaSlider, bool updateHex) {

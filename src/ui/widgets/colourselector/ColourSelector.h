@@ -114,12 +114,22 @@ private:
 	/// If true, then slider value change events will fire silently
 	bool m_EventLock;
 
+	/// Timer that calls updateImages periodically
+	QTimer* m_ImageRegenTimer;
+	bool m_RegenSquareSliderImg;
+	bool m_RegenPrimarySliderImg;
+	bool m_RegenAlphaSliderImg;
+
+	/// Sets the member variables m_RegenSquareSliderImg, etc. to the values passed in, and starts the m_ImageRegenTimer if it's
+	/// not already running to schedule the appropriate image regenerations
+	void scheduleUpdateImages(bool regenSquareSliderImg, bool regenPrimarySliderImg, bool regenAlphaSliderImg);
+
 	void enableEventLock();
 	void disableEventLock();
 
 	/// Sets the minimum/maximum for all sliders, dependent on the current colour selection model and slider arrangement
 	void updateUiBounds();
-	void updateImages(bool regenSquareSliderImg, bool regenPrimarySliderImg, bool regenAlphaSliderImg);
+	void updateImages();
 	void updateUi(bool updateSquareSlider, bool updatePrimarySlider, bool updateAlphaSlider, bool updateHex);
 
 	void genSquareImg();
