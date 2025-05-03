@@ -30,14 +30,13 @@ public:
     const QList<AbstractTool*>& availableTools() const;
     AbstractTool *currentTool() const;
 
-
 public slots: // TODO: How many of these are actually used as slots? Can change some to just functions for sure
 	/// Creates a new project with the supplied settings. Emits projectAdded
 	void newProject(int width, int height);
 
 	/// Opens an image file (any supported by QImage), turns the format into ARGB32, and creates a project with that image.
 	/// Emits projectAdded
-	void openProject(QString& path);
+	void openProject(const QString& path);
 
 	/// Deletes and removes the supplied project from the AppModel
 	void closeProject(ProjectModel* project);
@@ -83,7 +82,7 @@ signals:
 	void canvasDragModeRequested(bool scrollDrag);
 
 private:
-	QList<ProjectModel*> m_Projects;
+	QList<ProjectModel*> m_Projects; // TODO: Make this a map from project id to project model
 	Nullable<ProjectModel> m_CurrProject;
 
     QList<AbstractTool*> m_AvailableTools;

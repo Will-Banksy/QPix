@@ -55,18 +55,18 @@ void AppModel::setSecondaryColour(QColor colour) {
 void AppModel::newProject(int width, int height) {
 	ProjectModel* newProject = new ProjectModel(width, height);
 	this->m_Projects.append(newProject);
-	emit projectAdded(newProject);
-	connect(newProject, &ProjectModel::anythingUpdated, this, [this, newProject]() {
-        updateCurrProject(Nullable(newProject));
+	emit this->projectAdded(newProject);
+	this->connect(newProject, &ProjectModel::anythingUpdated, this, [this, newProject]() {
+        this->updateCurrProject(Nullable(newProject));
 	});
 }
 
-void AppModel::openProject(QString& path) {
+void AppModel::openProject(const QString& path) {
 	ProjectModel* newProject = new ProjectModel(path);
-	this->m_Projects.append(newProject);
-	emit projectAdded(newProject);
-	connect(newProject, &ProjectModel::anythingUpdated, this, [this, newProject]() {
-        updateCurrProject(Nullable(newProject));
+	m_Projects.append(newProject);
+	emit this->projectAdded(newProject);
+	this->connect(newProject, &ProjectModel::anythingUpdated, this, [this, newProject]() {
+        this->updateCurrProject(Nullable(newProject));
 	});
 }
 
@@ -81,12 +81,12 @@ void AppModel::closeProject(ProjectModel* project) {
 
 void AppModel::updateCurrProject(Nullable<ProjectModel> project) { // NOTE: m_CurrProject is now set before emitting currProjectUpdated - Desired behaviour?
 	m_CurrProject = project;
-	emit currProjectUpdated(project);
+	emit this->currProjectUpdated(project);
 }
 
 void AppModel::changeTool(AbstractTool* tool) {
 	m_CurrentTool->onSelectedChanged(false, this);
 	m_CurrentTool = tool;
 	m_CurrentTool->onSelectedChanged(true, this);
-	emit toolChanged(tool);
+	emit this->toolChanged(tool);
 }

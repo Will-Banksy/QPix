@@ -16,8 +16,18 @@ protected:
 
 private:
 	AppModel* m_Model;
+
 	QTabWidget* m_Tabs;
 	FloatingView* m_Floating;
+
+	QList<QAction*> m_ToggleViewActions;
+	QList<QAction*> m_ProjectDependentActions;
+
+	void createDocks();
+	void createMenus();
+	void createStatusBar();
+
+	i32 tabIdxFor(ProjectModel* project);
 
 private slots:
 	void addProject(ProjectModel* project);

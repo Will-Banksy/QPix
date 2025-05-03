@@ -8,12 +8,6 @@ QToolButton:checked {
 	background: palette(light);
 }
 
-/* TODO: Fix styling of QTabBar - there is a 2px black & grey line that appears at the bottom of :top tab bars (at least, the dock widget tab bar) */
-
-/* QTabBar {
-	border: 3px solid red;
-} */
-
 QTabBar::tab {
 	background: palette(button);
 	padding: 4px;
@@ -174,6 +168,11 @@ QDockWidget::title {
 	background-color: palette(base);
 }
 
+QDockWidget::close-button {
+	width: 0px;
+	height: 0px;
+}
+
 QSpinBox {
 	border: none;
 	border-radius: 2px;
@@ -212,6 +211,37 @@ QSpinBox::up-arrow {
 
 QSpinBox::down-arrow {
 	image: url(:/data/controls/arrow_down.svg);
+}
+
+QMenu {
+	border: 1px solid palette(base);
+}
+
+QMenu::item {
+	border: none;
+	background: palette(window);
+	padding: 4px 8px;
+}
+
+QMenu::item::selected {
+	background-color: palette(button);
+}
+
+QMenu::item:disabled {
+	color: palette(light)
+}
+
+QMenu::icon {
+	margin-left: 8px;
+}
+
+QMenu::separator {
+	height: 1px;
+	background: palette(button);
+	margin-left: 8px;
+	margin-right: 8px;
+	margin-top: 4px;
+	margin-bottom: 4px;
 }
 
 #floating {

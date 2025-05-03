@@ -5,7 +5,10 @@
 			"name": "base",
 			"displayName": "Base",
 			"generator": "Ninja",
-			"hidden": true
+			"hidden": true,
+			"environment": {
+				"QT_QPA_PLATFORM": "xcb"
+			}
 		},
 		{
 			"name": "debug",

@@ -21,13 +21,24 @@ class ProjectModel : public QObject { // TODO: Perhaps create project types, or 
 public:
 	explicit ProjectModel();
 	explicit ProjectModel(int width, int height);
-	explicit ProjectModel(QString& projectPath);
+	explicit ProjectModel(const QString& projectPath);
 	~ProjectModel() override;
 
 	///	Returns the absolute path to the file for this project, or "unsaved" is there is no path.
 	/// This should not be used definitively however - Use hasPath() to determine whether this project
 	/// corresponds to a file
     const QString& path() const;
+
+	/// Sets the path for this project. Pass false for isRealPath for this project to be "detached" from a file
+	void setPath(const QString& path, bool isRealPath = true);
+
+	/// The short name that should be used to identify this file. This is usually the file name, or
+	/// "unsaved" if no path
+	const QString displayName() const;
+
+	/// The short name that should be used to identify the passed-in file path. This is usually the file name, or
+	/// the path as-is if it is not a real path
+	const static QString displayNameOf(const QString& path, bool isRealPath);
 
 	/// Returns whether this project corresponds to a file
     bool hasPath() const;
@@ -50,22 +61,37 @@ public:
 	/// Update the zoom factor, zooming around zoomOrigin (in viewport coordinates) if specified. Emits zoomUpdated
 	void setZoom(float newZoom, QPointF* zoomOrigin = nullptr);
 
-	/// Zoom in to the next zoom factor in ZOOM_FACTORS (direction depending on zoomIn value), saturating on bounds
+	/// Zoom in to the next zoom factor in ZOOM_FACTORS (direction depending on zoomIn value), saturating on bounds. Emits zoomUpdated
 	void stepZoom(bool zoomIn, QPointF* zoomOrigin = nullptr);
 
-	/// Asserts that the most recent change has not been saved (i.e. sets m_Saved to false)
+	/// Sets that the most recent change has been saved (i.e. sets m_Saved to true)
+	void setSaved();
+
+	/// Sets that the most recent change has not been saved (i.e. sets m_Saved to false)
 	void setUnsaved();
 
 	/// Commits the contents of the drawing buffer to the surface
 	void commitBuffer();
+
 	/// Reverts changes to the drawing buffer by copying the surface
 	void revertBuffer();
 
+	/// Saves the file content to the file path, if it has one. Returns true on successful save, false on failed save
+	/// or the case that this project does not have a path
+	bool save();
+
 signals:
-	/// Emitted when anything is updated. Emitted by setZoom and setUnsaved
+	/// Emitted when anything is updated. Emitted along with all other updated signals
 	void anythingUpdated();
-	/// Emitted when the zoom is updated. Emitted by setZoom
+
+	/// Emitted when the zoom is updated. Emitted by setZoom/stepZoom
 	void zoomUpdated(float oldZoom, float newZoom, QPointF* zoomOrigin = nullptr);
+
+	/// Emitted when the path is updated. Emitted by setPath
+	void pathUpdated(const QString& path);
+
+	/// Emitted when the project is saved or changed (becoming unsaved). Emitted by save, setUnsaved & commitBuffer
+	void savedStateUpdated(bool saved);
 
 private:
 	/// Path to corresponding file, or "unsaved"

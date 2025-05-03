@@ -1,5 +1,8 @@
 #include "ProjectModel.h"
 #include <QImage>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 ProjectModel::ProjectModel() : QObject(),
 	m_Path("unsaved"),
@@ -12,13 +15,6 @@ ProjectModel::ProjectModel() : QObject(),
 	m_Surface->fill(QColorConstants::Transparent);
 	m_Overlay->fill(QColorConstants::Transparent);
 	m_Buffer->fill(QColorConstants::Transparent);
-	// for(int i = 0; i < m_Surface->width(); i++) {
-	// 	for(int j = 0; j < m_Surface->height(); j++) {
-	// 		m_Surface->setPixel(i, j,
-	// 			utils::Colour::toIntAHSL(100, i, j, i % 2 == 0 || j % 2 == 0 ? 0 : 50)
-	// 		);
-	// 	}
-	// }
 }
 
 ProjectModel::ProjectModel(int width, int height) : QObject(),
@@ -34,7 +30,7 @@ ProjectModel::ProjectModel(int width, int height) : QObject(),
 	m_Buffer->fill(QColorConstants::Transparent);
 }
 
-ProjectModel::ProjectModel(QString& path) : QObject(),
+ProjectModel::ProjectModel(const QString& path) : QObject(),
 	m_Path(path),
 	m_Saved(true),
 	m_SavedAs(true),
@@ -53,7 +49,32 @@ ProjectModel::~ProjectModel() {
 }
 
 const QString& ProjectModel::path() const {
-	return this->m_Path;
+	return m_Path;
+}
+
+void ProjectModel::setPath(const QString& path, bool isRealPath) {
+	m_Path = path;
+	m_SavedAs = isRealPath;
+}
+
+const QString ProjectModel::displayName() const {
+	// TODO: Note that files with the same name but different directories will have the same display name.
+	//       Perhaps fix - This would require recalculating all display names every new project, and giving
+	//       more context to this function
+	return ProjectModel::displayNameOf(m_Path, m_SavedAs);
+}
+
+const QString ProjectModel::displayNameOf(const QString& path, bool isRealPath) {
+	// TODO: Note that files with the same name but different directories will have the same display name.
+	//       Perhaps fix - This would require recalculating all display names every new project, and giving
+	//       more context to this function
+	if(isRealPath) {
+		fs::path stdpath = fs::path(path.toStdString());
+		fs::path name = stdpath.filename();
+		return QString::fromStdString(name.string());
+	} else {
+		return path;
+	}
 }
 
 bool ProjectModel::hasPath() const {
@@ -61,27 +82,27 @@ bool ProjectModel::hasPath() const {
 }
 
 bool ProjectModel::saved() const {
-	return this->m_Saved;
+	return m_Saved;
 }
 
 QImage& ProjectModel::surface() const {
-	return *this->m_Surface;
+	return *m_Surface;
 }
 
 QImage& ProjectModel::overlay() const {
-	return *this->m_Overlay;
+	return *m_Overlay;
 }
 
 QImage& ProjectModel::buffer() const {
-	return *this->m_Buffer;
+	return *m_Buffer;
 }
 
 float ProjectModel::zoom() const {
-	return this->m_Zoom;
+	return m_Zoom;
 }
 
 void ProjectModel::setZoom(float newZoom, QPointF* zoomOrigin) {
-	emit zoomUpdated(this->m_Zoom, newZoom, zoomOrigin);
+	emit zoomUpdated(m_Zoom, newZoom, zoomOrigin);
 	m_Zoom = newZoom;
 	emit anythingUpdated();
 }
@@ -108,9 +129,16 @@ void ProjectModel::stepZoom(bool zoomIn, QPointF* zoomOrigin) {
 	this->setZoom(newZoom, zoomOrigin);
 }
 
+void ProjectModel::setSaved() {
+	emit this->savedStateUpdated(true);
+	m_Saved = true;
+	emit this->anythingUpdated();
+}
+
 void ProjectModel::setUnsaved() {
-	this->m_Saved = false;
-	emit anythingUpdated();
+	emit this->savedStateUpdated(false);
+	m_Saved = false;
+	emit this->anythingUpdated();
 }
 
 void ProjectModel::commitBuffer() {
@@ -120,4 +148,16 @@ void ProjectModel::commitBuffer() {
 
 void ProjectModel::revertBuffer() {
 	memcpy(m_Buffer->bits(), m_Surface->bits(), m_Buffer->width() * m_Buffer->height() * 4);
+}
+
+bool ProjectModel::save() { // TODO: We really need better error handling here, and probably elsewhere. Problem is, error handling in C++ is a pain in the ass...
+	if(this->hasPath()) {
+		bool ret = m_Surface->save(m_Path, "png");
+		if(ret) {
+			this->setSaved();
+		}
+		return ret;
+	} else {
+		return false;
+	}
 }

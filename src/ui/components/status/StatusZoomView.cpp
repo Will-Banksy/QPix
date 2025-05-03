@@ -28,8 +28,8 @@ StatusZoomView::StatusZoomView(AppModel* model) : QWidget(), m_Model(model), m_Z
 
 	this->setIndexFromProject(m_Model->currProject());
 
-	connect(m_ZoomComboBox, &QComboBox::currentIndexChanged, this, &StatusZoomView::setZoomFromIndex);
-	connect(model, &AppModel::currProjectUpdated, this, &StatusZoomView::setIndexFromProject);
+	this->connect(m_ZoomComboBox, &QComboBox::currentIndexChanged, this, &StatusZoomView::setZoomFromIndex);
+	this->connect(model, &AppModel::currProjectUpdated, this, &StatusZoomView::setIndexFromProject);
 
 	QHBoxLayout* layout = new QHBoxLayout();
 	layout->setContentsMargins(0, 0, 0, 0);
