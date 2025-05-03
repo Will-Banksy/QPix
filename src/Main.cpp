@@ -14,7 +14,7 @@
 
 // TODO: Add some kind of chunking system to optimise rendering/drawing?
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
 	QApplication app(argc, argv);
 
 	app.setStyle("fusion");
