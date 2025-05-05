@@ -13,6 +13,7 @@ public:
 
 protected:
 	void resizeEvent(QResizeEvent* event) override;
+	void closeEvent(QCloseEvent* event) override;
 
 private:
 	AppModel* m_Model;
@@ -27,7 +28,7 @@ private:
 	void createMenus();
 	void createStatusBar();
 
-	i32 tabIdxFor(ProjectModel* project);
+	i32 tabIdxFor(const ProjectModel* project);
 
 private slots:
 	void addProject(ProjectModel* project);

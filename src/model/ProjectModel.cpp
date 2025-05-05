@@ -6,7 +6,7 @@ namespace fs = std::filesystem;
 
 ProjectModel::ProjectModel() : QObject(),
 	m_Path("unsaved"),
-	m_Saved(false),
+	m_Saved(true),
 	m_SavedAs(false),
 	m_Zoom(1.0),
 	m_Surface(new QImage(DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT, QImage::Format_ARGB32)),
@@ -19,7 +19,7 @@ ProjectModel::ProjectModel() : QObject(),
 
 ProjectModel::ProjectModel(int width, int height) : QObject(),
 	m_Path("unsaved"),
-	m_Saved(false),
+	m_Saved(true),
 	m_SavedAs(false),
 	m_Zoom(1.0),
 	m_Surface(new QImage(width, height, QImage::Format_ARGB32)),

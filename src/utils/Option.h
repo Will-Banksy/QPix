@@ -37,4 +37,37 @@ private:
 	std::variant<unit, T> m_Variant;
 };
 
+template<typename T>
+class Option<T*> {
+public:
+	explicit Option() : m_Ptr(nullptr) {
+	}
+
+	static Option newNone() {
+		return Option();
+	}
+
+	static Option newSome(T* val) {
+		Option opt = Option();
+		opt.m_Ptr = val;
+		return opt;
+	}
+
+	bool isNone() const {
+		return m_Ptr == nullptr;
+	}
+
+	bool isSome() const {
+		return m_Ptr != nullptr;
+	}
+
+	const T* some() const {
+		assert(this->isSome());
+		return m_Ptr;
+	}
+
+private:
+	T* m_Ptr;
+};
+
 #endif // OPTION_H

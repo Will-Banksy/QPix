@@ -18,6 +18,10 @@
 #include <QFileDialog>
 #include <QApplication>
 #include <QMessageBox>
+#include <QCloseEvent>
+#include <QListWidget>
+#include <QDialogButtonBox>
+#include <QLabel>
 
 // BUG: Moving between tabs and resizing can centre other canvases sometimes, or otherwise unexpectedly change the scroll position of other projects
 
@@ -51,6 +55,13 @@ AppView::AppView(AppModel* model) : QMainWindow(), m_Model(model), m_ToggleViewA
 	this->connect(m_Model, &AppModel::projectAdded, this, &AppView::addProject);
 
 	this->connect(m_Model, &AppModel::currProjectUpdated, this, [this](Nullable<ProjectModel> projOpt) {
+		if(projOpt.isNotNull()) {
+			ProjectModel* proj = projOpt.unwrap();
+			i32 projTabIdx = this->tabIdxFor(proj);
+			if(projTabIdx != this->m_Tabs->currentIndex()) {
+				this->m_Tabs->setCurrentIndex(projTabIdx);
+			}
+		}
 		this->statusBar()->clearMessage(); // NOTE: This is maybe a bit hasty. We don't necessarily want to clear the message on *any* event... Mainly not zoom tbh
 	});
 
@@ -81,6 +92,47 @@ AppView::~AppView() {
 
 void AppView::resizeEvent(QResizeEvent* event) {
 	m_Floating->setGeometry(0, 0, event->size().width(), event->size().height());
+}
+
+void AppView::closeEvent(QCloseEvent* event) {
+	// TODO: Handle multiple unsaved projects
+
+	QList<QString> unsavedProjNames;
+	for(const ProjectModel* proj : m_Model->projects()) {
+		if(!proj->saved()) {
+			unsavedProjNames.push_back(proj->displayName());
+		}
+	}
+
+	if(!unsavedProjNames.isEmpty()) {
+		QDialog* diag = new QDialog(this);
+		diag->setWindowTitle("Discard changes?");
+
+		QListWidget* projList = new QListWidget();
+		for(const QString& name : unsavedProjNames) {
+			projList->addItem(name);
+		}
+
+		QDialogButtonBox* buttons = new QDialogButtonBox(QDialogButtonBox::StandardButton::Cancel | QDialogButtonBox::Discard);
+
+		diag->connect(buttons->button(QDialogButtonBox::StandardButton::Discard), &QPushButton::clicked, diag, &QDialog::accept);
+		diag->connect(buttons, &QDialogButtonBox::rejected, diag, &QDialog::reject);
+
+		QVBoxLayout* diagLayout = new QVBoxLayout();
+		diagLayout->addWidget(new QLabel("These open projects have unsaved changes. Discard all changes and close QPix?"));
+		diagLayout->addWidget(projList);
+		diagLayout->addWidget(buttons);
+		diag->setLayout(diagLayout);
+
+		QDialog::DialogCode result = (QDialog::DialogCode)diag->exec();
+
+		if(result == QDialog::DialogCode::Rejected) {
+			event->ignore();
+			return;
+		}
+	}
+
+	QMainWindow::closeEvent(event);
 }
 
 void AppView::createDocks() {
@@ -132,7 +184,19 @@ void AppView::createMenus() {
 	this->connect(fileOpen, &QAction::triggered, this, [this]() {
 		QList<QString> files = QFileDialog::getOpenFileNames(this, "Open image files", "", "Image files (*.png)");
 		for(const auto& path : files) {
-			this->m_Model->openProject(path);
+			const ProjectModel* alreadyOpenProj = nullptr;
+			for(const ProjectModel* proj : this->m_Model->projects()) {
+				if(proj->path() == path) {
+					alreadyOpenProj = proj;
+					break;
+				}
+			}
+			if(alreadyOpenProj == nullptr) {
+				this->m_Model->openProject(path);
+			} else {
+				i32 idx = this->tabIdxFor(alreadyOpenProj);
+				this->m_Tabs->setCurrentIndex(idx);
+			}
 		}
 	});
 	fileOpen->setShortcut(QKeySequence::StandardKey::Open);
@@ -177,6 +241,12 @@ void AppView::createMenus() {
 	});
 	fileSave->setShortcut(QKeySequence::StandardKey::Save);
 
+	QAction* fileClose = new QAction("&Close File");
+	this->connect(fileClose, &QAction::triggered, this, [this]() {
+		this->closeProject(this->m_Tabs->currentIndex());
+	});
+	fileClose->setShortcut(QKeySequence::StandardKey::Close);
+
 	QAction* fileQuit = new QAction("&Quit");
 	this->connect(fileQuit, &QAction::triggered, this, [this]() {
 		QApplication::quit();
@@ -194,6 +264,10 @@ void AppView::createMenus() {
 		fileSaveAs
 	});
 	file->addSeparator();
+	file->addActions({
+		fileClose
+	});
+	file->addSeparator();
 	file->addAction(fileQuit);
 
 	QMenu* view = new QMenu("&View");
@@ -205,7 +279,8 @@ void AppView::createMenus() {
 
 	m_ProjectDependentActions.append({
 		fileSave,
-		fileSaveAs
+		fileSaveAs,
+		fileClose
 	});
 }
 
@@ -214,7 +289,7 @@ void AppView::createStatusBar() {
 	this->statusBar()->addPermanentWidget(new StatusZoomView(m_Model));
 }
 
-i32 AppView::tabIdxFor(ProjectModel* project) {
+i32 AppView::tabIdxFor(const ProjectModel* project) {
 	for(i32 i = 0; i < m_Tabs->count(); i++) {
 		ProjectView* view = (ProjectView*)m_Tabs->widget(i);
 		ProjectModel* model = view->model();
@@ -243,7 +318,8 @@ void AppView::addProject(ProjectModel* project) {
 		}
 	});
 
-	m_Tabs->addTab(view, project->displayName());
+	i32 idx = m_Tabs->addTab(view, project->displayName());
+	m_Tabs->setCurrentIndex(idx);
 
 	if(m_Tabs->count() == 1) {
 		for(QAction* action : m_ProjectDependentActions) {
@@ -253,8 +329,24 @@ void AppView::addProject(ProjectModel* project) {
 }
 
 void AppView::closeProject(int index) {
+	if(index == -1) {
+		return;
+	}
+
 	ProjectView* projectView = (ProjectView*)m_Tabs->widget(index);
 	ProjectModel* project = projectView->model();
+
+	if(!project->saved()) {
+		QMessageBox::StandardButton response = QMessageBox::question(this,
+			"Discard changes?",
+			QString("This open project (%1) has unsaved changes. Discard changes and close it?").arg(project->displayName()),
+			QMessageBox::StandardButton::Cancel | QMessageBox::StandardButton::Discard
+		);
+		if(response != QMessageBox::StandardButton::Discard) {
+			return;
+		}
+	}
+
 	m_Model->closeProject(project);
 
 	m_Tabs->removeTab(index);
