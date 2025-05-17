@@ -4,7 +4,7 @@
 #include <QLayout>
 
 // Based on: https://doc.qt.io/qt-6/qtwidgets-layouts-flowlayout-example.html
-class FlowLayout : public QLayout { // TODO: Get this layout working nicely, and actually apply margins properly
+class FlowLayout : public QLayout { // TODO: Add cross-axis alignment, and possibly other alignments and directions of flow
 public:
 	FlowLayout(QWidget* parent = nullptr);
 	FlowLayout(int spacing, QWidget* parent = nullptr);

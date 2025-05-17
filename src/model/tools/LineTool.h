@@ -4,6 +4,7 @@
 #include "AbstractTool.h"
 
 const static QString TS_LINE_UNIFORM = QString("line.uniform");
+const static QString TS_LINE_MAX_UNIFORM_SEGMENT_SIZE = QString("line.max-uniform-segment-size");
 
 class LineTool : public AbstractTool {
 	Q_OBJECT

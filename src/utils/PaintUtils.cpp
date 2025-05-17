@@ -66,7 +66,7 @@ void PaintUtils::drawLine(QImage& target, int x0, int y0, int x1, int y1, QRgb c
 	}
 }
 
-void PaintUtils::drawUniformLine(QImage& target, int x0, int y0, int x1, int y1, QRgb colour) {
+void PaintUtils::drawUniformLine(QImage& target, int x0, int y0, int x1, int y1, QRgb colour, int maxSegmentSize) {
 	QRgb* bytes = (QRgb*)target.scanLine(0); // Assumes a 32-bit format
 
 	int dx = x1 - x0;
@@ -87,8 +87,14 @@ void PaintUtils::drawUniformLine(QImage& target, int x0, int y0, int x1, int y1,
 	int stepAfter = std::numeric_limits<int>::max();
 	if(xfast && dy != 0) {
 		stepAfter = abs(int(round(fdx / fdy)));
+		if(maxSegmentSize > 0 && stepAfter > maxSegmentSize) { // TODO: Snap to being a perfectly vertical/horizontal line if closer to that than the end of the line as it'd end up with adjusted segment size
+			stepAfter = maxSegmentSize;
+		}
 	} else if(!xfast && dx != 0) {
 		stepAfter = abs(int(round(fdy / fdx)));
+		if(maxSegmentSize > 0 && stepAfter > maxSegmentSize) {
+			stepAfter = maxSegmentSize;
+		}
 	}
 
 	for(int ctr = 1;; ctr++) {
@@ -160,7 +166,7 @@ void PaintUtils::copyLine(const QImage& src, QImage& dest, int x0, int y0, int x
 	}
 }
 
-void PaintUtils::copyUniformLine(const QImage& src, QImage& dest, int x0, int y0, int x1, int y1) {
+void PaintUtils::copyUniformLine(const QImage& src, QImage& dest, int x0, int y0, int x1, int y1, int maxSegmentSize) {
 	assert(src.width() == dest.width() && src.height() == dest.height());
 
 	const QRgb* srcBytes = (QRgb*)src.scanLine(0); // Assumes a 32-bit format
@@ -184,8 +190,14 @@ void PaintUtils::copyUniformLine(const QImage& src, QImage& dest, int x0, int y0
 	int stepAfter = std::numeric_limits<int>::max();
 	if(xfast && dy != 0) {
 		stepAfter = abs(int(round(fdx / fdy)));
+		if(maxSegmentSize > 0 && stepAfter > maxSegmentSize) {
+			stepAfter = maxSegmentSize;
+		}
 	} else if(!xfast && dx != 0) {
 		stepAfter = abs(int(round(fdy / fdx)));
+		if(maxSegmentSize > 0 && stepAfter > maxSegmentSize) {
+			stepAfter = maxSegmentSize;
+		}
 	}
 
 	for(int ctr = 1;; ctr++) {

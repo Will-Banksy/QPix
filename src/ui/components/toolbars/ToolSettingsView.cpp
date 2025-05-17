@@ -20,7 +20,7 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 		ToolSettings* settings = tool->settings();
 		const QMap<QString, ToolSettingInfo>& settingsMap = settings->getMap();
 
-		FlowLayout* settingsLayout = new FlowLayout();
+		FlowLayout* settingsLayout = new FlowLayout(16, 8);
 
 		QMapIterator<QString, ToolSettingInfo> iter = QMapIterator(settingsMap);
 		while(iter.hasNext()) {
@@ -31,6 +31,7 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 			QHBoxLayout* itemLayout = new QHBoxLayout();
 			itemLayout->setSpacing(8);
 			itemLayout->setContentsMargins(0, 0, 0, 0);
+			itemLayout->setAlignment(Qt::AlignBaseline);
 
 			switch(info.Value.type()) {
 				case TSVariant::InnerType::Bool: {
@@ -46,9 +47,9 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 						}
 					});
 					this->connect(settings, &ToolSettings::valueChanged, checkbox, [checkbox, settings, key](const QString& changedKey, const ToolSettingInfo& newInfo) {
-						assert(newInfo.Value.type() == TSVariant::InnerType::Bool);
-
 						if(changedKey == key) {
+							assert(newInfo.Value.type() == TSVariant::InnerType::Bool);
+
 							if(newInfo.Value.toBool() == true) {
 								checkbox->setCheckState(Qt::CheckState::Checked);
 							} else {
@@ -71,9 +72,9 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 						settings->setValue(key, TSVariant::newInRangeU32(value.toInRangeU32().withValue(newValue)));
 					});
 					this->connect(settings, &ToolSettings::valueChanged, spinbox, [spinbox, settings, key](const QString& changedKey, const ToolSettingInfo& newInfo) {
-						assert(newInfo.Value.type() == TSVariant::InnerType::TSInRangeU32);
-
 						if(changedKey == key) {
+							assert(newInfo.Value.type() == TSVariant::InnerType::TSInRangeU32);
+
 							auto val = newInfo.Value.toInRangeU32();
 							spinbox->setMinimum(val.Start);
 							spinbox->setMaximum(val.End);

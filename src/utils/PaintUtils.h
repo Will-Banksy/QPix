@@ -44,7 +44,8 @@ public:
 	/// This function actually doesn't always draw perfectly uniform lines - It will draw a uniform line from (x0, y0)
 	/// until it reaches x1 or y1, at which point it will stop - Possibly resulting in less pixels in the last segment
 	/// than the rest.
-	static void drawUniformLine(QImage& target, int x0, int y0, int x1, int y1, QRgb colour);
+	/// Specify maxSegmentSize to limit the length of each segment, or <= 0 for unlimited
+	static void drawUniformLine(QImage& target, int x0, int y0, int x1, int y1, QRgb colour, int maxSegmentSize = 0);
 
 	/// Utilises the Bresenham line algorithm to copy a line from (x0, y0) to (x1, y1), sourcing pixels from `src`
 	/// and copying them to `dest`
@@ -52,7 +53,7 @@ public:
 
 	/// Utilises my own algorithm to copy a uniform line from (x0, y0) to (x1, y1), sourcing pixels from `src` and
 	/// copying them to `dest`. For more info on uniform lines, see `drawUniformLine`
-	static void copyUniformLine(const QImage& src, QImage& dest, int x0, int y0, int x1, int y1);
+	static void copyUniformLine(const QImage& src, QImage& dest, int x0, int y0, int x1, int y1, int maxSegmentSize = 0);
 
 	/// Alias for a function taking and returning a QRgb
 	using LineAffector = std::function<QRgb(QRgb)>;

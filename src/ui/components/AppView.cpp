@@ -138,6 +138,8 @@ void AppView::closeEvent(QCloseEvent* event) {
 void AppView::createDocks() {
 	// Toolbars (in the form of DockWidgets)
 
+	// TODO: Sort out the default sizes of docks to ensure their title is visible but they are not too big
+
 	const QDockWidget::DockWidgetFeatures TOOL_DOCK_FEATURES = QDockWidget::DockWidgetFeature::DockWidgetClosable | QDockWidget::DockWidgetFeature::DockWidgetMovable;
 
 	QDockWidget* toolToolDock = new QDockWidget("Tools");
