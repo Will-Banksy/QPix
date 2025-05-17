@@ -41,6 +41,14 @@ public:
 		return std::get<1>(m_Variant);
 	}
 
+	T someOr(T&& fallback) {
+		if(this->isSome()) {
+			return T(this->some());
+		} else {
+			return T(fallback);
+		}
+	}
+
 private:
 	std::variant<unit, T> m_Variant;
 };

@@ -4,7 +4,7 @@
 #include "AbstractTool.h"
 #include "utils/Option.h"
 
-const static QString TS_ERASER_OPACITY = QString("Opacity");
+const static QString TS_ERASER_OPACITY = QString("eraser.opacity");
 
 class EraserTool : public AbstractTool {
 	Q_OBJECT

@@ -3,7 +3,7 @@
 
 #include "AbstractTool.h"
 
-const static QString TS_LINE_UNIFORM = QString("Uniform Line");
+const static QString TS_LINE_UNIFORM = QString("line.uniform");
 
 class LineTool : public AbstractTool {
 	Q_OBJECT

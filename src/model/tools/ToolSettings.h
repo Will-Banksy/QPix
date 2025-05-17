@@ -69,25 +69,32 @@ private:
 	}
 };
 
+struct ToolSettingInfo {
+	QString Title;
+	QString Description;
+	TSVariant Value;
+};
+
 class ToolSettings : public QObject {
 	Q_OBJECT
 
 public:
-	explicit ToolSettings(const QMap<QString, TSVariant>& settingsMap);
+	explicit ToolSettings(const QMap<QString, ToolSettingInfo>& settingsMap);
 	~ToolSettings() override;
 
-	const Option<TSVariant> get(const QString& key) const;
-	const QMap<QString, TSVariant>& getMap() const;
-	void setMap(const QMap<QString, TSVariant>& settingsMap);
+	const Option<ToolSettingInfo> get(const QString& key) const;
+	const QMap<QString, ToolSettingInfo>& getMap() const;
+	void setMap(const QMap<QString, ToolSettingInfo>& settingsMap);
 
 public slots:
+	// void set(const QString& key, const ToolSettingInfo& info);
 	void setValue(const QString& key, const TSVariant& value);
 
 signals:
-	void valueChanged(const QString& key, const TSVariant& value);
+	void valueChanged(const QString& key, const ToolSettingInfo& info);
 
 private:
-	QMap<QString, TSVariant> m_SettingsMap;
+	QMap<QString, ToolSettingInfo> m_SettingsMap;
 };
 
 #endif // TOOLSETTINGS_H

@@ -11,7 +11,11 @@ LineTool::LineTool() : AbstractTool(), m_StartPoint(), m_EndPoint() {
 	m_UsageType = ToolUsageType::Drag;
 
 	m_Settings = new ToolSettings({
-		{ TS_LINE_UNIFORM, TSVariant::newBool(false) }
+		{ TS_LINE_UNIFORM, ToolSettingInfo {
+			.Title = "Uniform Line",
+			.Description = "Constrains lines to always use the same number of pixels per segment",
+			.Value = TSVariant::newBool(false)
+		}}
 	});
 }
 
@@ -20,7 +24,7 @@ LineTool::~LineTool() {
 
 void LineTool::onDrag(const QImage& surface, QImage& buffer, QPoint pt, Qt::MouseButton button, ToolDragState state, AppModel* model) {
 	QRgb colour = button == Qt::MouseButton::RightButton ? model->secondaryColour().rgba() : model->primaryColour().rgba();
-	bool uniform = m_Settings->get(TS_LINE_UNIFORM).some().toBool();
+	bool uniform = m_Settings->get(TS_LINE_UNIFORM).some().Value.toBool();
 
 	switch(state) {
 		case ToolDragState::Press: {

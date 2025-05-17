@@ -3,7 +3,7 @@
 
 #include "AbstractTool.h"
 
-const static QString TS_PENCIL_PIXELPERFECT = QString("Pixel Perfect");
+const static QString TS_PENCIL_PIXELPERFECT = QString("pencil.pixel-perfect");
 
 class PencilTool : public AbstractTool {
 	Q_OBJECT

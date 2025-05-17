@@ -2,6 +2,7 @@
 #include "ui/widgets/ColourButton.h"
 #include "model/AppModel.h"
 #include "ui/layouts/FlowLayout.h"
+#include "ui/components/floating/tooltip/HoverInfoEventFilter.h"
 
 ColourSelectView::ColourSelectView(AppModel* model) : QWidget(), m_Model(model) {
 	// TODO: Layout: A box containing two colour tool buttons (custom widget) diagonally to each other, slightly overlapped
@@ -17,6 +18,19 @@ ColourSelectView::ColourSelectView(AppModel* model) : QWidget(), m_Model(model) 
 	primaryBtn->setDefaultAction(primaryBtnAct);
 	ColourButton* secondaryBtn = new ColourButton(model->secondaryColour());
 	secondaryBtn->setDefaultAction(secondaryBtnAct);
+
+	primaryBtn->installEventFilter(new HoverInfoEventFilter(
+		model,
+		primaryBtn,
+		"Primary/Foreground Colour",
+		"Opens the colour picker"
+	));
+	secondaryBtn->installEventFilter(new HoverInfoEventFilter(
+		model,
+		secondaryBtn,
+		"Secondary/Background Colour",
+		"Opens the colour picker"
+	));
 
 	connect(model, &AppModel::primaryColourChanged, primaryBtn, &ColourButton::updateColour);
 	connect(model, &AppModel::secondaryColourChanged, secondaryBtn, &ColourButton::updateColour);

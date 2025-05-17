@@ -10,7 +10,11 @@ EraserTool::EraserTool() {
 	m_UsageType = ToolUsageType::Drag;
 
 	m_Settings = new ToolSettings({
-		{ TS_ERASER_OPACITY, TSVariant::newInRangeU32(TSInRange<u32> { .Start = 0, .End = 255, .Value = 255 }) }
+		{ TS_ERASER_OPACITY, ToolSettingInfo {
+			.Title = "Opacity",
+			.Description = "The amount (as a percentage of 255) of opacity that the eraser removes from pixels",
+			.Value = TSVariant::newInRangeU32(TSInRange<u32> { .Start = 0, .End = 255, .Value = 255 })
+		}}
 	});
 }
 
@@ -41,10 +45,9 @@ void EraserTool::onDrag(const QImage& surface, QImage& buffer, QPoint pt, Qt::Mo
 		}
 	}
 
-	u32 opacity = m_Settings->get(TS_ERASER_OPACITY).some().toInRangeU32().Value;
+	u32 opacity = m_Settings->get(TS_ERASER_OPACITY).some().Value.toInRangeU32().Value;
 
-	PaintUtils::affectLine(buffer, start.x(), start.y(), pt.x(), pt.y(), [this](QRgb col) {
-		u32 opacity = this->m_Settings->get(TS_ERASER_OPACITY).some().toInRangeU32().Value;
+	PaintUtils::affectLine(buffer, start.x(), start.y(), pt.x(), pt.y(), [this, opacity](QRgb col) {
 		f32 opacityF = f32(255 - opacity) / 255.0;
 
 		u8 alpha = qAlpha(col);

@@ -5,6 +5,7 @@
 #include <QStackedLayout>
 #include <QSpinBox>
 #include <QLabel>
+#include "ui/components/floating/tooltip/HoverInfoEventFilter.h"
 
 ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 	const QList<AbstractTool*>& tools = model->availableTools();
@@ -17,19 +18,23 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 
 	for(AbstractTool* tool : tools) {
 		ToolSettings* settings = tool->settings();
-		const QMap<QString, TSVariant>& settingsMap = settings->getMap();
+		const QMap<QString, ToolSettingInfo>& settingsMap = settings->getMap();
 
 		FlowLayout* settingsLayout = new FlowLayout();
 
-		QMapIterator<QString, TSVariant> iter = QMapIterator(settingsMap);
+		QMapIterator<QString, ToolSettingInfo> iter = QMapIterator(settingsMap);
 		while(iter.hasNext()) {
 			auto entry = iter.next();
 			const QString& key = entry.key();
-			const TSVariant& value = entry.value();
+			const ToolSettingInfo& info = entry.value();
 
-			switch(value.type()) {
+			QHBoxLayout* itemLayout = new QHBoxLayout();
+			itemLayout->setSpacing(8);
+			itemLayout->setContentsMargins(0, 0, 0, 0);
+
+			switch(info.Value.type()) {
 				case TSVariant::InnerType::Bool: {
-					QCheckBox* checkbox = new QCheckBox(key);
+					QCheckBox* checkbox = new QCheckBox(info.Title);
 
 					this->connect(checkbox, &QCheckBox::checkStateChanged, settings, [checkbox, settings, key](Qt::CheckState state) {
 						assert(!checkbox->isTristate());
@@ -40,11 +45,11 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 							settings->setValue(key, TSVariant::newBool(false));
 						}
 					});
-					this->connect(settings, &ToolSettings::valueChanged, checkbox, [checkbox, settings, key](const QString& changedKey, const TSVariant& value) {
-						assert(value.type() == TSVariant::InnerType::Bool);
+					this->connect(settings, &ToolSettings::valueChanged, checkbox, [checkbox, settings, key](const QString& changedKey, const ToolSettingInfo& newInfo) {
+						assert(newInfo.Value.type() == TSVariant::InnerType::Bool);
 
 						if(changedKey == key) {
-							if(value.toBool() == true) {
+							if(newInfo.Value.toBool() == true) {
 								checkbox->setCheckState(Qt::CheckState::Checked);
 							} else {
 								checkbox->setCheckState(Qt::CheckState::Unchecked);
@@ -53,7 +58,7 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 					});
 					// Emit settings changed to update UI
 					emit settings->valueChanged(key, settings->get(key).some());
-					settingsLayout->addWidget(checkbox);
+					itemLayout->addWidget(checkbox);
 
 					break;
 				}
@@ -61,14 +66,15 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 					QSpinBox* spinbox = new QSpinBox();
 					spinbox->setFixedWidth(60);
 
+					TSVariant value = info.Value;
 					this->connect(spinbox, &QSpinBox::valueChanged, settings, [spinbox, value, settings, key](int newValue) {
 						settings->setValue(key, TSVariant::newInRangeU32(value.toInRangeU32().withValue(newValue)));
 					});
-					this->connect(settings, &ToolSettings::valueChanged, spinbox, [spinbox, settings, key](const QString& changedKey, const TSVariant& newValue) {
-						assert(newValue.type() == TSVariant::InnerType::TSInRangeU32);
+					this->connect(settings, &ToolSettings::valueChanged, spinbox, [spinbox, settings, key](const QString& changedKey, const ToolSettingInfo& newInfo) {
+						assert(newInfo.Value.type() == TSVariant::InnerType::TSInRangeU32);
 
 						if(changedKey == key) {
-							auto val = newValue.toInRangeU32();
+							auto val = newInfo.Value.toInRangeU32();
 							spinbox->setMinimum(val.Start);
 							spinbox->setMaximum(val.End);
 							spinbox->setValue(val.Value);
@@ -76,17 +82,25 @@ ToolSettingsView::ToolSettingsView(AppModel* model) : m_Model(model) {
 					});
 					emit settings->valueChanged(key, settings->get(key).some());
 
-					QLabel* spinboxLabel = new QLabel(key + ":");
-					QHBoxLayout* layout = new QHBoxLayout();
-					layout->setSpacing(8);
+					QLabel* spinboxLabel = new QLabel(info.Title + ":");
 
-					layout->addWidget(spinboxLabel);
-					layout->addWidget(spinbox);
-					settingsLayout->addItem(layout);
+					itemLayout->addWidget(spinboxLabel);
+					itemLayout->addWidget(spinbox);
 
 					break;
 				}
 			}
+
+			QWidget* itemWidget = new QWidget();
+			itemWidget->setLayout(itemLayout);
+			itemWidget->installEventFilter(new HoverInfoEventFilter(
+				model,
+				itemWidget,
+				info.Title,
+				info.Description
+			));
+
+			settingsLayout->addWidget(itemWidget);
 		}
 
 		QWidget* widget = new QWidget();

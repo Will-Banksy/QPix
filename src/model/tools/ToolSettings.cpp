@@ -77,31 +77,33 @@ TSVariant::TSVariant(TSVariantInner&& inner) : m_Inner(inner) {
 
 // ToolSettings
 
-ToolSettings::ToolSettings(const QMap<QString, TSVariant>& settingsMap) : m_SettingsMap(settingsMap) {
+ToolSettings::ToolSettings(const QMap<QString, ToolSettingInfo>& settingsMap) : m_SettingsMap(settingsMap) {
 }
 
 ToolSettings::~ToolSettings() {
 }
 
-const Option<TSVariant> ToolSettings::get(const QString& key) const {
+const Option<ToolSettingInfo> ToolSettings::get(const QString& key) const {
 	if(m_SettingsMap.contains(key)) {
-		QMap<QString, TSVariant>::const_iterator valI = m_SettingsMap.find(key);
+		QMap<QString, ToolSettingInfo>::const_iterator valI = m_SettingsMap.find(key);
 
-		return Option<TSVariant>::newSome(*const_cast<TSVariant*>(valI.operator->()));
+		return Option<ToolSettingInfo>::newSome(*const_cast<ToolSettingInfo*>(valI.operator->()));
 	} else {
-		return Option<TSVariant>::newNone();
+		return Option<ToolSettingInfo>::newNone();
 	}
 }
 
-const QMap<QString, TSVariant>& ToolSettings::getMap() const {
+const QMap<QString, ToolSettingInfo>& ToolSettings::getMap() const {
 	return m_SettingsMap;
 }
 
-void ToolSettings::setMap(const QMap<QString, TSVariant>& settingsMap) {
+void ToolSettings::setMap(const QMap<QString, ToolSettingInfo>& settingsMap) {
 	m_SettingsMap = settingsMap;
 }
 
 void ToolSettings::setValue(const QString& key, const TSVariant& value) {
-	emit this->valueChanged(key, value);
-	m_SettingsMap[key] = value;
+	ToolSettingInfo info = this->get(key).some();
+	info.Value = value;
+	emit this->valueChanged(key, info);
+	m_SettingsMap[key].Value = value;
 }

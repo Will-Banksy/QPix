@@ -3,7 +3,7 @@
 
 #include "AbstractTool.h"
 
-const static QString TS_PIPETTE_COPYALPHA = QString("Copy Alpha");
+const static QString TS_PIPETTE_COPYALPHA = QString("pipette.copy-alpha");
 
 class PipetteTool : public AbstractTool {
 	Q_OBJECT
