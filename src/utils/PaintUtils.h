@@ -38,6 +38,22 @@ public:
 	/// the first point will not be recorded
 	static void drawLine(QImage& target, int x0, int y0, int x1, int y1, QRgb colour, QList<QPoint>* stroke = nullptr, bool recordFirst = true);
 
+	/// Utilises my own algorithm to draw a uniform line from (x0, y0) to (x1, y1) in the supplied colour. A uniform line
+	/// is one that is composed of equal sized segments, or more mathematically where the `width / height` of the line
+	/// is an integer.
+	/// This function actually doesn't always draw perfectly uniform lines - It will draw a uniform line from (x0, y0)
+	/// until it reaches x1 or y1, at which point it will stop - Possibly resulting in less pixels in the last segment
+	/// than the rest.
+	static void drawUniformLine(QImage& target, int x0, int y0, int x1, int y1, QRgb colour);
+
+	/// Utilises the Bresenham line algorithm to copy a line from (x0, y0) to (x1, y1), sourcing pixels from `src`
+	/// and copying them to `dest`
+	static void copyLine(const QImage& src, QImage& dest, int x0, int y0, int x1, int y1);
+
+	/// Utilises my own algorithm to copy a uniform line from (x0, y0) to (x1, y1), sourcing pixels from `src` and
+	/// copying them to `dest`. For more info on uniform lines, see `drawUniformLine`
+	static void copyUniformLine(const QImage& src, QImage& dest, int x0, int y0, int x1, int y1);
+
 	/// Alias for a function taking and returning a QRgb
 	using LineAffector = std::function<QRgb(QRgb)>;
 

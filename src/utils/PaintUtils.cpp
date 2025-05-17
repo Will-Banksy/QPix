@@ -66,6 +66,160 @@ void PaintUtils::drawLine(QImage& target, int x0, int y0, int x1, int y1, QRgb c
 	}
 }
 
+void PaintUtils::drawUniformLine(QImage& target, int x0, int y0, int x1, int y1, QRgb colour) {
+	QRgb* bytes = (QRgb*)target.scanLine(0); // Assumes a 32-bit format
+
+	int dx = x1 - x0;
+	int dy = y1 - y0;
+
+	int unitX = dx > 0 ? 1 : -1;
+	int unitY = dy > 0 ? 1 : -1;
+
+	dx = dx == 0 ? 0 : dx + unitX;
+	dy = dy == 0 ? 0 : dy + unitY;
+
+	// Whether x is the "fast axis"
+	bool xfast = abs(dx) >= abs(dy);
+
+	float fdx = float(dx);
+	float fdy = float(dy);
+
+	int stepAfter = std::numeric_limits<int>::max();
+	if(xfast && dy != 0) {
+		stepAfter = abs(int(round(fdx / fdy)));
+	} else if(!xfast && dx != 0) {
+		stepAfter = abs(int(round(fdy / fdx)));
+	}
+
+	for(int ctr = 1;; ctr++) {
+		// Check that the point is in drawable space first
+		bool inDrawableSpace = utils::contains(target, QPoint(x0, y0));
+		if(inDrawableSpace) {
+			bytes[x0 + y0 * target.width()] = colour;
+		}
+
+		if(xfast) {
+			if(x0 == x1) {
+				break;
+			}
+
+			x0 += unitX;
+			if(ctr >= stepAfter) {
+				y0 += unitY;
+				ctr = 0;
+			}
+		} else {
+			if(y0 == y1) {
+				break;
+			}
+
+			y0 += unitY;
+			if(ctr >= stepAfter) {
+				x0 += unitX;
+				ctr = 0;
+			}
+		}
+	}
+}
+
+void PaintUtils::copyLine(const QImage& src, QImage& dest, int x0, int y0, int x1, int y1) {
+	assert(src.width() == dest.width() && src.height() == dest.height());
+
+	const QRgb* srcBytes = (QRgb*)src.scanLine(0); // Assumes a 32-bit format
+	QRgb* destBytes = (QRgb*)dest.scanLine(0); // Assumes a 32-bit format
+
+	int dx = abs(x1 - x0);
+	int dy = -abs(y1 - y0);
+
+	int unitX = x0 < x1 ? 1 : -1;
+	int unitY = y0 < y1 ? 1 : -1;
+
+	int err = dx + dy;
+	int err2;
+
+	for(;;) {
+		// Check that the point is in drawable space first
+		bool inDrawableSpace = utils::contains(src, QPoint(x0, y0));
+		if(inDrawableSpace) {
+			int index = x0 + y0 * src.width();
+			destBytes[index] = srcBytes[index];
+		}
+
+		if(x0 == x1 && y0 == y1) {
+			break;
+		}
+		err2 = err * 2;
+		if(err2 >= dy) {
+			err += dy;
+			x0 += unitX;
+		}
+		if(err2 <= dx) {
+			err += dx;
+			y0 += unitY;
+		}
+	}
+}
+
+void PaintUtils::copyUniformLine(const QImage& src, QImage& dest, int x0, int y0, int x1, int y1) {
+	assert(src.width() == dest.width() && src.height() == dest.height());
+
+	const QRgb* srcBytes = (QRgb*)src.scanLine(0); // Assumes a 32-bit format
+	QRgb* destBytes = (QRgb*)dest.scanLine(0); // Assumes a 32-bit format
+
+	int dx = x1 - x0;
+	int dy = y1 - y0;
+
+	int unitX = dx > 0 ? 1 : -1;
+	int unitY = dy > 0 ? 1 : -1;
+
+	dx = dx == 0 ? 0 : dx + unitX;
+	dy = dy == 0 ? 0 : dy + unitY;
+
+	// Whether x is the "fast axis"
+	bool xfast = abs(dx) >= abs(dy);
+
+	float fdx = float(dx);
+	float fdy = float(dy);
+
+	int stepAfter = std::numeric_limits<int>::max();
+	if(xfast && dy != 0) {
+		stepAfter = abs(int(round(fdx / fdy)));
+	} else if(!xfast && dx != 0) {
+		stepAfter = abs(int(round(fdy / fdx)));
+	}
+
+	for(int ctr = 1;; ctr++) {
+		// Check that the point is in drawable space first
+		bool inDrawableSpace = utils::contains(src, QPoint(x0, y0));
+		if(inDrawableSpace) {
+			int index = x0 + y0 * src.width();
+			destBytes[index] = srcBytes[index];
+		}
+
+		if(xfast) {
+			if(x0 == x1) {
+				break;
+			}
+
+			x0 += unitX;
+			if(ctr >= stepAfter) {
+				y0 += unitY;
+				ctr = 0;
+			}
+		} else {
+			if(y0 == y1) {
+				break;
+			}
+
+			y0 += unitY;
+			if(ctr >= stepAfter) {
+				x0 += unitX;
+				ctr = 0;
+			}
+		}
+	}
+}
+
 void PaintUtils::affectLine(QImage& target, int x0, int y0, int x1, int y1, LineAffector f, bool oncePerPixel) {
 	QRgb* bytes = (QRgb*)target.scanLine(0); // Assumes a 32-bit format
 

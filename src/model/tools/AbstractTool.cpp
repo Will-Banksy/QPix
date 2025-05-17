@@ -4,6 +4,7 @@
 #include "HandTool.h"
 #include "PipetteTool.h"
 #include "EraserTool.h"
+#include "LineTool.h"
 
 AbstractTool::AbstractTool() : QObject() {
 }
@@ -27,6 +28,7 @@ QList<AbstractTool*> AbstractTool::initialiseTools() {
 		(AbstractTool*)new PipetteTool(),
 		(AbstractTool*)new BucketTool(),
 		(AbstractTool*)new HandTool(),
+		(AbstractTool*)new LineTool(),
 	};
 }
 

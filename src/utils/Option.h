@@ -9,6 +9,14 @@ public:
 	explicit Option() : m_Variant(unit()) {
 	}
 
+	Option(const T& some) : m_Variant(unit()) {
+		m_Variant.template emplace<1>(some);
+	}
+
+	Option(T&& some) : m_Variant(unit()) {
+		m_Variant.template emplace<1>(std::move(some));
+	}
+
 	static Option newNone() {
 		return Option();
 	}
