@@ -6,7 +6,7 @@ QPixmap* ColourButton::s_TransparentBackground = nullptr;
 
 ColourButton::ColourButton(const QColor& colour) : QToolButton(), m_Colour(colour) {
 	if(!s_TransparentBackground) {
-		s_TransparentBackground = new QPixmap(":/data/canvas_bg_dark.png");
+		s_TransparentBackground = new QPixmap(":/assets/canvas_bg_dark.png");
 	}
 
 	this->setMinimumSize(32, 32); // TODO: Derive a better size... Be nice if it'd be the same size as other tool buttons

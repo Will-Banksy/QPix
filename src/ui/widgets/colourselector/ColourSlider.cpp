@@ -9,7 +9,7 @@ QPixmap* ColourSlider::s_TransparentBackground = nullptr;
 
 ColourSlider::ColourSlider(QImage* bgImg, Qt::Orientation orientation, QWidget* parent) : QAbstractSlider(parent), m_BgImg(bgImg), m_PrefLength(COLSLIDER_DEFAULT_LENGTH) {
 	if(!s_TransparentBackground) {
-		s_TransparentBackground = new QPixmap(":/data/canvas_bg_dark.png");
+		s_TransparentBackground = new QPixmap(":/assets/canvas_bg_dark.png");
 	}
 
 	this->setOrientation(orientation);

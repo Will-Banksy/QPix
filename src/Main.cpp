@@ -21,11 +21,11 @@ int main(int argc, char* argv[]) {
 
 	// Load and set palette from json
 	QPalette base = app.palette();
-	QPalette pal = utils::loadPaletteFrom(":/data/palette.json", base);
+	QPalette pal = utils::loadPaletteFrom(":/assets/palette.json", base);
 	app.setPalette(pal);
 
 	// Load and set style sheet
-	QFile qss(":/data/style.qss");
+	QFile qss(":/assets/style.qss");
 	qss.open(QFile::ReadOnly);
 	QString styleSheet = QString::fromUtf8(qss.readAll());
 	app.setStyleSheet(styleSheet);

@@ -1,0 +1,20 @@
+<RCC>
+	<qresource>
+		<file>assets/canvas_bg_dark.png</file>
+
+		<file>assets/controls/arrow_down.svg</file>
+		<file>assets/controls/arrow_up.svg</file>
+		<file>assets/controls/arrow_left.svg</file>
+		<file>assets/controls/arrow_right.svg</file>
+
+		<file>assets/tools/pencil.svg</file>
+		<file>assets/tools/eraser.svg</file>
+		<file>assets/tools/fill.svg</file>
+		<file>assets/tools/line.svg</file>
+		<file>assets/tools/move.svg</file>
+		<file>assets/tools/pipette.svg</file>
+
+		<file>assets/palette.json</file>
+		<file>assets/style.qss</file>
+	</qresource>
+</RCC>

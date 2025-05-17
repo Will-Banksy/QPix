@@ -7,7 +7,7 @@
 PencilTool::PencilTool() : AbstractTool(), m_CurrentStroke(QList<QPoint>()) {
 	m_Name = "Pencil";
 	m_Description = "Draws pixels";
-	m_IconPath = ":/data/tools/pencil.svg";
+	m_IconPath = ":/assets/tools/pencil.svg";
 	m_UsageType = ToolUsageType::Drag;
 
 	m_Settings = new ToolSettings({

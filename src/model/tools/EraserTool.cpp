@@ -6,7 +6,7 @@
 EraserTool::EraserTool() {
 	m_Name = "Eraser";
 	m_Description = "Erases pixels";
-	m_IconPath = ":/data/tools/eraser.svg";
+	m_IconPath = ":/assets/tools/eraser.svg";
 	m_UsageType = ToolUsageType::Drag;
 
 	m_Settings = new ToolSettings({

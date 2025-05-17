@@ -51,11 +51,11 @@ QComboBox::drop-down {
 }
 
 QComboBox::down-arrow {
-	image: url(:/data/controls/arrow_down.svg);
+	image: url(:/assets/controls/arrow_down.svg);
 }
 
 QComboBox::down-arrow:on {
-	image: url(:/data/controls/arrow_up.svg);
+	image: url(:/assets/controls/arrow_up.svg);
 }
 
 QComboBox QAbstractItemView {
@@ -114,19 +114,19 @@ QScrollBar::up-arrow, QScrollBar::down-arrow, QScrollBar::left-arrow, QScrollBar
 }
 
 QScrollBar::up-arrow {
-	image: url(:/data/controls/arrow_up.svg);
+	image: url(:/assets/controls/arrow_up.svg);
 }
 
 QScrollBar::down-arrow {
-	image: url(:/data/controls/arrow_down.svg);
+	image: url(:/assets/controls/arrow_down.svg);
 }
 
 QScrollBar::left-arrow {
-	image: url(:/data/controls/arrow_left.svg);
+	image: url(:/assets/controls/arrow_left.svg);
 }
 
 QScrollBar::right-arrow {
-	image: url(:/data/controls/arrow_right.svg);
+	image: url(:/assets/controls/arrow_right.svg);
 }
 
 QToolBar {
@@ -206,11 +206,11 @@ QSpinBox::up-arrow, QSpinBox::down-arrow {
 }
 
 QSpinBox::up-arrow {
-	image: url(:/data/controls/arrow_up.svg);
+	image: url(:/assets/controls/arrow_up.svg);
 }
 
 QSpinBox::down-arrow {
-	image: url(:/data/controls/arrow_down.svg);
+	image: url(:/assets/controls/arrow_down.svg);
 }
 
 QMenu {

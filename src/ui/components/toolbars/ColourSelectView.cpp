@@ -32,15 +32,15 @@ ColourSelectView::ColourSelectView(AppModel* model) : QWidget(), m_Model(model) 
 		"Opens the colour picker"
 	));
 
-	connect(model, &AppModel::primaryColourChanged, primaryBtn, &ColourButton::updateColour);
-	connect(model, &AppModel::secondaryColourChanged, secondaryBtn, &ColourButton::updateColour);
+	this->connect(model, &AppModel::primaryColourChanged, primaryBtn, &ColourButton::updateColour);
+	this->connect(model, &AppModel::secondaryColourChanged, secondaryBtn, &ColourButton::updateColour);
 
-	connect(primaryBtn, &ColourButton::triggered, this, [this, primaryBtn](QAction* action) {
+	this->connect(primaryBtn, &ColourButton::triggered, this, [this, primaryBtn](QAction* action) {
 		emit this->m_Model->modalColourSelectRequested(primaryBtn, this->m_Model->primaryColour(), [this](const QColor& colour) {
 			this->m_Model->setPrimaryColour(colour);
 		}, FloatingPosition::Unspecified);
 	});
-	connect(secondaryBtn, &ColourButton::triggered, this, [this, secondaryBtn](QAction* action) {
+	this->connect(secondaryBtn, &ColourButton::triggered, this, [this, secondaryBtn](QAction* action) {
 		emit this->m_Model->modalColourSelectRequested(secondaryBtn, this->m_Model->secondaryColour(), [this](const QColor& colour) {
 			this->m_Model->setSecondaryColour(colour);
 		}, FloatingPosition::Unspecified);

@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-// BUG: When a modal floating widget exists, and UI on top of the canvas is updated/painted, so is the canvas. Unsure where exactly to put this or how to fix it
+// BUG: // FIXME: When a modal floating widget exists, and UI on top of the canvas is updated/painted, so is the canvas. Unsure where exactly to put this or how to fix it
 
 enum class FloatingPosition {
 	Right,

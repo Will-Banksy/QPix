@@ -6,7 +6,7 @@
 PipetteTool::PipetteTool() : AbstractTool() {
 	m_Name = "Pipette";
 	m_Description = "Picks a colour from the canvas";
-	m_IconPath = ":/data/tools/pipette.svg";
+	m_IconPath = ":/assets/tools/pipette.svg";
 	m_UsageType = ToolUsageType::Click;
 
 	m_Settings = new ToolSettings({

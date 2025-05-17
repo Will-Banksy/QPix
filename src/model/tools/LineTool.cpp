@@ -7,7 +7,7 @@
 LineTool::LineTool() : AbstractTool(), m_StartPoint(), m_EndPoint() {
 	m_Name = "Line";
 	m_Description = "Draws a line";
-	m_IconPath = ":/data/tools/line.svg";
+	m_IconPath = ":/assets/tools/line.svg";
 	m_UsageType = ToolUsageType::Drag;
 
 	m_Settings = new ToolSettings({
