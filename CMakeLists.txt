@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 # Set project name and version, and languages used
-project(QPix VERSION 1.0 LANGUAGES CXX)
+project(QPix VERSION 1.0.0 LANGUAGES CXX)
 
 # Find the Qt6Widgets library
 find_package(Qt6Widgets CONFIG REQUIRED)
@@ -36,5 +36,8 @@ target_include_directories(qpix PRIVATE src)
 # Link to Qt6::Widgets (also adds include paths I think)
 target_link_libraries(qpix Qt6::Widgets)
 
-# Install the executable
+include(CPack)
+
+# Define install rules for the package
 install(TARGETS qpix DESTINATION bin)
+install(FILES $<TARGET_RUNTIME_DLLS:qpix> DESTINATION ${CMAKE_INSTALL_LIBDIR})

@@ -25,10 +25,10 @@ int main(int argc, char* argv[]) {
 	app.setPalette(pal);
 
 	// Load and set style sheet
-	QFile qss(":/assets/style.qss");
-	qss.open(QFile::ReadOnly);
-	QString styleSheet = QString::fromUtf8(qss.readAll());
-	app.setStyleSheet(styleSheet);
+	// QFile qss(":/assets/style.qss");
+	// qss.open(QFile::ReadOnly);
+	// QString styleSheet = QString::fromUtf8(qss.readAll());
+	// app.setStyleSheet(styleSheet);
 
 	// TODO: Perhaps load SVG icons at runtime and string replace to colourise them to the correct colour (same as text most likely)
 

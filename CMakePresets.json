@@ -5,10 +5,7 @@
 			"name": "base",
 			"displayName": "Base",
 			"generator": "Ninja",
-			"hidden": true,
-			"environment": {
-				"QT_QPA_PLATFORM": "xcb"
-			}
+			"hidden": true
 		},
 		{
 			"name": "debug",
@@ -39,6 +36,19 @@
 			"name": "release",
 			"displayName": "Release",
 			"configurePreset": "release"
+		}
+	],
+	"packagePresets": [
+		{
+			"name": "release",
+			"displayName": "Release",
+			"generators": [
+				"ZIP"
+			],
+			"configurePreset": "release",
+			"packageName": "QPix",
+			"vendorName": "WillBanksy",
+			"inheritConfigureEnvironment": true
 		}
 	]
 }
